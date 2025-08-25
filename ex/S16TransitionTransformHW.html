@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>트랜지션+트랜스폼 과제</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+    <style>
+        /* 1. 카드 리프트 효과 */
+        .card {
+            width: 200px;
+            height: 120px;
+            background: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.2);
+        }
+
+        /* 2. 카드 플립 */
+        .scene {
+            width: 200px;
+            height: 120px;
+            perspective: 800px;
+        }
+        .card-flip {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+        }
+        .scene:hover .card-flip {
+            transform: rotateY(180deg);
+        }
+        .face {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 1px solid #ddd;
+            backface-visibility: hidden;
+        }
+        .back {
+            transform: rotateY(180deg);
+            background: lightpink;
+        }
+
+        /* 3. 밑줄 슬라이드 네비게이션 */
+        .nav a {
+            position: relative;
+            text-decoration: none;
+            color: #333;
+            padding: 4px 0;
+        }
+        .nav a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            background: royalblue;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        .nav a:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* 4. 이미지 줌-인 썸네일 */
+        .thumb {
+            width: 200px;
+            height: 120px;
+            overflow: hidden;
+        }
+        .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .thumb:hover img {
+            transform: scale(1.15);
+        }
+
+        /* 5. 툴팁 팝 */
+        .icon-wrap {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip {
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            transform-origin: bottom center;
+            opacity: 0;
+            background: black;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .icon-wrap:hover .tooltip {
+            transform: translateX(-50%) scale(1);
+            opacity: 1;
+        }
+    </style>
+
+</head>
+<body>
+<h1>트랜지션+트랜스폼 과제</h1>
+<section>
+    <h2>과제 1: 카드 리프트 효과</h2>
+    <ul>
+        <li>마우스를 카드에 올리면 살짝 위로 떠오르고 그림자가 깊어진다.</li>
+        <li>transform: translateY(-8px)와 box-shadow를 transition으로 부드럽게 전환.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>과제 2: 카드 플립(2D 전용)</h2>
+    <ul>
+        <li>앞면·뒷면이 있는 카드를 hover 시 rotateY로 뒤집는다.</li>
+        <li>각 면은 backface-visibility: hidden 설정, 부모에는 perspective 적용.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>과제 3: 밑줄 슬라이드 네비게이션</h2>
+    <ul>
+        <li>hover 시 밑줄이 왼쪽에서 오른쪽으로 확장되는 애니메이션.</li>
+        <li>transform: scaleX(0) → scaleX(1), transform-origin: left 사용.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>과제 4: 이미지 줌-인 썸네일</h2>
+    <ul>
+        <li>이미지를 hover하면 안쪽으로 확대되며 자연스럽게 보인다.</li>
+        <li>래퍼에 overflow: hidden, 내부 img는 scale(1.15)로 확대.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>과제 5: 툴팁 팝(Scale + Opacity)</h2>
+    <ul>
+        <li>아이콘 hover 시 툴팁이 커지면서 나타난다.</li>
+        <li>transform: scale(0.9) + opacity: 0 → scale(1) + opacity: 1로 전환.</li>
+    </ul>
+</section>
+<h3>1. 카드 리프트</h3>
+<!-- 1. 카드 리프트 -->
+<div class="card">카드</div>
+<h3> 2. 카드 플립</h3>
+<!-- 2. 카드 플립 -->
+<div class="scene">
+    <div class="card-flip">
+        <div class="face front">앞면</div>
+        <div class="face back">뒷면</div>
+    </div>
+</div>
+
+<!-- 3. 밑줄 슬라이드 네비게이션 -->
+<h3>3. 밑줄 슬라이드 네비게이션</h3>
+<div class="nav">
+    <a href="#">메뉴1</a> |
+    <a href="#">메뉴2</a>
+</div>
+<h3>4. 이미지 줌-인 썸네일</h3>
+<!-- 4. 이미지 줌-인 썸네일 -->
+<div class="thumb">
+    <img src="/src/img/1.jpeg" alt="thumb">
+</div>
+<h2>5. 툴팁 팝</h2>
+<!-- 5. 툴팁 팝 -->
+<div class="icon-wrap">
+    <span>🔍</span>
+    <div class="tooltip">검색하기</div>
+</div>
+</body>
+</html>

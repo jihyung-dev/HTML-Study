@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: white;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        ul {
+            margin-left: 20px;
+        }
+    </style>
+
+</head>
+<body>
+<h1>요소를 감추는 방법</h1>
+<section>
+    <h2>display: none</h2>
+    <ul>
+        <li>요소 자체가 화면에서 완전히 제거됨</li>
+        <li>문서 흐름에서도 사라짐 (자리도 없어짐)</li>
+        <li>스크린 리더도 인식 못함 (접근성 주의)</li>
+    </ul>
+</section>
+
+<section>
+    <h2>visibility: hidden</h2>
+    <ul>
+        <li>요소는 보이지 않지만, **자리는 유지**됨</li>
+        <li>문서 흐름에 영향 없음</li>
+        <li>스크린 리더는 인식할 수 있음</li>
+    </ul>
+</section>
+
+<section>
+    <h2>opacity: 0</h2>
+    <ul>
+        <li>요소가 완전히 투명해져 보이지 않음</li>
+        <li>자리는 유지됨</li>
+        <li>스크린 리더는 인식함</li>
+        <li>마우스 이벤트는 그대로 감지됨 (주의!)</li>
+    </ul>
+</section>
+
+<section>
+    <h2>width: 0 + overflow: hidden</h2>
+    <ul>
+        <li>요소의 크기를 0으로 줄이고 내부 내용도 숨김</li>
+        <li>공간도 줄고 컨텐츠도 보이지 않음</li>
+        <li>border가 있다면 눈에 보일 수 있으므로 <code>border: none</code> 권장</li>
+    </ul>
+</section>
+
+<section>
+    <h2>transform: scale(0)</h2>
+    <ul>
+        <li>요소 크기를 시각적으로 0으로 축소</li>
+        <li>자리(공간)는 유지되며, 접근성도 그대로 있음</li>
+        <li>애니메이션용으로 많이 사용됨</li>
+    </ul>
+</section>
+
+<section>
+    <h2>HTML 속성: hidden</h2>
+    <ul>
+        <li><code>&lt;element hidden&gt;</code>처럼 HTML 속성으로 숨김</li>
+        <li>CSS의 <code>display: none</code>과 동일한 효과</li>
+        <li>JavaScript로 <code>element.hidden = true</code> 사용 가능</li>
+        <li><strong>input[type="hidden"]</strong>은 폼 제출용 요소로, 시각적으로는 원래 안 보임</li>
+    </ul>
+</section>
+</body>
+</html>

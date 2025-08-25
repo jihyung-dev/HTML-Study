@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>트랜지션으로 애니메이션 만들기</title>
+</head>
+
+<style>
+    .container{
+        border: 1px solid darkblue;
+    }
+    .box{
+        width: 5em;
+        height: 5em;
+        border: 1px solid;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .box.ex1:hover{
+        transition: width 1000ms ease-in-out, height 500ms ease;
+        width: 10em;
+        height: 10em;
+    }
+
+    .box.ex2{
+        background: blue;
+    }
+
+    .box.ex2:hover{
+        transition: background-color 1s ease,
+                    color 1.2s ease;
+        background-color: rgba(255, 33, 237, 0.67);
+                    color: white;
+    }
+
+    .box.ex3{
+        border:none;
+    }
+
+    .box.ex3:hover{
+        transition:
+                border .5s ease;
+                margin 1s ease;
+        border: 2em solid hotpink;
+        margin: 1em;
+    }
+
+
+</style>
+
+<body>
+    <h1>트랜지션으로 애니메이션 만들기</h1>
+
+    <h2>너비 높이 트랜지션 : 레이아웃 전체를 변경하기 때문에
+        부모 자식 요소의 위치가 변경됨
+    </h2>
+
+    <div class="container">
+        <div class="box ex1">
+            <b>너비 높이</b>
+        </div>
+    </div>
+
+
+<!--    div.container>div.box.ex2>b{색}-->
+    <h2>배경색과 폰트색 변경</h2>
+    <div class="container">
+        <div class="box ex2"><b>색</b></div>
+    </div>
+
+    <h2>border + margin 변경</h2>
+<!--    div.container>div.box.ex3>b{테두리}-->
+    <div class="container">
+        <div class="box ex3"><b>테두리</b></div>
+    </div>
+
+    <style>
+        .box.ex4{
+            margin: 1em;
+            /*box-shadow: 10px 5px 10px #573767, -10px -5px 10px #9ceb9c;*/
+        }
+        .box.ex4:hover{
+            box-shadow: 20px 10px 5px black;
+            transition: box-shadow 1s ease;
+        }
+
+    </style>
+
+
+    <h2>box-shadow 그림자 변경</h2>
+    <div class="container">
+        <div class="box ex4"><b>그림자</b></div>
+    </div>
+
+    <style>
+        .box.ex5:hover{
+            transition: display 1s ease;
+            display: none;
+        }
+        .box.ex6{
+            height: 7em;
+        }
+
+        .ex6-menu:hover+.box.ex6{
+            overflow: hidden;
+            transition: height 1s ease;
+            height: 0;
+        }
+        .box.ex7:hover{
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .box.ex8:hover{
+            transition: transform 1s ease;
+            transform-origin: top left;
+            transform: scaley(0);
+        }
+
+    </style>
+
+    <h2>opacity로 box 숨기기</h2>
+    <div class="container">
+        <div ><b>논</b></div>
+        <div class="box ex5"><b>none</b></div>
+        <div class="ex6-menu"><b>높이조절</b></div>
+        <div class="box ex6"><b>높이0</b></div>
+        <div class="box ex7"><b>opacity0</b></div>
+        <div class="box ex8"><b>scale0</b></div>
+    </div>
+
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PseudoElements</title>
+</head>
+
+<style>
+    h2::before{
+        content: "★";
+        color : rgba(12, 80, 208, 0.96);
+    }
+
+    button::after{
+        content: "→";
+        color : rgba(20, 146, 42, 0.96);
+    }
+
+    button:hover::after{
+        color : #0090f7;
+    }
+
+    p::first-letter{
+        font-size:2rem;
+        color: red;
+        font-weight: bold;
+    }
+
+    div.first-line::first-line{
+        background-color: yellow;
+        color: darkblue;
+    }
+    div.selection::selection{
+        background-color: black;
+        color: yellow;
+    }
+    ul {
+        font-size: 1.1rem;
+        font-weight: 300;
+    }
+    ul>li{
+        list-style: none;
+        position: relative;
+    }
+    .li1:hover::before{
+        content:"👉";
+        position:absolute;
+        left: -1.2em;
+
+    }
+    .li2:hover::after{
+        content:"👈"
+    }
+    .li3:hover::before {
+        content: "👉";
+        position: absolute;
+        left: -1.2em;
+    }
+    .li4:hover::after{
+        content:"👈"
+    }
+    .li5:hover::before {
+        content: "👉";
+        position: absolute;
+        left: -1.2em;
+    }
+
+</style>
+
+<body>
+
+
+<!--1.::brfore로 꾸미기-->
+1.::brfore로 꾸미기
+<br>
+<h2>제목</h2>
+
+<br>
+<!--2.::after로 꾸미기-->
+2.::after로 꾸미기
+<br>
+<button>꾸우우욱~ </button>
+
+<br><br><br>
+<!--3.::first-letter 스타일링-->
+3.::first-letter 스타일링
+<p>스타일링을 부탁하네 </p>
+
+<!--4.::first-line 스타일링-->
+4.::first-line 스타일링
+<div class="first-line">첫번째 줄의 스타일링을 부탁하네 줄수가 바뀌면 어떻게 되는지 보자보자~</div>
+
+<br>
+<!--5.::selection 스타일링-->
+5.::selection 스타일링
+<div class="selection">사용자가 텍스트를 드래그했을때 어떻게 변하나요
+    <br> 오 배경이 까맣고 글자는 노랑색이 되는군요
+</div>
+<br><br><br>
+
+<!--6.의사클래스 + 의사 요소 -->
+                     <!-- 여기서 의사란, 구성요소로 실제로 존재하지 않는, 마우스를 올린다거나, 클릭했다거나, 부수적인 활동에 의한 것 -->
+                     <!-- ex) hover, action 등-->
+6.의사클래스 + 의사 요소
+<ul>
+    <li class="li1">마우스를 올려보세요</li>
+    <li class="li2">마우스를 올려보세요</li>
+    <li class="li3">마우스를 올려보세요</li>
+    <li class="li4">마우스를 올려보세요</li>
+    <li class="li5">마우스를 올려보세요</li>
+</ul>
+
+
+
+
+</body>
+</html>

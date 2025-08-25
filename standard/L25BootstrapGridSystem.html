@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>부트스트랩</title>
+    <link rel="stylesheet" href="/src/bootstrap-5.3.7/bootstrap-5.3.7/dist/css/bootstrap.css">
+    <script src="/src/bootstrap-5.3.7/bootstrap-5.3.7/dist/js/bootstrap.bundle.js"></script>
+
+    <style>
+        .row{
+            background-color: lightblue;
+            border: 1px solid #588e9f;
+
+        }
+        .row>div{
+            background-color: #f9c2c2;
+            border: 1px solid #e49494;
+            height: 3em;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <h1>부트스트랩의 그리드 시스템</h1>
+        <p>화면을 12개의 열로 구성해서 디바이스 마다 구성을 다르게 하는 것(css grid로 구현됨)</p>
+        <h4>col == auto </h4>
+        <div class="row">
+            <div class="col">col</div>
+            <div class="col">col</div>
+            <div class="col">col</div>
+            <div class="col">col</div>
+        </div>
+        <hr>
+        <h4>col-(1~12)</h4>
+        <div class="row">
+            <div class="col-1">col-1</div>
+            <div class="col-2">col-2</div>
+            <div class="col-1">col-1</div>
+            <div class="col-1">col-1</div>
+        </div>
+        <hr>
+        <h4>col-(deviceSize:xs,sm,md,lg,xl,xxl)-numb</h4>
+        <div class="row">
+            <div class="col-md-1 col-6">col</div>
+            <div class="col-md-2 col-6">col</div>
+            <div class="col-md-1 col-6">col</div>
+            <div class="col-md-1 col-6">col</div>
+        </div>
+        <hr>
+        <h4> .row .row-cols-(device)-numb</h4>
+        <div class="row row-col-2">
+            <div class="col-md-1 ">col</div>
+            <div class="col-md-2 ">col</div>
+            <div class="col-md-1 ">col</div>
+            <div class="col-md-1 ">col</div>
+        </div>
+        <hr>
+        <h4>다양한 디바이스에 맞게 적용</h4>
+        <div class="row">
+            <div class="col-lg-2 col-md-3 col-7">col</div>
+            <div class="col-lg-2 col-md-3 col-5">col</div>
+            <div class="col-lg-2 col-md-3">col</div>
+            <div class="col-lg ">col</div>
+        </div>
+
+    </div>
+    
+    <h2>.row : gap g (css grid 갭과 같음)</h2>
+    <div class="row gx-5" >
+        <div class="col-4"></div>
+        <div class="col-4"></div>
+        <div class="col-4"></div>
+        <div class="col-4"></div>
+        <div class="col-4"></div>
+        <div class="col-4"></div>
+        <div class="col-4"></div>
+        <div class="col-4"></div>
+        <div class="col-4"></div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+<!--                <form class="d-flex" role="search">-->
+<!--                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />-->
+<!--                    <button class="btn btn-outline-success" type="submit">Search</button>-->
+<!--                </form>-->
+            </div>
+        </div>
+    </nav>
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</body>
+</html>
+<hr>

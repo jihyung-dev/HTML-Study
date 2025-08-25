@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <title>CSS Transform 수업 자료</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+        *{box-sizing:border-box}
+        body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#fafafa;color:#111}
+        main{max-width:1000px;margin:0 auto;padding:20px 16px}
+        h2{margin:24px 0 8px 0;font-size:20px}
+        .section{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin:16px 0}
+        .note{padding:10px;border-left:4px solid #3b82f6;background:#eff6ff;border-radius:8px;margin:8px 0}
+        .demo{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+
+        /* 공용 카드 */
+        .card{
+            width:140px;height:140px;border-radius:12px;border:1px solid #e5e7eb;
+            display:flex;align-items:center;justify-content:center;background:#f8fafc;
+            transition: transform .35s ease;
+            will-change: transform;
+        }
+
+        /* hover로 transform 적용 */
+        .card.hover-move:hover{ transform: translateY(-10px) }
+        .card.hover-scale:hover{ transform: scale(1.1) }
+        .card.hover-rotate:hover{ transform: rotate(8deg) }
+
+        /* 레이아웃/페인트 비교 박스 */
+        .compare{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+        .box{
+            width:140px;height:48px;border-radius:10px;border:1px solid #e5e7eb;background:#f3f4f6;
+            display:flex;align-items:center;justify-content:center; transition: all .3s ease;
+        }
+        .box.move-left-top:hover{ left:10px; top:-10px; position: relative } /* 레이아웃/페인트 발생 */
+        .box.move-transform:hover{ transform: translate(10px,-10px) }       /* 합성 단계 위주 */
+
+        /* transform-origin 예시 */
+        .origin-demo .card{transform-origin: left top}
+        .origin-demo .card:hover{ transform: rotate(12deg) scale(1.1) }
+
+        /* 3D 카드 효과 */
+        .scene{ perspective: 800px; width:200px; height:140px }
+        .flip{
+            width:100%;height:100%; position:relative; transform-style: preserve-3d;
+            transition: transform .6s ease; cursor:pointer;
+        }
+        .flip:hover{ transform: rotateY(180deg) }
+        .face{
+            position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+            border-radius:12px; border:1px solid #e5e7eb; backface-visibility: hidden; background:#fff;
+        }
+        .face.back{ transform: rotateY(180deg); background:#111; color:#fff }
+    </style>
+</head>
+<body>
+<main>
+
+    <section class="section">
+        <h2>1) 브라우저 렌더링 과정</h2>
+        <img    style="width: 100%;padding: 1em"
+                src="/src/img/webkit%20렌더링.png" alt="브라우저의 렌더링 과정">
+
+        <div class="note">
+            <b>1. DOM/CSSOM 생성</b> : HTML과 CSS를 파싱해 구조와 스타일 트리를 만든다.<br>
+            <b>2. 레이아웃(Layout/Reflow)</b> : 각 요소의 크기와 위치를 계산한다.<br>
+            <b>3. 페인트(Paint)</b> : 색, 텍스트, 이미지 등을 화면에 그릴 픽셀 데이터로 만든다.<br>
+            <b>4. 합성(Compositing)</b> : 여러 레이어를 GPU에서 합쳐 최종 화면을 만든다.
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>2) transform과 일반 스타일 변경의 차이</h2>
+        <div class="note">
+            <b>레이아웃 속성 변경</b> (예: left, top, width, height)은 레이아웃과 페인트 단계를 다시 거쳐야 하므로 성능 부담이 크다.<br>
+            <b>transform</b>은 요소의 시각적인 위치·크기·회전만 합성 단계에서 변경하므로 주변 요소 레이아웃에 영향을 주지 않고 비교적 부드럽다.
+        </div>
+        <div class="demo compare">
+            <div class="box move-left-top">left/top</div>
+            <div class="box move-transform">transform</div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>3) 기본 transform 예시</h2>
+        <p class="note">hover 시 이동, 확대, 회전 효과</p>
+        <div class="demo">
+            <div class="card hover-move">translate</div>
+            <div class="card hover-scale">scale</div>
+            <div class="card hover-rotate">rotate</div>
+        </div>
+    </section>
+
+    <section class="section origin-demo">
+        <h2>4) transform-origin</h2>
+        <p class="note">변형의 기준점을 바꾸면 회전·확대 느낌이 달라진다 (기본은 center center)</p>
+        <div class="demo">
+            <div class="card">origin: left top</div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>5) 3D transform 예시</h2>
+        <p class="note">perspective, preserve-3d, backface-visibility를 사용한 카드 뒤집기</p>
+        <div class="demo">
+            <div class="scene">
+                <div class="flip">
+                    <div class="face front">Front</div>
+                    <div class="face back">Back</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+</body>
+</html>

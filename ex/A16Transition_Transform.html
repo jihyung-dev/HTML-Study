@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Transition+Transform</title>
+</head>
+<style>
+    .prac div{ /*그냥 div썼더니 GPT plug-in이 간섭받아서 prac으로 감싸줌 */
+        width: 150px;
+        height: 150px;
+    }
+    div.box1:hover {
+        transform:translateY(-4px) ;
+        box-shadow: #b72020 0px 5px 5px;
+        transition: 0.5s
+    }
+    .container2{
+        border: 1px solid rgba(221, 221, 221, 0);
+    }
+    .box2{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 5em;
+        height: 8em;
+        background-color: #3070b0;
+        color: white;
+        backface-visibility: hidden;
+    }
+    div.box2:hover {
+        transform:rotateY(180deg);
+        transition: 1s;
+    }
+    .box-wrap{
+        display: flex;
+    }
+    .backbox{
+        background-color: #7d1f4e;
+        color: white;
+        transform: rotateY(180deg);
+        backface-visibility: hidden; /* 저는 여기에 줬더니 둘다 하얘져서 ㅎㅎ;  */
+    }
+    .backbox:hover{
+        transform: rotateY(0deg);
+        transition: 1s;
+    }
+
+    a{
+        position: relative;
+        text-decoration: none;
+        color: black;
+
+    }
+    a::before{
+        content: '';
+        background-color: blue;
+        position: absolute;
+        top: 1.2em;
+        left: 0;
+        width: 100%;
+        height: 0.1em;
+        transform: scaleX(0);
+        transform-origin: bottom left;
+
+    }
+    a:hover::before{
+        transform: scaleX(1);
+        transition-duration: 0.5s;
+    }
+
+    img{
+        width: 100%;
+        height: 100%;
+    }
+    .wrap{
+        width: 200px;
+        height: 170px;
+        overflow: hidden;
+        border: 2px solid hotpink;
+
+    }
+    img:hover{
+        transform: scale(1.4);
+        transition-duration: 0.2s;
+    }
+
+    div.prac5{
+        font-size: 3rem;
+        position: relative;
+    }
+    div.cake{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    div.snack{
+        position: absolute;
+        top: 12px;
+        left: 10px;
+        background-color: black;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        font-size: 1rem;
+        text-align: center;
+        width: 7rem;
+        height: fit-content;
+        border-radius: 13px;
+        transform: scale(0.2);
+    }
+    div.cake:hover .snack{
+        opacity: 1;
+        transform: scale(1.2);
+        transition-duration: 0.3s;
+        z-index: 1;
+    }
+
+</style>
+<body>
+<div class="prac">
+    <h1>과제 1: 카드 리프트 효과</h1>
+        <div class="prac1">
+            <div class="box1">카드 리프트 효과 </div>
+        </div>
+
+    <h1>과제 2: 카드 플립(2D 전용)*</h1>   <!--플립은 잘 모르겠다요 -->
+        <div class="container2">
+            <div class="box-wrap">
+                <div class="box2">플립 박스</div>
+                <div class="box backbox">뒷 박스</div>
+            </div>
+        </div>
+
+    <h1>과제 3: 밑줄 슬라이드 네비게이션</h1>
+        <p>
+            <a href=""> 우쭐 탬쭐 밑줄을 만들어야 합니다.   샤하고 빵하게</a>
+            <br>
+            <a href=""> 또다른 줄을 만들어본다요. </a>
+        </p>
+
+    <h1>과제 4: 이미지 줌-인 썸네일</h1>
+        <p class="wrap">
+            <img src="/src/img/cat.jpg" alt="찰떡냥이">
+        </p>
+
+    <h1>과제 5: 툴팁 팝(Scale+ Opacity)</h1>
+    <div class="prac5">
+        <div class="cake">🍜🥩
+            <div class="snack">
+                오늘의 간식!?
+            </div>
+        </div>
+    </div>
+
+    <br><br><br><br><br><br><br><br>
+
+</div>
+</body>
+</html>

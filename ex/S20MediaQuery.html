@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>미디어 쿼리와 방응형 웹</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+<section>
+    <h2>1. 반응형 웹(Responsive Web)</h2>
+    <ul>
+        <li>사용자의 디바이스 크기나 환경에 따라 화면 레이아웃이 자동으로 조정되는 웹 디자인 방식</li>
+        <li>하나의 웹사이트로 PC, 태블릿, 모바일 등 다양한 환경에 최적화된 화면 제공</li>
+        <li>사용자의 가독성과 편의성을 높이고 유지 보수 비용을 절감</li>
+        <li>미디어 쿼리(Media Query)를 활용하여 구현</li>
+    </ul>
+</section>
+
+<section>
+    <h2>2. 미디어 쿼리(Media Query) 개념</h2>
+    <ul>
+        <li>CSS에서 특정 조건을 만족할 때만 스타일을 적용하는 기능</li>
+        <li>@media (조건) { ... } 형태로 작성</li>
+        <li>조건은 화면 크기, 방향, 해상도, 입력 방식 등 다양한 요소로 설정 가능</li>
+    </ul>
+</section>
+
+<section>
+    <h2>3. 화면 크기 관련 조건</h2>
+    <ul>
+        <li>
+            max-width : 지정한 너비 이하일 때 적용
+            <pre>
+@media (max-width: 600px) {
+  body { background-color: lightblue; }
+}
+      </pre>
+        </li>
+        <li>
+            min-width : 지정한 너비 이상일 때 적용
+            <pre>
+@media (min-width: 1024px) {
+  body { background-color: lightgreen; }
+}
+      </pre>
+        </li>
+        <li>
+            min-width ~ max-width : 특정 구간에서만 적용
+            <pre>
+@media (min-width: 601px) and (max-width: 1023px) {
+  body { background-color: lightyellow; }
+}
+      </pre>
+        </li>
+    </ul>
+</section>
+<section>
+    <h2>4. 디바이스 방향(orientation)</h2>
+    <ul>
+        <li>
+            orientation: portrait → 세로 모드일 때 적용
+            <pre>
+@media (orientation: portrait) {
+  body { background-color: lightblue; }
+}
+      </pre>
+        </li>
+        <li>
+            orientation: landscape → 가로 모드일 때 적용
+            <pre>
+@media (orientation: landscape) {
+  body { background-color: lightcoral; }
+}
+      </pre>
+        </li>
+    </ul>
+</section>
+<section>
+    <h2>5. 입력 방식 및 상태 관련 조건</h2>
+    <ul>
+        <li>
+            hover : 마우스 hover 동작이 가능한 환경에서만 스타일 적용
+            <pre>
+@media (hover: hover) {
+  button:hover {
+    background-color: orange;
+  }
+}
+      </pre>
+        </li>
+        <li>
+            pointer : 입력 장치의 정밀도를 기준으로 적용 (예: mouse, touch)
+            <pre>
+@media (pointer: fine) {
+  body { font-size: 16px; } /* 마우스 같은 정밀 입력 장치 */
+}
+
+@media (pointer: coarse) {
+  body { font-size: 20px; } /* 손가락 같은 터치 입력 장치 */
+}
+      </pre>
+        </li>
+        <li>
+            any-hover, any-pointer : 연결된 입력 장치 중 하나라도 조건을 만족하면 적용
+            <pre>
+@media (any-hover: hover) {
+  a:hover { text-decoration: underline; }
+}
+
+@media (any-pointer: coarse) {
+  button { padding: 1.5em; } /* 터치 환경 대응 */
+}
+      </pre>
+        </li>
+    </ul>
+</section>
+<section>
+    <h2>6. 해상도 및 디스플레이 조건</h2>
+    <ul>
+        <li>
+            min-resolution, max-resolution : 디바이스 픽셀 밀도 기준 (dpi, dppx)
+            <pre>
+@media (min-resolution: 150dpi) {
+  body {
+    font-size: 18px;
+  }
+}
+
+@media (max-resolution: 72dpi) {
+  body {
+    font-size: 12px;
+  }
+}
+      </pre>
+        </li>
+        <li>
+            고해상도(레티나) 화면 대응 시 사용
+            <pre>
+@media (min-resolution: 2dppx) {
+  img {
+    content: url("high-res-image.png");
+  }
+}
+      </pre>
+        </li>
+    </ul>
+</section>
+<section>
+    <h2>7. 정리 포인트</h2>
+    <ul>
+        <li>반응형 웹은 다양한 기기 환경에 맞게 자동으로 화면을 조정하는 기술</li>
+        <li>미디어 쿼리를 통해 조건에 맞는 CSS를 적용</li>
+        <li>주요 조건: 화면 크기, 방향(orientation), 해상도, hover 여부, 입력 장치</li>
+        <li>모바일 퍼스트 접근: 작은 화면부터 설계하고 점차 확장하는 방식 권장</li>
+    </ul>
+</section>
+</body>
+</html>

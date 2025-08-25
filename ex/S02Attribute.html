@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: white;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        ul {
+            margin-left: 20px;
+        }
+    </style>
+
+</head>
+<body>
+
+<h1>HTML 요소의 속성 정리</h1>
+
+<section>
+    <h2>속성이란?</h2>
+
+    <ul>
+        <li>HTML 요소에 부가 정보를 제공함</li>
+        <li>항상 <code>이름="값"</code> 형식으로 작성</li>
+        <li>시작 태그 내부에 작성</li>
+    </ul>
+
+</section>
+
+<section>
+    <h2>속성 예시</h2>
+    <ul>
+        <li><code>&lt;a href="https://example.com"&gt;</code> : 링크 주소</li>
+        <li><code>&lt;img src="image.jpg" alt="설명"&gt;</code> : 이미지 경로와 대체 텍스트</li>
+        <li><code>&lt;input type="text" value="기본값"&gt;</code> : 입력값 설정</li>
+        <li><code>&lt;button disabled&gt;</code> : 버튼 비활성화</li>
+        <li><code>&lt;div title="툴팁"&gt;</code> : 마우스를 올렸을 때 설명 표시</li>
+    </ul>
+</section>
+<section>
+
+    <h2>공통 속성(Global Attributes)</h2>
+    <ul>
+        <li><code>id</code> : 고유 식별자</li>
+        <li><code>class</code> : 클래스 이름 (CSS, JS에서 사용)</li>
+        <li><code>style</code> : 인라인 스타일 지정</li>
+        <li><code>title</code> : 툴팁 제공</li>
+        <li><code>hidden</code> : 화면에서 숨김 처리</li>
+        <li><code>data-*</code> : 사용자 정의 데이터 속성</li>
+    </ul>
+</section>
+<section>
+    <h2>Input 요소의 주요 속성</h2>
+    <ul>
+        <li><code>type</code> : 입력 필드의 유형 설정 (text, password, email 등)</li>
+        <li><code>value</code> : 초기 입력값 설정</li>
+        <li><code>placeholder</code> : 입력 전 표시되는 안내 텍스트</li>
+        <li><code>name</code> : 폼 전송 시 사용되는 이름</li>
+        <li><code>required</code> : 필수 입력 필드로 지정</li>
+        <li><code>readonly</code> : 읽기 전용으로 설정</li>
+        <li><code>disabled</code> : 비활성화 상태로 설정</li>
+        <li><code>maxlength</code> : 입력 가능한 최대 글자 수 제한</li>
+        <li><code>autocomplete</code> : 자동 완성 기능 설정 (on/off)</li>
+    </ul>
+    <h3>예시</h3>
+    <ul>
+        <li><code>&lt;input type="text" placeholder="이름을 입력하세요"&gt;</code></li>
+        <li><code>&lt;input type="password" required&gt;</code></li>
+        <li><code>&lt;input type="email" value="user@example.com" readonly&gt;</code></li>
+        <li><code>&lt;input type="text" disabled value="수정 불가"&gt;</code></li>
+        <li><code>&lt;input type="text" maxlength="10"&gt;</code></li>
+    </ul>
+    <h3>입력 필드 실습 예제</h3>
+    <form>
+        <p>
+            <label>이름 (placeholder 사용): </label>
+            <input type="text" placeholder="이름을 입력하세요">
+        </p>
+        <p>
+            <label>비밀번호 (필수): </label>
+            <input type="password" required>
+        </p>
+        <p>
+            <label>이메일 (readonly): </label>
+            <input type="email" value="user@example.com" readonly>
+        </p>
+        <p>
+            <label>비활성화된 필드: </label>
+            <input type="text" disabled value="수정 불가">
+        </p>
+        <p>
+            <label>글자 수 제한 (최대 10자): </label>
+            <input type="text" maxlength="10">
+        </p>
+        <p>
+            <button type="submit">제출</button>
+        </p>
+    </form>
+</section>
+</body>
+</html>

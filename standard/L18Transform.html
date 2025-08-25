@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>트랜스폼으로 요소를 변경하자</title>
+</head>
+
+<style>
+    .container{
+        border: 1px solid;
+    }
+    .container>.box{
+        width: 5em;
+        height: 5em;
+        display: inline-block;
+        background-color: hotpink;
+        border: 1px solid #7d1f4e;
+        transition: transform 1s ease;
+    }
+    .ex1:active{
+        /*transform: translateX(10em);*/
+        /*transform: translateY(10em);*/
+        transform: translateX(10em) translateY(10em);
+    }
+
+
+    .ex2:active{
+        transform: rotate(100deg);
+    }
+    .ex3:active{
+        transform: rotateX(100deg);
+    }
+    .ex4:active{
+        transform: rotateY(100deg);
+    }
+
+
+    .ex5:active{
+        transform: scale(.1);
+    }
+    .ex6:active{
+        transform: scaleX(0);
+    }
+    .ex7:active{
+        transform: scaleY(0);
+    }
+
+
+    .ex8:active{
+        transform: skew(30deg, 30deg);
+    }
+    .ex9:active{
+        transform: skewX(30deg);
+    }
+    .ex10:active{
+        transform: skewY(30deg);
+    }
+
+    .ex11{
+        transform-origin: 10% 10%;
+    }
+    .ex12{
+        transform-origin: right bottom;
+    }
+    .ex13{
+        transform-origin: right top;
+    }
+    .ex11:active, .ex12:active, .ex13:active{
+        /*transform-origin: 50% 50%;*/
+        transform: scale(0);
+
+    }
+
+</style>
+
+
+<body>
+
+    <h1>트랜스폼으로 요소를 변경하자</h1>
+
+    <h2>Translate : 이동</h2>
+    <div class="container">
+        <div class="box ex1"></div>
+    </div>
+
+
+    <h2>Rotate : 회전</h2>
+    <div class="container">
+        <div class="box ex2"></div>
+        <div class="box ex3"></div>
+        <div class="box ex4"></div>
+    </div>
+
+    <h2>Scale : 크기조절</h2>
+    <div class="container">
+        <div class="box ex5"></div>
+        <div class="box ex6"></div>
+        <div class="box ex7"></div>
+    </div>
+    <h2>Skew : 비틀기</h2>
+    <div class="container">
+        <div class="box ex8"></div>
+        <div class="box ex9"></div>
+        <div class="box ex10"></div>
+    </div>
+    <h2>transform-origin : 기준점 이동</h2>
+    <div class="container">
+        <div class="box ex11"></div>
+        <div class="box ex12"></div>
+        <div class="box ex13"></div>
+    </div>
+
+</body>
+</html>

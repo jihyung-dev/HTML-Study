@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>CSS 단위 정리</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: white;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        ul {
+            margin-left: 20px;
+        }
+        .box {
+            display: inline-block;
+            background-color: #3498db;
+            width: 4em;
+            height: 4em;
+            margin: 5px 0;
+            text-align: center;
+            line-height: 4em;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>CSS 단위 정리</h1>
+<section>
+    <h2>📏 크기 단위</h2>
+    <ul>
+        <li><strong>px</strong> – 픽셀 (기본 고정 단위)</li>
+        <li><strong>%</strong> – 부모 요소 기준 비율</li>
+        <li><strong>em</strong> – 부모 폰트 크기 기준 (상대 단위)</li>
+        <li><strong>rem</strong> – 루트 폰트 크기 기준 (HTML 기본 16px)</li>
+        <li><strong>vw / vh</strong> – 뷰포트 너비 / 높이 기준 (반응형에서 필수)</li>
+        <li><strong>vmin / vmax</strong> – 뷰포트의 작은 / 큰 축 기준</li>
+        <li><strong>calc()</strong> – 여러 단위를 계산해서 조합할 때 사용</li>
+    </ul>
+</section>
+
+<section>
+    <h2>🎨 색상 단위</h2>
+    <ul>
+        <li><strong>rgb(r, g, b)</strong> – 정수값 (0~255)</li>
+        <li><strong>rgba(r, g, b, a)</strong> – 투명도 포함</li>
+        <li><strong>#rrggbb</strong> – 16진수 표현</li>
+        <li><strong>hsl(h, s%, l%)</strong> – 색조, 채도, 명도</li>
+        <li><strong>hsla(h, s%, l%, a)</strong> – 투명도 포함 HSL</li>
+    </ul>
+</section>
+
+<section>
+    <h2>크기 단위 예시</h2>
+    <ul>
+        <li>px (픽셀): 고정된 단위, 화면 해상도 기준
+            <div class="box" style="width: 100px; height: 100px;">100px</div>
+        </li>
+        <li>% (백분율): 부모 요소 기준
+            <div class="box" style="width: 50%; height: 50%;">50%</div>
+        </li>
+        <li>vw / vh (뷰포트 너비 / 높이 기준):
+            <div class="box" style="width: 20vw; height: 20vh;">20vw / 20vh</div>
+        </li>
+        <li>rem (루트 폰트 크기 기준, 기본 1rem = 16px)
+            <div class="box" style="width: 2rem; height: 2rem;">2rem</div>
+        </li>
+        <li>em (부모 폰트 크기 기준)
+            <div style="font-size: 0.5em;">
+                <div class="box" style="width: 10em; height: 10em;">10em</div>
+            </div>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>색상 단위 예시</h2>
+    <ul>
+        <li>rgb(r, g, b): 정수값(0~255)
+            <div class="box" style="background: rgb(255,0,0);">RGB</div>
+        </li>
+        <li>rgba(r, g, b, a): RGB + 투명도(0~1)
+            <div class="box" style="background: rgba(255,0,0,0.5);">RGBA</div>
+        </li>
+        <li>#RRGGBB (16진수 표기법)
+            <div class="box" style="background: #FF0000;">#FF0000</div>
+        </li>
+        <li>hsl(H, S%, L%): 색상(0~360), 채도/명도(0~100%)
+            <div class="box" style="background: hsl(200, 70%, 70%);">HSL</div>
+        </li>
+        <li>hsla(H, S%, L%, A): HSL + 투명도
+            <div class="box" style="background: hsla(200, 70%, 70%, 0.5);">HSLA</div>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>단위 사용 시 주의사항</h2>
+    <ul>
+        <li>숫자 0은 단위 없이 사용 가능 (ex. `width: 0;`)
+            <div class="box" style="width: 0; height: 50px;">0</div>
+        </li>
+        <li>0이 아닌 숫자에는 반드시 단위가 필요함
+            <div class="box" style="width: 1000; height: 1000;">잘못된 예</div>
+        </li>
+        <li>단위끼리 수학 연산은 직접 불가능
+            <div class="box" style="width: 100px + 100px;">오류</div>
+        </li>
+        <li>계산할 경우 `calc()` 함수 사용
+            <div class="box" style="width: calc(300px / 4);">calc</div>
+        </li>
+        <li>`calc()` 연산 시 연산자 주변에 공백 필수
+            <div class="box" style="width: calc(100px + 50px);">OK</div>
+        </li>
+    </ul>
+</section>
+
+</body>
+</html>

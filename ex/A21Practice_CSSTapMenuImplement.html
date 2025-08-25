@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+    <title>순수 CSS 탭 메뉴 구현하기</title>
+    <style>
+
+    .container{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 400px;
+
+    }
+           /*글씨가 왜 다 올라갔을까요 ?*/
+    .tap{
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        display: flex;
+        flex-grow: 0.3;
+        justify-content: space-between;
+        align-items: center;
+        background-color: rgba(230, 230, 230, 0.73);
+        width: 100%;
+        height: 3em;
+        border-radius: 1em;
+        border: 1px solid #e6e6e6;
+    }
+    label:hover{
+        background-color: #cbc9c9;
+    }
+    .tap >input{
+       display: none;
+    }
+    .tap > label{
+        font-size: 1em;
+        cursor: pointer;
+        text-align: center;
+        flex-grow:1;
+        height: 3em;
+    }
+    .body{
+        position: relative;
+        width: 100%;
+
+    }
+
+    .body > div{
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        /*position: absolute;*/
+        max-height:0;
+        opacity : 0;
+        width: 100%;
+        /*transition : 1s ease-in-out ;*/
+        border-radius: 0.5em;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+    .container:has(#tab1:checked) #body1,
+    .container:has(#tab2:checked) #body2,
+    .container:has(#tab3:checked) #body3{
+        animation: tap 1s forwards;
+    }
+
+    @keyframes tap {
+        to{
+            padding: 20px;
+            max-height: 20em;
+            opacity: 1;
+            background-color: #e5e5e5;
+        }
+
+    }
+
+    </style>
+
+
+</head>
+<body>
+    <h2>순수 CSS 탭 메뉴 구현하기</h2>
+    <ul>
+        <li>라디오 버튼 + label을 이용하여 탭을 전환한다.
+            label을 클릭하면 연결된 input[type="radio"]가 체크되며, 이를 CSS로 감지해 콘텐츠를 토글한다.</li>
+        <li>:has() 선택자를 활용해 “특정 라디오 버튼이 체크되었을 때 해당 콘텐츠를 보이게” 만든다.</li>
+        <li>애니메이션은 display:none 대신 max-height, opacity, transform을 조합해 부드럽게 펼침/접힘 효과를 만든다.</li>
+    </ul>
+    <div class="container">
+        <div class="tap">
+            <input type="radio" name="tab" id="tab1" >
+            <label for="tab1">홈</label>
+            <input type="radio" name="tab" id="tab2">
+            <label for="tab2">소개</label>
+            <input type="radio" name="tab" id="tab3">
+            <label for="tab3">연락</label>
+        </div>
+        <div class="body">
+            <div id="body1">여기는 홈 화면 입니다.</div>
+            <div id="body2">간단한 소개 페이지입니다.</div>
+            <div id="body3">연락처: email@example.com</div>
+        </div>
+    </div>
+
+</body>
+
+
+</html>

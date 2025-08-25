@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>animation</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<style>
+
+    /* 1) 무지개 색상 박스 (여러 단계 순환 → transition 불가) */
+    .rainbow {
+        width: 140px; height: 80px; border-radius: 12px;
+        animation: hue 3.6s linear infinite, pulse 1.2s ease-in-out infinite;
+        background: #ff0000;
+    }
+    @keyframes hue {
+        0%   { background: #ff3b30; }
+        16%  { background: #ff9500; }
+        33%  { background: #ffcc00; }
+        50%  { background: #34c759; }
+        66%  { background: #007aff; }
+        83%  { background: #5856d6; }
+        100% { background: #ff3b30; }
+    }
+    @keyframes pulse {
+        0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,0,0,.10); }
+        50%     { transform: scale(1.05); box-shadow: 0 10px 24px 0 rgba(0,0,0,.18); }
+    }
+
+    /* 2) 타자기 효과 + 커서 깜빡임 (steps 필요 → transition 불가) */
+    .typing-wrap {
+        display: inline-flex; align-items: center;
+        background: #101828; color: #e5e7eb; padding: 10px 14px; border-radius: 10px;
+    }
+    .typing {
+        font-size: 2em;
+        overflow: hidden; white-space: nowrap; width: 0ch;
+        animation: typing 3.2s steps(22) 0.2s 1 both;
+    }
+    .caret {
+        width: 2px; height: 2em; background: #e5e7eb; margin-left: 6px;
+        animation: blink 900ms steps(1) infinite;
+    }
+    @keyframes typing {
+        /*ch 폰트의 폭*/
+        from { width: 0ch; }
+        to   { width: 22ch; } /* 텍스트 길이에 맞춰 조절 */
+    }
+    @keyframes blink {
+        0%, 49%  { opacity: 1; }
+        50%,100% { opacity: 0; }
+    }
+
+    /* 3) 카드 플립 3D (backface-visibility/왕복 방향 제어 → animation) */
+    .scene { perspective: 800px; }
+    .card {
+        width: 200px; height: 120px; position: relative;
+        transform-style: preserve-3d; border-radius: 14px;
+        animation: flip 2.2s cubic-bezier(.22,.61,.36,1) 0s infinite alternate both;
+        box-shadow: 0 10px 30px rgba(0,0,0,.15);
+    }
+    .face {
+        position: absolute; inset: 0; display: grid; place-items: center;
+        font-weight: 700; color: #fff; border-radius: 14px;
+        backface-visibility: hidden;
+    }
+    .front { background: linear-gradient(135deg,#5b8eff,#2c6bff); }
+    .back  { background: linear-gradient(135deg,#22c55e,#16a34a); transform: rotateY(180deg); }
+    @keyframes flip {
+        0%   { transform: rotateY(0deg); }
+        100% { transform: rotateY(180deg); }
+    }
+
+    /* 4) 로딩 애니메이션: 점 3개 순차 등장 (delay/반복 조합) */
+    .dots {
+        display: flex; gap: 10px;
+    }
+    .dot {
+        width: 14px; height: 14px; border-radius: 50%;
+        background: #111827;
+        animation: popdot 1s cubic-bezier(.22,.61,.36,1) infinite;
+    }
+    .dot:nth-child(2){ animation-delay: .15s; }
+    .dot:nth-child(3){ animation-delay: .30s; }
+    @keyframes popdot {
+        0%, 60%, 100% { transform: translateY(0) scale(1); opacity: .35; }
+        30%          { transform: translateY(-10px) scale(1.15); opacity: 1; }
+    }
+
+    /* 5) 스프라이트 느낌의 steps 애니메이션 (배경 프레임 시트 흉내) */
+    .sprite {
+        width: 96px; height: 96px; image-rendering: pixelated;
+        /* 5프레임짜리 가짜 스프라이트 시트(가로 5칸) */
+        background-size: 480px 96px; /* 96*5 = 480 */
+        background-repeat: no-repeat;
+        border-radius: 10px; overflow: hidden; box-shadow: 0 8px 22px rgba(0,0,0,.12);
+        animation: run 900ms steps(5) infinite;
+        /* 프레임 시트: 각 프레임마다 모양/색이 다른 정사각형을 그라디언트로 구성 */
+        background-image:
+                linear-gradient(to right,
+                    /* frame1 */ #ff3b30 0 96px,
+                    /* frame2 */ #34c759 96px 192px,
+                    /* frame3 */ #007aff 192px 288px,
+                    /* frame4 */ #ffcc00 288px 384px,
+                    /* frame5 */ #8e44ad 384px 480px
+                );
+    }
+    @keyframes run {
+        from { background-position:    0 0; }
+        to   { background-position: -384px 0; } /* 480-96 = 384 */
+    }
+
+    /* 작은 라벨 */
+    .label {
+        position: absolute; top: 10px; right: 12px;
+        background: #eef2ff; color: #334155; border-radius: 999px;
+        padding: 3px 10px; font-size: 12px; font-weight: 700;
+    }
+
+    /* 안내 문구 */
+    .hint {
+        font-size: 12px; color: #667085; text-align: center; margin-top: 10px;
+    }
+    </style>
+<body>
+    <h1>animation 속성으로 복잡한 동작을 구현하자</h1>
+    <section>
+        <h2>1. 애니메이션 개요</h2>
+        <ul>
+            <li>CSS가 시간 축을 따라 스타일 값을 자동으로 보간하는 기능</li>
+            <li>키프레임과 타이밍 함수를 조합해 상태 변화를 구현</li>
+            <li>브라우저는 transform/opacity 위주 애니메이션을 합성 단계에서 처리</li>
+        </ul>
+        <h3>Transition 한계</h3>
+        <ul>
+            <li>시간 개념이 없음 → 값이 즉시 바뀜</li>
+            <li>변형 속성이 제한적 (색상, 투명도, 그림자 등은 불가)</li>
+            <li>상태 제어 불가 (반복, 지연, 방향 제어 없음)</li>
+            <li>중간 단계 정의 불가 (시작/끝만 가능)</li>
+        </ul>
+        <h3>Animation만 할 수 있는 것</h3>
+        <ul>
+            <li>시간 축 제어: 반복, 지연, 방향, 일시정지/재개</li>
+            <li>다양한 스타일 속성 애니메이션 가능 (opacity, color, shadow 등)</li>
+            <li>@keyframes로 여러 단계(0%, 50%, 100% …) 정의 가능</li>
+            <li>이벤트 없이 자동 실행 가능</li>
+            <li>alternate, reverse, fill-mode 등 특수 제어 가능</li>
+        </ul>
+        <style>
+            /* 공통 박스 스타일 */
+            .box {
+                width: 100px;
+                height: 100px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                font-weight: bold;
+            }
+
+            /* 1. 무한 회전 (transition으로 불가: 이벤트 없어도 계속 반복) */
+            .spin {
+                background: #3498db;
+                animation: spin 2s linear 10;
+
+            }
+            .spin:hover {
+                animation-play-state: paused;
+            }
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+
+            /* 2. 여러 단계 색상 변화 (transition은 시작-끝만 가능) */
+            .color-cycle {
+                background: red;
+                animation: cycle 4s infinite;
+            }
+            @keyframes cycle {
+                0%   { background: red; }
+                33%  { background: orange; }
+                66%  { background: limegreen; }
+                100% { background: red; }
+            }
+
+            /* 3. 타자 효과 (steps, transition은 불가) */
+            .typing {
+                width: 0;
+                background: #2ecc71;
+                overflow: hidden;
+                white-space: nowrap;
+                border-right: 3px solid #fff;
+                animation: typing 4s steps(12) infinite alternate;
+            }
+            @keyframes typing {
+                from { width: 0; }
+                to   { width: 12ch; }
+            }
+            .box-wrap{
+                display: flex;
+            }
+            .spin-hover{
+                background: #28527f;
+            }
+            .spin-hover:hover{
+                transform: rotate(360deg);
+                transition: all 1s linear;
+            }
+            .color-cycle-hover:hover{
+                background: red;
+                transition: all 1s linear;
+            }
+            .typing-hover{
+                background: #2ecc71;
+                transform-origin: 0 0;
+                transform: scaleX(.1);
+            }
+            .typing-hover:hover{
+                transform: scaleX(1);
+                transition: all 1s steps(4);
+            }
+        </style>
+        <div class="box-wrap">
+            <div class="box spin-hover">회전</div>
+            <div class="box color-cycle-hover">색상</div>
+            <div class="box typing-hover">타자효과</div>
+        </div>
+        <hr>
+        <div class="box-wrap">
+            <div class="box spin">회전</div>
+            <div class="box color-cycle">색상</div>
+            <div class="box typing">타자효과</div>
+        </div>
+    </section>
+    <section>
+        <h2>2. 핵심 구성요소</h2>
+        <ul>
+            <li>@keyframes: 애니메이션 단계 정의</li>
+            <li>애니메이션 속성: 이름, 시간, 반복, 방향, 채움 모드 등</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>3. 주요 속성</h2>
+        <ul>
+            <li><strong>animation-duration</strong>
+                - 시간 단위: <code>s</code> (초), <code>ms</code> (밀리초)
+                예: <code>2s</code>, <code>500ms</code></li>
+
+            <li><strong>animation-timing-function</strong>
+                - 사전 정의: <code>linear</code>, <code>ease</code>, <code>ease-in</code>, <code>ease-out</code>, <code>ease-in-out</code>
+                - 사용자 정의: <code>cubic-bezier(x1,y1,x2,y2)</code>, <code>steps(n, start|end)</code></li>
+
+            <li><strong>animation-delay</strong>
+                - 지연 시간: <code>s</code>, <code>ms</code> 단위
+                예: <code>1s</code>, <code>200ms</code></li>
+
+            <li><strong>animation-iteration-count</strong>
+                - 정수 값: <code>1</code>, <code>2</code>, <code>3</code> …
+                - 무한 반복: <code>infinite</code></li>
+
+            <li><strong>animation-direction</strong>
+                - <code>normal</code>: 기본 방향
+                - <code>reverse</code>: 반대 방향
+                - <code>alternate</code>: 정/역 왕복
+                - <code>alternate-reverse</code>: 역/정 왕복</li>
+
+            <li><strong>animation-fill-mode</strong>
+                - <code>none</code>: 기본값, 애니메이션 외에는 적용 안 됨
+                - <code>forwards</code>: 마지막 상태 유지
+                - <code>backwards</code>: 시작 지연 시 첫 상태 적용
+                - <code>both</code>: 시작 전·종료 후 상태 모두 유지</li>
+
+            <li><strong>animation-play-state</strong>
+                - <code>running</code>: 실행 상태
+                - <code>paused</code>: 일시 정지</li>
+        </ul>        <h3>animation: 단축 표기</h3>
+        <ul>
+            <li><code>animation: fadeIn 2s;</code>
+                이름 + 시간</li>
+
+            <li><code>animation: slideUp 1s ease-out;</code>
+                이름 + 시간 + 타이밍 함수</li>
+
+            <li><code>animation: pop 0.6s ease-in-out 0.3s;</code>
+                이름 + 시간 + 타이밍 함수 + 지연</li>
+
+            <li><code>animation: spin 1s linear 0s infinite;</code>
+                이름 + 시간 + 타이밍 함수 + 지연 + 반복</li>
+
+            <li><code>animation: bounce 1.2s ease-in 0s infinite alternate;</code>
+                이름 + 시간 + 타이밍 함수 + 지연 + 반복 + 방향</li>
+
+            <li><code>animation: typing 3s steps(12, end) 0.5s infinite alternate both running;</code>
+                모든 속성을 포함한 예시 (이름, 시간, 타이밍, 지연, 반복, 방향, fill-mode, play-state)</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>4. 타이밍 함수</h2>
+        <ul>
+            <li>ease, linear, ease-in, ease-out, ease-in-out</li>
+            <li>cubic-bezier(): 사용자 정의 곡선</li>
+            <li>steps(): 계단식 애니메이션</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>5. 상태 제어</h2>
+        <ul>
+            <li>hover 시 일시정지/재생</li>
+            <li>fill-mode로 최종 상태 유지</li>
+            <li>alternate로 왕복 동작</li>
+        </ul>
+    </section>
+
+    <h2>실습 과제 </h2>
+    <section>
+        <h2> 무지개 색상 박스</h2>
+        <p>빨강→주황→노랑→초록→파랑→보라 순환. 여러 단계 순환은 animation 전용 패턴.</p>
+        <div class="demo">
+            <div class="rainbow"></div>
+        </div>
+        <div class="hint">여러 키프레임 분할과 무한 반복</div>
+    </section>
+
+    <section>
+        <h2> 타자기 효과</h2>
+        <p><code>steps()</code>로 글자가 “한 글자씩” 나타나는 효과 + 커서 깜빡임.</p>
+        <div class="demo">
+            <div class="typing-wrap">
+                <span class="typing">Hello, CSS Animation!</span>
+                <span class="caret" aria-hidden="true"></span>
+            </div>
+        </div>
+        <div class="hint">연속 보간이 아닌 계단식 변화 → steps()</div>
+    </section>
+
+    <section>
+        <h2> 카드 플립 3D</h2>
+        <p>앞/뒤 면을 가진 카드가 Y축 회전으로 뒤집힘. <code>backface-visibility</code> 필수.</p>
+        <div class="demo">
+            <div class="scene">
+                <div class="card">
+                    <span class="label">alternate</span>
+                    <div class="face front">FRONT</div>
+                    <div class="face back">BACK</div>
+                </div>
+            </div>
+        </div>
+        <div class="hint">perspective + preserve-3d + alternate 방향</div>
+    </section>
+
+    <section>
+        <h2> 로딩 애니메이션 (점 3개)</h2>
+        <p>세 점이 순서대로 톡톡 튀는 로딩. 요소별 <code>animation-delay</code>로 시퀀스 구성.</p>
+        <div class="demo">
+            <div class="dots">
+                <div class="dot" aria-label="loading dot 1"></div>
+                <div class="dot" aria-label="loading dot 2"></div>
+                <div class="dot" aria-label="loading dot 3"></div>
+            </div>
+        </div>
+        <div class="hint">delay로 순차 연출, 반복으로 영속적인 로딩</div>
+    </section>
+
+    <section>
+        <h2> 스프라이트 느낌의 steps 애니메이션</h2>
+        <p>가로로 이어진 5프레임 시트를 <code>steps(5)</code>로 프레임 점프. 실제 스프라이트 이미지로 교체 가능.</p>
+        <div class="demo">
+            <div class="sprite" role="img" aria-label="sprite running"></div>
+        </div>
+        <div class="hint">배경 위치를 프레임 단위로 점프 → steps()</div>
+    </section>
+
+</body>
+</html>

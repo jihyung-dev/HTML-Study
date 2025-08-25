@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: white;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        ul {
+            margin-left: 20px;
+        }
+    </style>
+
+</head>
+<body>
+<h1>position 으로 요소의 위치 지정</h1>
+<section>
+    <h2>position: static (기본값)</h2>
+    <ul>
+        <li>기본 배치 상태이며 따로 위치 지정하지 않음</li>
+        <li><code>top</code>, <code>left</code> 등의 위치 속성이 무시됨</li>
+    </ul>
+</section>
+
+<section>
+    <h2>position: relative (상대 위치)</h2>
+    <ul>
+        <li>요소의 원래 위치(static 기준)를 기준으로 이동</li>
+        <li>문서 흐름에는 영향을 주지 않음 (자리 차지 유지)</li>
+        <li>자식의 <code>absolute</code> 위치 기준이 됨</li>
+    </ul>
+</section>
+
+<section>
+    <h2>position: absolute (절대 위치)</h2>
+    <ul>
+        <li>가장 가까운 <code>relative</code>, <code>absolute</code>, <code>fixed</code>, <code>sticky</code> 부모 기준으로 위치함</li>
+        <li>문서 흐름에서 제거되어 겹칠 수 있음</li>
+        <li>기준 부모가 없으면 <code>&lt;html&gt;</code> 기준</li>
+    </ul>
+</section>
+
+<section>
+    <h2>position: fixed (뷰포트 기준 고정)</h2>
+    <ul>
+        <li>브라우저 화면(뷰포트)을 기준으로 항상 고정</li>
+        <li>스크롤해도 같은 위치에 유지됨</li>
+        <li>주로 헤더/사이드바/알림창 등에 사용</li>
+    </ul>
+</section>
+
+<section>
+    <h2>position: sticky (스크롤에 따라 고정)</h2>
+    <ul>
+        <li>스크롤 시 지정 위치에 도달하면 고정됨</li>
+        <li>그 이전에는 <code>relative</code>처럼 동작</li>
+        <li>부모 요소의 영역을 벗어나면 다시 스크롤됨</li>
+        <li><code>top</code>, <code>left</code> 등의 기준값 필요</li>
+    </ul>
+</section>
+<section>
+    <h2>top / right / bottom / left</h2>
+    <ul>
+        <li>요소의 위치를 조절하는 속성</li>
+        <li><code>relative</code>, <code>absolute</code>, <code>fixed</code>, <code>sticky</code>에서만 동작</li>
+        <li>위치를 지정할 축 기준은 부모 또는 뷰포트에 따라 다름</li>
+        <li>예: <code>top: 10px</code> → 위에서 10px 아래로 이동</li>
+    </ul>
+</section>
+
+<section>
+    <h2>z-index (요소의 쌓이는 순서)</h2>
+    <ul>
+        <li>요소가 화면에 **겹칠 때 위/아래 순서**를 결정</li>
+        <li>값이 클수록 위에 표시됨</li>
+        <li>음수도 가능 (<code>z-index: -1</code> → 맨 뒤)</li>
+        <li><strong>position이 지정된 요소</strong>에서만 동작 (<code>relative</code>, <code>absolute</code>, <code>fixed</code>, <code>sticky</code>)</li>
+    </ul>
+</section>
+</body>
+</html>

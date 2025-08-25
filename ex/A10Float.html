@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Float</title>
+    <style>
+        .subject1>img{
+            float: left;
+            height: 150px;
+        }
+        .subject1>p{padding: 10px;
+        }
+
+
+
+        ul{
+            width: 100%;
+            background-color: #333333;
+        }
+        ul>li{
+            list-style: none;
+            float: left;
+            padding: 15px;
+            background-color: #333333;
+            color: white;
+            width : fit-content;
+        }
+        ul::after{
+            content: "";
+            display: table;
+
+            clear: both;
+        }
+        .clear {
+            clear: both;
+        }
+    </style>
+
+</head>
+<body>
+
+
+<h3><strong>과제 1: 이미지와 텍스트 감싸기 </strong></h3>
+<div class="subject1">
+<img src="/src/img/cat.jpg" alt="">
+    <p>이 편지는 영국에서 최초로 시작되어 일년에 한바퀴를 돌면서 받는 사람에게 행운을 주었고
+        지금은 당신에게로 옮겨진 이 편지는 4일 안에 당신 곁을 떠나야 합니다. 이 편지를 포함해서 7통을 행운이 필요한 사람에게 보내 주셔야 합니다.
+        복사를 해도 좋습니다. 혹 미신이라 하실지 모르지만 사실입니다.</p>
+</div>
+
+<br><br><br><br>
+<h3><strong>과제 2: 2단 레이아웃 만들기</strong></h3>
+    <div style="
+        float: left;
+        background-color: #3498db;
+        width: 50%;
+        box-sizing: border-box">
+        <p>왼쪽 0역</p>
+    </div>
+    <div style="
+        float: right;
+        background-color: mediumspringgreen;
+        width: 50%;
+        box-sizing: border-box">
+        <p>오른쪽 0역</p>
+    </div>
+    <div style="clear: both"></div>
+
+<br><br><br>
+<h3><strong>과제 3: 가로 메뉴 만들기</strong></h3>
+<div style="background-color: #e74c3c;">
+    <ul>
+        <li>메뉴1</li>
+        <li>메뉴2</li>
+        <li>메뉴3</li>
+        <li>메뉴4</li>
+        <li>메뉴5</li>
+    </ul>
+</div>
+<div class="clear"></div>
+
+
+</body>
+</html>

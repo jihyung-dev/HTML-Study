@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Background 속성으로 배경을 지정하자</title>
+
+    <style>
+        .container{
+            min-height: 10em;
+        }
+        .wrap{
+            top: 10em;
+            left : 10em;
+            display: flex;
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            justify-content: center;
+            align-items: center;
+            perspective-origin:  50% 50%;
+            transition: transform .5s ease;
+        }
+        .wrap >div{
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border: 1px solid black;
+            background-color: white;
+            transition: transform .5s ease;
+        }
+
+        .face1{
+            transform: rotateX(90deg) translateZ(-200px);
+        }
+        .face2{
+            transform: rotatey(90deg) translateZ(-200px);
+        }
+        .face3{
+            transform: rotatex(90deg) translateZ(200px);
+        }
+        .face4{
+            transform: rotatey(90deg) translateZ(200px);
+        }
+        .face5{
+            transform: rotatex(180deg) translateZ(200px);
+        }
+        .face6{
+            transform: rotatex(-180deg) translateZ(-200px);
+        }
+
+    </style>
+
+
+</head>
+<body>
+ <div>
+    <h1>Background 속성으로 배경을 지정하자</h1>
+    <div class="container" style="background-color: red;"></div>
+
+    <h2>배경 이미지 background-image</h2>
+    <div class="container" style="background-image: url('/src/img/cat.jpg');
+        background-size: contain; background-repeat: no-repeat;
+"></div>
+
+    <h2>배경 이미지 정렬 및 반복</h2>
+    <div class="container"
+         style="height: 20em; border: 1px solid;
+                background-image: url('/src/img/cat.jpg');
+                background-size: 10em 10em;
+                background-repeat: no-repeat;
+                background-position: 50% 2em;">
+        안녕!!!
+    </div>
+        <h2>배경의 그라데이션 gradient</h2>
+        <h3>선형 그라데이션 linear-gradient(?????)</h3>
+        <div class="container"
+             style="background: linear-gradient(blue,red)"
+        ></div>
+        <h3>그라데이션 방향</h3>
+        <div class="container"
+             style="background: linear-gradient(to right,blue,red)"
+        ></div>
+         <div class="container"
+         style="background: linear-gradient(45deg,blue,red)"
+        ></div>
+    <h3>그라디언트 색의 크기 지정</h3>
+        <div class="container"
+         style="background: linear-gradient(45deg,blue,red,green,purple)"
+        ></div>
+        <div class="container"
+         style="background: linear-gradient(45deg,blue 0 10%,red 50% 70%,green,purple)"
+        ></div>
+    <h3>그라디언트+img</h3>
+    <div class="container"
+         style="background: linear-gradient(45deg,blue 0 10%,red 50% 70%,green,purple)
+                            ,url('/src/img/cat.jpg');
+                            background-size: 5em;"
+    ></div>
+
+    <h3>그라디언트+size : 사진처럼 취급</h3>
+    <div class= "container"
+         style="
+         background-size: 5em 2em;
+         background-image: linear-gradient(45deg,blue 0 50%, red 50% 70%, green, purple);
+"
+    ></div>
+
+    <h2>원형 그라디언트 radial-gradient</h2>
+    <div class="container"
+         style="background: radial-gradient(at 0% 50%,blue,red,green,purple)"
+    ></div>
+
+    <div class="container"
+         style="background: radial-gradient(blue 0 10%, red 10% 20%, green 20% 30%, purple 30% 100%)"
+    ></div>
+
+    <h2>원뿔 그라디언트 conic-gradient</h2>
+    <div class="container"
+         style="background: conic-gradient(at 20% 20%,blue,red,green,purple,blue)"
+    ></div>
+
+    <div class="container"
+         style="background: conic-gradient(blue 0% 10%,red 10% 20%,green 20% 30%, white 30% 100%)"
+    ></div>
+
+    <div class="container"
+         style="background: conic-gradient(blue 0deg 10deg,red 10deg 20deg,green 20deg 45deg, white 45deg 100%)"
+    ></div>
+
+    <div class="container"
+         style="background: repeating-conic-gradient(blue 0deg 10deg,red 10deg 20deg,green 20deg 45deg, white 45deg 60deg)"
+    ></div>
+
+
+ </div>
+    <br><br><br>
+    <h2>정육면체 만들어보기 #1 감싸고 있는 div를 회전시켜서 회전 </h2>
+    <h3>버튼을 통해 회전하도록 만들기</h3>
+    <div class="wrap" id="boxWrap" style="background-color: #7aa9f7">
+        <div class="face1" style="background-color: rgba(240,60,60,0.78)">1</div>
+        <div class="face2" style="background-color: rgba(60,183,240,0.78)">2</div>
+        <div class="face3" style="background-color: rgba(60,63,240,0.78)">3</div>
+        <div class="face4" style="background-color: rgba(108,240,60,0.78)">4</div>
+        <div class="face5" style="background-color: rgba(189,60,240,0.78)">5</div>
+        <div class="face6" style="background-color: rgba(60,240,192,0.78)">6</div>
+    </div>
+ <br><br><br><br><br><br><br><br><br><br>
+    <div>
+        <div>perspective : <input id="wrapPerspectiveRange" type="range" min="400" max="1000" ></div>
+    </div>
+    <div>
+        <div>perspective-origin-x : <input id="wrapOriginRangeX" type="range" min="0" max="100" ></div>
+    </div>
+    <div>
+        <div>perspective-origin-y : <input id="wrapOriginRangeY" type="range" min="0" max="100" ></div>
+    </div>
+
+ <div>
+     <button class="right-button" id="rotateRightBtn">오른쪽 회전</button>
+     <button class="left-button" id="rotateLeftBtn">왼쪽 회전</button>
+     <br>
+     <button class="up-button" id="rotateUpBtn">위 회전</button>
+     <button class="down-button" id="rotateDownBtn">아래 회전</button>
+ </div>
+
+ <br><br><br>
+
+    <h2>정육면체 만들어보기 #2 각면의 꼭지점의 위치를 변형시켜 회전</h2>
+    <h3>버튼을 통한 회전</h3>
+
+
+ <style>
+     .container{
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         height: 50vh;
+
+
+     }
+     .face-wrap{
+         transform-style: preserve-3d;
+         perspective: 1000px;
+         perspective-origin: -300% 300%;
+         width: 200px;
+         height: 200px;
+
+     }
+     .face{
+         text-align: center;
+         width: 200px;
+         height: 200px;
+         position: absolute;
+
+     }
+     .face-0{
+         background-color: blue;
+         transform-origin: left;
+         transform: rotateY(10deg);
+         /*margin: 25px;*/
+         /*transform: rotateY(10deg) translateX(calc(sin(10deg) * 10px));*/
+     }
+
+     .face-1{
+         background-color: pink;
+         transform-origin: right;
+         /*transform: rotateY(100deg)  translateX(calc(-200% - sin(10deg) * 10px));*/
+         transform: rotateY(100deg) translateX(calc(100% - 1px )) translateZ(calc(sin(10deg) * 200px));
+     }
+     .face-1:hover{
+     }
+ </style>
+
+ <div class="container">
+     <div class="face-wrap">
+         <div class="face face-0">1</div>
+         <div class="face face-1">1</div>
+     </div>
+ </div>
+
+
+
+
+
+
+
+
+ <script>
+     const boxWrap=document.getElementById("boxWrap");
+     const wrapPerspectiveRange=document.getElementById("wrapPerspectiveRange");
+     const wrapOriginRangeX=document.getElementById("wrapOriginRangeX");
+     const wrapOriginRangeY=document.getElementById("wrapOriginRangeY");
+
+     const rotateRightBtn = document.getElementById("rotateRightBtn");
+     const rotateLeftBtn = document.getElementById("rotateLeftBtn");
+     const rotateUpBtn = document.getElementById("rotateUpBtn");
+     const rotateDownBtn = document.getElementById("rotateDownBtn");
+
+     let currentYRotation = 0;
+     let currentXRotation = 0;
+
+     // 각각 따로도는건 구현했는데 하나가 이제 고정되고 나머지가 그대로 유지되는채로 가게 해야한단 말이지 ~ X,Y를 다 써줌으로 구현
+
+     console.log(boxWrap);
+     console.log(wrapPerspectiveRange);
+     wrapPerspectiveRange.addEventListener("change", e => {
+         let unit=(wrapPerspectiveRange.value)+"px";
+         boxWrap.style.perspective=unit;
+     })
+     const originHandler=e => {
+         let x=(wrapOriginRangeX.value)+"%";
+         let y=(wrapOriginRangeY.value)+"%";
+         boxWrap.style.perspectiveOrigin=x+" "+y;
+     }
+     wrapOriginRangeX.addEventListener("change",originHandler)
+     wrapOriginRangeY.addEventListener("change",originHandler)
+
+     rotateRightBtn.addEventListener("click", e => {
+         currentYRotation += 13;
+         boxWrap.style.transform = `rotateY(${currentYRotation}deg) rotateX(${currentXRotation}deg)`;
+     });
+
+     rotateLeftBtn.addEventListener("click", e => {
+         currentYRotation -= 13;
+         boxWrap.style.transform = `rotateY(${currentYRotation}deg) rotateX(${currentXRotation}deg)`;
+     });
+
+     rotateUpBtn.addEventListener("click", e => {
+         currentXRotation += 13;
+         boxWrap.style.transform = `rotateY(${currentYRotation}deg) rotateX(${currentXRotation}deg)`;
+     });
+
+     rotateDownBtn.addEventListener("click", e => {
+         currentXRotation -= 13;
+         boxWrap.style.transform = `rotateY(${currentYRotation}deg) rotateX(${currentXRotation}deg)`;
+     });
+
+ </script>
+
+
+
+
+
+
+
+
+
+
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

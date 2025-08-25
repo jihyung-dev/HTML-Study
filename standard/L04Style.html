@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>스타일</title>
+
+<!--    internal style 적용 위치!  -->
+
+    <style>
+        h1{
+        /* css 주석 */
+            color : rgba(28, 41, 152, 0.36);
+        }
+        /*요소선택자(태그이름) : 요소 모두를 선택 후 변경  (1점) */
+        li{
+            text-decoration: underline;
+        }
+        /* class 선택자 . : 클래스가 지정된 모든 요소 변경  (10점) */
+        .blue{
+            color : blue;
+        }
+        /* id 선택자 # : 요소에서 한개만 선택 후 변경   (100점) */
+        #title {
+            color : red;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+
+    <h1>CSS 스타일</h1>
+    <p>브라우저는 html의 출력할 때 CSS를 기반으로 적용합니다.</p>
+    <h2>스타일의 종류</h2>
+<ul>
+    <li style="color: rgb(255,0,0)">
+        color : text의 색
+        <em>자식요소는 부모요소의 스타일을 그대로 적용(CASCADING)</em>
+    </li>
+    <li style="background-color: #FF00FF">
+        background-color : 배경색
+        <strong style="background-color: lime">
+        #FF0000 (00~FF(0~255) red 00 green 00 blue)
+        </strong>
+        <br> 같은 스타일 속성일때, 자식의 우선순위가 높다 (Override같은 느낌)
+    </li>
+    <li style="font-size: 20px; font-weight: lighter">
+        font-size : 폰트 크기, -weight : 폰트 굵기
+    </li>
+    <li style="border: 5px cadetblue dashed">
+        border 테두리, 컨텐츠의 경계 </li>
+
+    <li style="text-align: right">
+        text-align: [left center right]
+    </li>
+    <li style="border: 1px solid black;
+                margin: 10px; padding: 20px">
+        여백 외부(margin), 내부(padding)
+    </li>
+</ul>
+
+    <h2>클래스와 아이디 선택자로 css 적용</h2>
+<!--    ul>li{$$}*5   -->
+    <ul>
+        <li class="blue">01</li>
+        <li id="title" class="blue">02</li>
+        <li class="blue">03</li>
+        <li>04</li>
+        <li>05</li>
+    </ul>
+
+
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

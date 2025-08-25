@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>트랜스폼으로 3D 적용</title>
+</head>
+<style>
+    .container {
+        border: 1px solid;
+        background-color: rgba(122, 169, 247, 0.78);
+        padding: 2em;
+        display: flex;
+        justify-content: center;
+    }
+    .box{
+        border: 1px solid;
+        background-color: #73e6a4;
+        width: 10em;
+        height: 10em;
+        margin: 0 1em;
+    }
+    .grid-container{
+        background-color: rgba(0, 191, 255, 0.76);
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        row-gap: 2em;
+        padding: 2em;
+        perspective: 1000px;
+        transform-style: preserve-3d;
+
+    }
+    .grid-container>.box{
+        transform:  translateZ(15em) rotateX(90deg);
+        transition: 1s ease;
+    }
+    .grid-container:hover>.box{
+        transform:   translateZ(-40em) rotateX(90deg);
+    }
+
+
+
+</style>
+
+<body>
+    <h1>트랜스폼으로 3D 적용</h1>
+    <h2>3d 적용(원근감X)이 안된 transform rotateX</h2>
+    <div class="container">
+        <div class="box" style="transform: rotateX(30deg)">transform: rotateX(30deg)</div>
+        <div class="box" style="transform: rotateX(60deg)">transform: rotateX(60deg)</div>
+        <div class="box" style="transform: rotateX(90deg)">transform: rotateX(90deg)</div>
+    </div>
+
+    <h2>원근감 적용 perspective: 100px</h2>
+    <div class="container" style="perspective: 100px">
+        <div class="box" style="transform: rotateX(30deg)">transform: rotateX(30deg)</div>
+        <div class="box" style="transform: rotateX(60deg)">transform: rotateX(60deg)</div>
+        <div class="box" style="transform: rotateX(90deg)">transform: rotateX(90deg)</div>
+    </div>
+
+    <h2>원근감 적용 perspective: 1000px</h2>
+    <div class="container" style="perspective: 1000px">
+        <div class="box" style="transform: rotateX(30deg)">transform: rotateX(30deg)</div>
+        <div class="box" style="transform: rotateX(60deg)">transform: rotateX(60deg)</div>
+        <div class="box" style="transform: rotateX(90deg)">transform: rotateX(90deg)</div>
+    </div>
+
+    <h2>부모 자식이 3D로 연관있게 하기 : transform-style:flat->preserve-3D</h2>
+    <div class="container" style="perspective: 1000px; transform-style: preserve-3d">
+        <div class="box" style="transform: rotateX(30deg)">transform: rotateX(30deg)</div>
+        <div class="box" style="transform: rotateX(60deg)">transform: rotateX(60deg)</div>
+        <div class="box" style="transform: rotateX(90deg)">transform: rotateX(90deg)</div>
+    </div>
+
+    <h2>grid로 시선의 위치 확인</h2>
+    <div class="grid-container">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+    </div>
+</body>
+</html>

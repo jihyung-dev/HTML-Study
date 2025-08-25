@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>컨텐츠인 인라인 요소</title>
+</head>
+<style>
+    .red{
+        display: inline; /* inline-block으로 지정하면 다 먹힘 */
+        /*
+        넓이, 높이를 지정할 수 없다 (contents자체가 너비 및 높이, 따로 지정 불가능)(box model에 포함되지 않음:block)
+        마진은 좌우만 적용 가능 (마진 위 아래는 line-height 충돌하기 때문에 적용안됨
+        */
+
+        color: red;
+        width : 50px;
+    /*    The display: inline property prevents width
+          from having an effect.*/
+        height : 50px;
+    /*      The display: inline property prevents height from having an effect.
+            Try setting display to something other than inline*/
+        padding : 5px;
+        margin : 5px;
+        border : 1px solid red;
+        border-radius : 5px;
+        background-color: #2c3e50;
+
+
+    }
+    .link {
+        text-decoration: none;
+    }
+    .cat {
+        display: inline-block;
+        /*box모델을 모두 사용가능한 inline속성*/
+        width: 30px;
+        height: 40px;
+        object-fit: cover;
+        /* cover : 이미지를 너비 높이에 맞게 변형하지 않음 */
+
+        border : 1px solid blue;
+        padding: 5px;
+        margin: 5px;
+    }
+
+</style>
+
+
+
+<body>
+    <h1>컨텐츠(text)를 정의하는 인라인 요소</h1>
+    <ul>
+        <li>
+            span <span class="red">스팬태그</span> : 문자를 분리 (스타일이 없음)
+        </li>
+        <li>
+            <a class="link" href="https://naver.com">네이버</a>
+            a(Hypertext) : 방문한 기록이 있으면 보라색, 없으면 파란색, 기본이 밑줄
+        </li>
+        <li>
+            <b>굵게</b>
+            b : 텍스트를 굵게 표시
+        </li>
+        <li>
+            <strong>굵게+강조(의미론적_semantic)</strong>
+        </li>
+        <li>
+            <i>기울게</i>
+        </li>
+        <li>
+            <em>기울게+강조(semantic)</em>
+        </li>
+        <li>
+            <mark>마크</mark> 짠!
+        </li>
+        <li>
+            <big>크게</big> 없앨거라고 얘기만하는중
+        </li>
+        <li>
+            <small>작게</small> 얘는 안없앰?
+        </li>
+        <li>
+            안녕
+            <sup>위</sup>
+            <sub>아래</sub>
+            2<sup>2</sup> 대 구 사람~
+        </li>
+        <li>
+            <address>주소+semantic</address>
+            : 이메일주소, 사람의 고유 주소 입력
+        </li>
+        <li>
+            <code>System.out.println()</code>
+            프로그램 코드작성(번역 x)
+        </li>
+        <li>
+            <pre>
+                안녕!
+                경민이야
+                pre는 공백과 라인개행을 출력
+            </pre>
+        </li>
+
+        인라인인데 블럭(box medel)요소 (display:inline-block)
+        <ul>
+            <li> 이미지 :
+                <img class="cat" src="../src/img/cat.jpg" width="20" >
+
+
+            </li>
+        <li>
+            <input type="text">
+            <input type="checkbox" name="" id="">
+            <input type="range" name="" id="">
+            <input type="button" value="">
+            <select> <option>1</option></select>
+        </li>
+        <li>
+            <textarea></textarea>
+        </li>
+        </ul>
+    </ul>    
+
+
+</body>
+</html>

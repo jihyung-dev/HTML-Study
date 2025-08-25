@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>리소스 참조를 배워보자</title>
+<!-- 외부인데 바뀔 수 있는 CSS 참조 위치 ex)bootstrap   -->
+    <link rel="stylesheet" href="/src/bootstrap-5.3.7/bootstrap-5.3.7/dist/css/bootstrap.css">
+<!-- 외부 CSS를 참조하는 위치 : link로 참조 (헤드안 타이틀 아래)-->
+    <link rel="stylesheet" href="/src/background.css">
+<!-- 내부 CSS 위치, 우선순위는 인라인>내부>외부 이므로 -->
+<!-- 여기서 C는 Cascading _ 상속을 의미 -->
+    <style>
+        body{
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+    <h1>리소스 참조를 배워보자</h1>
+    <p>http://localhost:63342/html_Study/standard/L26Resource.html</p>
+    <ul>
+        <li>http : 통신규약</li>
+        <li>localhost : 내컴퓨터 내부 (127.0.0.1)</li>
+        <li>63342 : os가 부여한 웹서버의 고유번호 포트(port)</li>
+        <li>html_Study/standard/L26Resource.html : 서버내의 리소스 주소 (path)</li>
+        <li>http://localhost:63342/html_Study/standard/L26Resource.html : url (Uniform Resouce Locator)</li>
+    </ul>
+    <p>
+        <img src="/src/img/cat.gif" alt="">
+    </p>
+
+    <br><br><br>
+<!--#2 iframe-->
+    <h2>상대 경로</h2>
+    <ul>
+        <li>/path : 루트경로 => 리소스의 맨상단</li>
+        <li></li>
+        <li></li>
+    </ul>
+    <h2>다른 문서(html)을 포함하는 ifrmae</h2>
+    <h3> / : <strong>루트상대경로</strong> </h3>
+    <iframe src="/standard/L01Hello.html" frameborder="1"></iframe>
+    <hr>
+    <h3> ./  .  ../ : 리소스 위치 기준 (현재위치를 기준으로하는) <strong>상대경로</strong></h3>
+    <iframe src="/standard/L01Hello.html" frameborder="1"></iframe>
+    <hr>
+    <iframe src="../standard/L01Hello.html" frameborder="0"></iframe>
+
+    <br><br>
+    <h3>절대경로 : 통신규약 or 드라이버 </h3>
+    <iframe src="http://localhost:63342/html_study/L01Hello.html" frameborder="0"></iframe>
+    
+    <h3>절대경로로 다른 사이트 참조</h3>
+    <p>CORP Cross-Origin Resource =?> SOP : 같은 서버의 리소스만 참조가능</p>
+    <iframe src="https://naver.com" frameborder="0"></iframe>
+    <hr>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/5HGVrMUQCRo?si=VIPgvPQCmfp9sTiD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

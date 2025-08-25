@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>menubar</title>
+</head>
+
+
+<style>
+    .menubar {
+        display: inline-block;
+        position : sticky;
+        top : 0;
+        width: 100%;
+        text-align: left;
+        background-color: #333333;
+        margin: 0;
+    }
+    .hidden{
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease-in-out;
+
+        position: absolute;
+        top: 100%;
+        left: auto;
+
+        background-color: rgba(156, 156, 104, 0.9);
+        padding: 0.3em 1em;
+        border: 1px solid #051041;
+        min-width: 100px;
+        z-index: 10;
+    }
+    .hidden2{
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease-in-out;
+
+        position: absolute;
+        top: 0%;
+        left: 100%;
+
+        background-color: rgba(27, 78, 28, 0.9);
+        padding: 0.3em 1em;
+        border: 1px solid #051041;
+        min-width: 150px;
+        z-index: 10;
+    }
+    ul {
+        margin: 3px;
+        padding: 3px;
+    }
+    ul li{
+        font: bold 20px "Lucida Grande", Helvetica, Arial, sans-serif;
+        display: inline-block;
+        color : rgba(255, 255, 255, 0.93);
+        padding: 3px;
+        margin: 3px;
+        position: relative;
+        z-index: 3;
+    }
+    ol{
+        list-style: none;
+
+    }
+    ul li.hover > ol > li{
+        position: relative;
+        display: block;
+    }
+    ul li.hover > ol > li.hover2 > ol > li {
+        position: relative;
+        display: block;
+    }
+    .hover:hover > .hidden{
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .hover2:hover > .hidden2{
+        opacity: 1;
+        visibility: visible;
+    }
+    ol li:hover{
+        background-color: lightgray;
+    }
+
+    li.hover2:hover ol{
+        opacity: 1;
+        visibility: visible;
+    }
+    ol. li {
+        padding: 5px;
+    }
+    ol li:hover{
+        background-color: lightgray;
+    }
+
+
+</style>
+<body>
+
+<h1>Sticky HOME</h1>
+
+    <div class="menubar">
+        <ul>
+            <li class="hover">한식
+                <ol class="hidden">
+                    <li class="hover2">비빔밥
+                        <ol class="hidden2">
+                            <li>육회비빔밥</li>
+                            <li>양푼비빔밥</li>
+                        </ol>
+                    </li>
+                    <li>떡볶이</li>
+                </ol>
+            </li>
+            <li class="hover">일식
+                <ol class="hidden">
+                    <li>돈가스</li>
+                    <li>초밥</li>
+                </ol>
+            </li>
+            <li class="hover">양식
+                <ol class="hidden">
+                    <li>파스타</li>
+                    <li>리조또</li>
+                </ol>
+            </li>
+        </ul>
+    </div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</body>
+</html>

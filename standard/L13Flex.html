@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>display flex</title>
+</head>
+<body>
+
+    <h1>flex로 layout을 구성하자 </h1>
+    <p>flex는 요소를 블럭으로 정렬하기 위해서 만들어짐 (기본값:가로정렬)</p>
+    <ul style="display: flex; list-style: none;">
+        <li>플렉스아이템</li>
+        <li>플렉스아이템</li>
+        <li>플렉스아이템</li>
+        <li>플렉스아이템</li>
+        <li>플렉스아이템</li>
+    </ul>
+    <h2>justify-content: space-around 플렉스 아이템 주변에 여백을 고르게 주겠다.  [주측정렬]</h2>
+     <div style="display: flex; justify-content: space-around">
+        <p>아이템1</p>
+        <p>아이템2</p>
+        <p>아이템3</p>
+        <p>아이템4</p>
+        <p>아이템5</p>
+    </div>
+
+    <div style="display: flex; justify-content: space-evenly">
+        <p>아이템</p>
+        <p>아이템</p>
+        <p>아이템</p>
+        <p>아이템</p>
+        <p>아이템</p>
+    </div>
+
+    <div style="display: flex; justify-content: space-between">
+        <p>01아이템</p>
+        <p>02아이템</p>
+    </div>
+
+    <div style="display: flex; justify-content: center">
+        <p>01아이템</p>
+        <p>02아이템</p>
+    </div>
+    <hr>
+    <style>
+        .flex-warp{
+            display: flex;
+            height: 5em;
+            border: 1px solid;
+        }
+
+        .flex-warp>p{
+            border: 1px solid;
+            /*height: fit-content;*/
+            margin: 0;
+            align-items: stretch;
+        }
+    </style>
+
+    <div class="flex-warp">
+        <p>01아이템</p>
+        <p>02아이템</p>
+        <p>03아이템</p>
+    </div>
+    <h2>교차측 정렬 : flex 정렬의 교차측 정렬(기본값 stretch)</h2>
+    <div class="flex-warp"
+    style="align-items: center">
+        <p>01아이템</p>
+        <p>02아이템</p>
+        <p>03아이템</p>
+    </div>
+    <div class="flex-warp"
+         style="align-items: end">
+        <p>01아이템</p>
+        <p>02아이템</p>
+        <p>03아이템</p>
+    </div>
+
+    <div class="flex-warp"
+         style="align-items: start">
+        <p>01아이템</p>
+        <p>02아이템</p>
+        <p>03아이템</p>
+    </div>
+    <div class="flex-warp"
+         style="height: 20em;
+         justify-content: center">
+        <div>
+            <h2>로그인 폼</h2>
+            <p>id:<input type="text"></p>
+            <p>
+            <!-- 입력요소를 포커스하거나 체크하는 용도 -->
+                <label> pw;
+                <input type="password" ></label></p>
+        <p style="display: flex; justify-content: end; ">
+            <button>로그인</button>
+            <button>회원가입</button>
+        </p>
+
+
+        </div>
+
+
+
+
+</body>
+</html>

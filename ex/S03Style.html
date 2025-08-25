@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        background-color: #f9f9f9;
+    }
+    h1, h2 {
+        color: #2c3e50;
+    }
+    section {
+        margin-bottom: 30px;
+        padding: 15px;
+        background-color: white;
+        border-left: 5px solid rgb(52, 152, 219);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.23);
+    }
+    ul {
+        margin-left: 20px;
+    }
+</style>
+<body>
+
+<h1>CSS와 스타일 속성 정리</h1>
+<section>
+    <h2>CSS란?</h2>
+    <ul>
+        <li>CSS(Cascading Style Sheets)는 HTML 요소의 디자인(모양과 배치)을 지정하는 언어입니다.</li>
+        <li>HTML은 구조, CSS는 표현을 담당합니다.</li>
+        <li>하나의 CSS 파일로 여러 HTML 문서에 스타일을 적용할 수 있습니다.</li>
+    </ul>
+
+</section>
+<section>
+
+    <h2>스타일 속성이란?</h2>
+    <ul>
+        <li>HTML 태그 안에 <code>style</code> 속성을 사용해 인라인으로 CSS를 지정할 수 있습니다.</li>
+        <li>한 요소에 한 번만 적용되며, 우선순위가 높습니다.</li>
+        <li>예시: <code>&lt;p style="color:red;"&gt;빨간 글씨&lt;/p&gt;</code></li>
+    </ul>
+</section>
+<section>
+    <h2>자주 쓰는 CSS 속성</h2>
+    <ul>
+        <li><code>color</code> : 텍스트 색상</li>
+        <li><code>background-color</code> : 배경색</li>
+        <li><code>font-size</code> : 글자 크기</li>
+        <li><code>text-align</code> : 텍스트 정렬 (left, center, right)</li>
+        <li><code>width</code>, <code>height</code> : 요소의 너비와 높이</li>
+        <li><code>padding</code> : 안쪽 여백</li>
+        <li><code>margin</code> : 바깥 여백</li>
+        <li><code>border</code> : 테두리</li>
+    </ul>
+</section>
+<section>
+    <h2>CSS 선택자 정리</h2>
+    <ul>
+        <li>
+            <strong>전체 선택자</strong> (<code>*</code>)
+            모든 요소에 스타일 적용
+            <br><code>* { margin: 0; }</code>
+        </li>
+
+        <li>
+            <strong>태그 선택자</strong>
+            특정 태그에 스타일 적용
+            <br><code>p { color: blue; }</code>
+        </li>
+
+        <li>
+            <strong>클래스 선택자</strong> (<code>.</code>)
+            특정 class 속성을 가진 요소에 적용
+            <br><code>.highlight { background-color: yellow; }</code>
+        </li>
+
+        <li>
+            <strong>ID 선택자</strong> (<code>#</code>)
+            특정 id 속성을 가진 요소에 적용
+            <br><code>#main-title { font-size: 24px; }</code>
+        </li>
+
+        <li>
+            <strong>그룹 선택자</strong>
+            여러 선택자를 콤마로 묶어 동시에 지정
+            <br><code>h1, h2, p { font-family: Arial; }</code>
+        </li>
+
+        <li>
+            <strong>자식 선택자</strong> (<code>&gt;</code>)
+            바로 아래 자식 요소만 선택
+            <br><code>ul &gt; li { color: red; }</code>
+        </li>
+
+        <li>
+            <strong>후손 선택자</strong> (띄어쓰기)
+            하위 모든 자식 요소 선택
+            <br><code>div span { font-weight: bold; }</code>
+        </li>
+
+        <li>
+            <strong>인접 형제 선택자</strong> (<code>+</code>)
+            바로 뒤에 있는 형제 요소 하나 선택
+            <br><code>h1 + p { color: gray; }</code>
+        </li>
+
+        <li>
+            <strong>일반 형제 선택자</strong> (<code>~</code>)
+            뒤에 있는 모든 형제 요소 선택
+            <br><code>h1 ~ p { font-style: italic; }</code>
+        </li>
+
+        <li>
+            <strong>속성 선택자</strong>
+            특정 속성을 가진 요소 선택
+            <br><code>input[type="text"] { border: 1px solid #ccc; }</code>
+        </li>
+    </ul>
+</section>
+<section>
+    <h2>CSS 선택자 우선순위</h2>
+    <p>동일한 요소에 여러 스타일이 적용될 때 어떤 스타일이 우선 적용되는지 결정하는 규칙입니다.</p>
+
+    <h3>우선순위 순서 (낮음 → 높음)</h3>
+    <ul>
+        <li><code>*</code> (전체 선택자)</li>
+        <li>태그 선택자 (예: <code>div</code>, <code>p</code>)</li>
+        <li>클래스 선택자, 속성 선택자, 가상 클래스 (예: <code>.class</code>, <code>[type="text"]</code>, <code>:hover</code>)</li>
+        <li>ID 선택자 (예: <code>#id</code>)</li>
+        <li>인라인 스타일 (예: <code>style="..."</code>)</li>
+        <li><code>!important</code> (가장 강력한 우선순위)</li>
+    </ul>
+
+    <h3>우선순위 점수 개념 (간단)</h3>
+    <ul>
+        <li>인라인 스타일: 1000점</li>
+        <li>ID 선택자: 100점</li>
+        <li>클래스, 속성, 가상 클래스: 10점</li>
+        <li>태그 선택자, 가상 요소: 1점</li>
+    </ul>
+
+    <h3>예시</h3>
+    <p>아래 두 스타일 중 어떤 것이 적용될까요?</p>
+    <pre><code>
+p {
+  color: blue;  /* 태그 선택자 */
+}
+#myPara {
+  color: red;   /* ID 선택자 */
+}
+  </code></pre>
+    <p>→ <code>#myPara</code>가 더 높은 우선순위를 가져 텍스트가 빨간색으로 표시됩니다.</p>
+</section>
+<h1>HTML &amp; CSS 과제</h1>
+
+<section>
+    <h2>1. HTML 요소와 속성 작성하기</h2>
+    <ul>
+        <li><strong>ul</strong> 리스트를 만들고, 그 안에 <strong>3개의 li 요소</strong>를 작성하세요.</li>
+        <li>각 <code>li</code>에 <code>title</code> 속성을 추가하여 마우스를 올리면 설명이 나타나게 하세요.</li>
+        <li><code>li</code> 중 하나에 <code>class="highlight"</code>를 부여하세요.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>2. CSS 스타일 적용하기</h2>
+    <ul>
+        <li><code>.highlight</code> 클래스에 <code>background-color: yellow;</code>, <code>color: red;</code>를 적용하세요.</li>
+        <li>모든 <code>li</code> 요소에 <code>text-align: center;</code>를 적용하세요.</li>
+        <li><code>ul</code>에 <code>padding: 20px;</code>, <code>margin: 30px;</code>를 지정하세요.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>3. CSS 선택자와 우선순위 연습</h2>
+    <ul>
+        <li><code>id="main-list"</code>를 <code>ul</code>에 추가하고, <code>#main-list</code> 선택자로 <code>border: 2px solid blue;</code>를 적용하세요.</li>
+        <li><code>li</code> 태그 선택자로 <code>font-size: 18px;</code>를 지정하세요.</li>
+        <li>특정 <code>li</code>에 <code>style</code> 속성을 사용해 <code>color: green;</code>를 직접 지정해 보세요.</li>
+    </ul>
+</section>
+<section>
+    <h2>4. 예쁜 프로필 카드 만들기 (구현 문제)</h2>
+    <p>아래 조건에 맞게 간단한 프로필 카드를 HTML과 CSS로 구현하세요.</p>
+    <ul>
+        <li>프로필 사진 (이미지 포함)</li>
+        <li>이름 (큰 글씨, 굵게)</li>
+        <li>한 줄 소개글 (작은 글씨)</li>
+        <li>연락처 또는 이메일 (작고 회색 글씨)</li>
+    </ul>
+    <p>다음 CSS 스타일을 적용하세요:</p>
+    <ul>
+        <li>카드 배경색 지정 (밝은 색)</li>
+        <li>테두리와 둥근 모서리 적용</li>
+        <li>텍스트는 가운데 정렬</li>
+        <li>사진은 둥근 원형으로 만들기</li>
+        <li>카드에 적당한 안쪽 여백(padding)과 바깥 여백(margin) 적용</li>
+    </ul>
+    <p><strong>힌트:</strong> <code>border-radius</code>, <code>text-align</code>, <code>background-color</code>, <code>padding</code>, <code>margin</code>, <code>font-weight</code> 속성을 활용하세요.</p>
+</section>
+<ul class="profile-card">
+    <li class="profile-image">
+        <img src="../src/img/치즈냥이.webp" alt="프로필 사진" />
+    </li>
+    <li class="profile-name">홍길동</li>
+    <li class="profile-intro">웹 개발자 & UI 디자이너</li>
+    <li class="profile-contact">hong@example.com</li>
+</ul>
+
+<style>
+    .profile-card {
+        width: 250px;
+        background-color: #fef9f9;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 20px auto;
+        list-style: none;
+        text-align: center;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        font-family: Arial, sans-serif;
+    }
+    .profile-card li {
+        margin-bottom: 12px;
+    }
+    .profile-image img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .profile-name {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #333;
+    }
+    .profile-intro {
+        font-size: 1em;
+        color: #666;
+    }
+    .profile-contact {
+        font-size: 0.9em;
+        color: #999;
+    }
+</style>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+    <style>
+        *{box-sizing:border-box}
+        h3{margin:28px 0 12px}
+        .row{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:20px}
+
+        /* 공통 박스들 */
+        .box, .card, .chip, .pill, .fade, .shadow, .bar, .scale {
+            display:flex; align-items:center; justify-content:center;
+            border:1px solid #e5e7eb; border-radius:12px; background:#f8fafc; color:#111;
+        }
+
+        /* 1) background-color */
+        .chip{
+            padding:10px 14px; border-radius:999px; background:#eef2ff; color:#3730a3;
+            transition: background-color .25s ease, color .25s ease;
+        }
+        .chip:hover{ background:#3730a3; color:#eef2ff }
+
+        /* 2) color */
+        .box.color{
+            width:160px; height:64px;
+            color:#1f2937; background:#fff;
+            transition: color .3s ease-in;
+        }
+        .box.color:hover{ color:#ef4444 }
+
+        /* 3) width / height */
+        .bar-wrap{width:320px; padding:10px; background:#fff; border:1px dashed #cbd5e1; border-radius:12px}
+        .bar{
+            height:18px; width:40%; background:#4f46e5; border:0; border-radius:999px; color:#fff;
+            transition: width .6s ease-in-out;
+        }
+        .bar:hover{ width:100% }
+        .box.hgt{
+            width:140px; height:60px; background:#fff;
+            transition: height .5s ease-in-out;
+        }
+        .box.hgt:hover{ height:120px }
+
+        /* 4) transform: scale */
+        .scale{
+            width:140px; height:100px; background:#fff;
+            transition: transform .25s ease;
+        }
+        .scale:hover{ transform: scale(1.1) }
+
+        /* 5) box-shadow (blur) */
+        .shadow{
+            width:160px; height:110px; background:#fff;
+            box-shadow: 0 0 0 rgba(0,0,0,0);
+            transition: box-shadow .4s ease;
+        }
+        .shadow:hover{
+            box-shadow: 0 16px 36px rgba(0,0,0,.18), 0 4px 12px rgba(0,0,0,.12);
+        }
+
+        /* 6) border-radius */
+        .pill{
+            width:140px; height:64px; background:#fff; border-radius:12px;
+            transition: border-radius .35s ease-in-out;
+        }
+        .pill:hover{ border-radius:999px }
+
+        /* 7) opacity */
+        .fade{
+            width:140px; height:64px; background:#111; color:#fff; opacity:1;
+            transition: opacity .35s ease;
+        }
+        .fade:hover{ opacity:.45 }
+
+        /* 8) transition-timing-function */
+        .timing{
+            width:140px; height:56px; background:#fff;
+            transition: transform .8s var(--ease);
+        }
+        .timing:hover{ transform: translateX(90px) }
+        .linear{ --ease: linear }
+        .ease-in{ --ease: ease-in }
+        .ease-out{ --ease: ease-out }
+        .ease-in-out{ --ease: ease-in-out }
+        .bezier{ --ease: cubic-bezier(.2,.7,.1,1) }
+
+        /* 9) transition-delay */
+        .card.delay{
+            width:160px; height:110px; background:#fff;
+            transition: transform .35s ease .15s, background-color .35s ease .05s;
+        }
+        .card.delay:hover{ transform: translateY(-8px); background:#eef2ff }
+
+        /* 10) multiple properties */
+        .card.combo{
+            width:180px; height:120px; background:#fff;
+            box-shadow: 0 0 0 rgba(0,0,0,0);
+            transition:
+                    transform .3s ease-out,
+                    background-color .3s ease-out,
+                    box-shadow .3s ease-out;
+        }
+        .card.combo:hover{
+            transform: translateY(-8px) scale(1.03);
+            background:#f0fdf4;
+            box-shadow: 0 18px 40px rgba(0,0,0,.16);
+        }
+
+        /* 보기 좋게 */
+        .tag{font-size:13px; color:#6b7280}
+    </style>
+</head>
+<body>
+<section>
+    <h2>1) 트랜지션이란?</h2>
+    <ul>
+        <li>스타일 값이 바뀔 때, 변화가 즉시 “뚝” 바뀌지 않고 지정한 시간과 속도 곡선에 따라 부드럽게 변하도록 만드는 CSS 기능</li>
+        <li>상태 전환(예: :hover, :focus, 클래스 토글 등) 사이의 “중간값”을 브라우저가 자동 계산하여 프레임 단위로 그려줌</li>
+        <li>JavaScript가 없어도 동작하며, 시작·끝 상태만 선언하면 됨</li>
+    </ul>
+</section>
+<section>
+    <h3>background-color</h3>
+    <div class="row">
+        <span class="chip">Hover</span>
+        <span class="chip">Color</span>
+        <span class="chip">Change</span>
+    </div>
+
+    <h3>color</h3>
+    <div class="row">
+        <div class="box color">Text</div>
+        <div class="box color">Color</div>
+    </div>
+
+    <h3>width / height</h3>
+    <div class="row">
+        <div class="bar-wrap">
+            <div class="bar"></div>
+            <div class="tag">hover → width 40% → 100%</div>
+        </div>
+        <div class="box hgt">Height</div>
+    </div>
+
+    <h3>transform: scale</h3>
+    <div class="row">
+        <div class="scale">Scale</div>
+        <div class="scale">Up</div>
+    </div>
+
+    <h3>box-shadow</h3>
+    <div class="row">
+        <div class="shadow">Shadow</div>
+        <div class="shadow">Blur</div>
+    </div>
+
+    <h3>border-radius</h3>
+    <div class="row">
+        <div class="pill">Radius</div>
+        <div class="pill">Pill</div>
+    </div>
+
+    <h3>opacity</h3>
+    <div class="row">
+        <div class="fade">Fade</div>
+        <div class="fade">Out</div>
+    </div>
+
+    <h3>transition-timing-function</h3>
+    <div class="row">
+        <div class="timing linear">linear</div>
+        <div class="timing ease-in">ease-in</div>
+        <div class="timing ease-out">ease-out</div>
+        <div class="timing ease-in-out">in-out</div>
+        <div class="timing bezier">bezier</div>
+    </div>
+
+    <h3>transition-delay</h3>
+    <div class="row">
+        <div class="card delay">Delay</div>
+        <div class="card delay">Start</div>
+    </div>
+
+    <h3>multiple properties</h3>
+    <div class="row">
+        <div class="card combo">Combo</div>
+        <div class="card combo">Hover</div>
+    </div>
+</section>
+<section>
+    <h2>2) 애니메이션이 동작하는 방식(개념)</h2>
+    <ul>
+        <li>시작 상태와 끝 상태가 정해지면, 브라우저가 일정한 프레임(보통 60fps 목표) 간격으로 중간 값을 보간</li>
+        <li>duration(지속시간)과 timing-function(속도 곡선)에 따라 각 프레임의 변화 폭이 달라짐</li>
+        <li>transition은 “상태 변화가 발생했을 때만” 재생되며, 명시적 키프레임 없이도 부드러운 변화를 제공</li>
+    </ul>
+</section>
+
+<section>
+    <h2>3) 브라우저는 애니메이션을 어떻게 그리나(렌더링 관점)</h2>
+    <ul>
+        <li>레이아웃(Layout): 크기·위치가 변하는 속성(top/left/width 등)을 바꾸면 레이아웃 재계산을 수행</li>
+        <li>페인트(Paint): 색, 배경, 테두리 등은 다시 칠하기가 필요</li>
+        <li>합성(Compositing): transform, opacity 등은 보통 합성 단계에서 갱신 가능하여 성능 유리</li>
+        <li>실무 팁: 이동은 left/top 대신 transform: translate()를, 등장/퇴장은 opacity와 transform을 우선 고려</li>
+    </ul>
+</section>
+
+<section>
+    <h2>4) 트랜지션의 구성 요소(속성)</h2>
+    <ul>
+        <li>transition-property: 어떤 속성을 부드럽게 바꿀지 지정 (예: background-color, transform). 기본값은 all</li>
+        <li>transition-duration: 변화가 완료되는 시간 (예: 300ms, 0.3s)</li>
+        <li>transition-timing-function: 속도 곡선(ease, linear, ease-in/out, cubic-bezier())</li>
+        <li>transition-delay: 시작 전 대기 시간 (예: 0.2s)</li>
+        <li>단축형: <code>transition: property duration timing-function delay;</code> 순서로 작성</li>
+    </ul>
+</section>
+
+<section>
+    <h2>5) 속도(타이밍) 곡선 이해</h2>
+    <ul>
+        <li>linear: 처음부터 끝까지 같은 속도</li>
+        <li>ease: 초반 빠르고 후반 느림(기본값)</li>
+        <li>ease-in / ease-out / ease-in-out: 가속·감속 패턴을 다르게 적용</li>
+        <li>cubic-bezier(x1, y1, x2, y2): 사용자 정의 곡선으로 세밀한 제어
+            <ul>
+                <li>cubic-bezier 시각 편집기:<a href="https://cubic-bezier.com">cubic-bezier.com</a></li>
+                <li>여러 이징 모음/미리보기:<a href="https://easings.net">easings.net</a></li>
+                <li>프리셋 애니메이션/코드 생성:<a href="https://animista.net">animista.net</a></li>
+            </ul>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>7) 주의 사항과 베스트 프랙티스</h2>
+    <ul>
+        <li>가능하면 합성 단계에서 끝나는 속성(transform, opacity)을 애니메이션</li>
+        <li>너무 많은 요소에 긴 duration/무거운 속성 애니메이션을 동시에 주지 않기</li>
+        <li>상태 전환이 잦다면 duration을 짧게(지루함/딜레이 방지)</li>
+    </ul>
+</section>
+
+
+
+<section>
+    <h2>8) 실습 과제(짧게)</h2>
+    <ul>
+        <li>1: 버튼 색상과 border-radius가 0.2초 동안 바뀌도록 트랜지션 설정</li>
+        <li>2: 카드에 hover 시 transform: translateY(-8px), box-shadow 변경(0.3초 ease-out)</li>
+        <li>3: 메뉴 항목에 hover 지연 0.1초와 ease-in 적용, focus 시에도 동일 동작</li>
+        <li>4: cubic-bezier로 “빠르게 시작-매우 부드럽게 멈춤” 곡선을 만들고 적용</li>
+    </ul>
+</section>
+</body>
+</html>

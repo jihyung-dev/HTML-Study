@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS 탭 메뉴</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+        }
+        main{
+            height: 40vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 400px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-bottom: 5em;
+        }
+
+        .tabs {
+            display: flex;
+        }
+
+        .tabs label {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: #eee;
+            transition: background 0.3s;
+        }
+        .tabs label:hover {
+            background: #ddd;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        .content {
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(0);
+            max-height: 0;              /* 접힘 */
+            padding: 0 20px;            /* 접힘일 때는 상하 패딩 0으로 두는 게 자연스러움 */
+        }
+
+        /* 펼침: max-height는 “충분히 큰 값”(예: 600px)으로 */
+        .container:has(#tab1:checked) #content1,
+        .container:has(#tab2:checked) #content2,
+        .container:has(#tab3:checked) #content3 {
+            animation: tap 1s ease forwards;
+        }
+        @keyframes tap {
+            to{
+                max-height: 600px;
+                opacity: 1;
+                padding: 20px;              /* 펼칠 때 상하 패딩 복원 */
+            }
+        }
+    </style>
+</head>
+<body>
+<main>
+
+    <div class="container">
+        <div class="tabs">
+            <input type="radio" id="tab1" name="tab">
+            <label for="tab1">홈</label>
+            <input type="radio" id="tab2" name="tab">
+            <label for="tab2">소개</label>
+            <input type="radio" id="tab3" name="tab">
+            <label for="tab3">연락</label>
+        </div>
+        <div class="contents">
+            <div id="content1" class="content">여기는 홈 화면입니다.</div>
+            <div id="content2" class="content">간단한 소개 페이지입니다.</div>
+            <div id="content3" class="content">연락처: email@example.com</div>
+        </div>
+    </div>
+</main>
+<div>
+    <h2>과제: 순수 CSS 탭 메뉴 구현하기</h2>
+    <ul>
+        <li>목표
+            JavaScript 없이 HTML과 CSS만 사용하여 탭 메뉴를 구현한다. 각 탭을 클릭하면 해당 콘텐츠가 부드럽게 펼쳐지고, 다른 콘텐츠는 접히는 형태로 동작해야 한다.</li>
+        <li>구현 방식
+            <ul>
+                <li><strong>라디오 버튼 + label</strong>을 이용하여 탭을 전환한다.
+                    label을 클릭하면 연결된 input[type="radio"]가 체크되며, 이를 CSS로 감지해 콘텐츠를 토글한다.</li>
+                <li><strong>:has() 선택자</strong>를 활용해 “특정 라디오 버튼이 체크되었을 때 해당 콘텐츠를 보이게” 만든다.</li>
+                <li><strong>애니메이션</strong>은 display:none 대신 max-height, opacity, transform을 조합해 부드럽게 펼침/접힘 효과를 만든다.</li>
+            </ul>
+        </li>
+        <li>:has() 선택자 설명
+            <ul>
+                <li>:has()는 부모나 조상 요소가 특정 자식/후손을 포함했을 때 스타일을 적용할 수 있는 관계 의사 클래스다.</li>
+                <li>예: <code>.container:has(#tab1:checked) #content1 { ... }</code>
+                    → .container 안에서 #tab1 라디오 버튼이 체크되면 #content1에 스타일이 적용된다.</li>
+                <li>이를 통해 구조를 크게 바꾸지 않고도 CSS만으로 상태 기반 UI를 만들 수 있다.</li>
+            </ul>
+        </li>
+        <li>세부 요구사항
+            <ul>
+                <li>탭은 최소 3개 이상 구성한다(예: 홈, 소개, 연락).</li>
+                <li>각 탭의 콘텐츠는 접힌 상태에서 보이지 않다가 선택된 탭일 때만 펼쳐진다.</li>
+                <li>전환 시 애니메이션이 적용되어 자연스럽게 열리고 닫혀야 한다.</li>
+                <li>탭 버튼에 hover 시 배경색 변화 같은 시각적 효과를 준다.</li>
+                <li>전체 레이아웃은 중앙 정렬되며, 카드 형태의 디자인(둥근 모서리, 그림자 효과 등)을 적용한다.</li>
+            </ul>
+        </li>
+        <li>제출물
+            <ul>
+                <li><code>index.html</code>, <code>styles.css</code> 파일</li>
+                <li>README 파일에 구현 방식과 :has() 사용 이유를 간단히 설명할 것</li>
+            </ul>
+        </li>
+        <li>평가 기준
+            <ul>
+                <li>기능 구현: 탭 전환과 콘텐츠 토글이 정상적으로 동작하는가?</li>
+                <li>애니메이션: 펼침/접힘 효과가 부드럽고 자연스러운가?</li>
+                <li>디자인: 가독성, 색상 조화, 반응형 배치가 적절한가?</li>
+                <li>코드 품질: 선택자와 구조가 깔끔하고 불필요한 중복이 없는가?</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

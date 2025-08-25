@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>float</title>
+</head>
+<body>
+
+    <h1>float속성으로 기사의 이미지를 삽입</h1>
+
+    <div>
+        <img src="/src/img/cat.jpg"
+             style="width: 4em; float: left">
+        <img src="/src/img/cat.jpg"
+             style="width: 4em; float: right">
+        안녕하세요~ 최경민 프론트엔드 강의입니다.
+        머라하지마!머라하지마!머라하지마!머라하지마!
+        안녕하세요~ 최경민 프론트엔드 강의입니다.
+        머라하지마!머라하지마!머라하지마!머라하지마!
+        안녕하세요~ 최경민 프론트엔드 강의입니다.
+        머라하지마!머라하지마!머라하지마!머라하지마!
+        안녕하세요~ 최경민 프론트엔드 강의입니다.
+        머라하지마!머라하지마!머라하지마!머라하지마!
+        안녕하세요~ 최경민 프론트엔드 강의입니다.
+        머라하지마!머라하지마!머라하지마!머라하지마!
+        안녕하세요~ 최경민 프론트엔드 강의입니다.
+        머라하지마!머라하지마!머라하지마!머라하지마!
+        안녕하세요~ 최경민 프론트엔드 강의입니다.
+        머라하지마!머라하지마!머라하지마!머라하지마!
+        안녕하세요~ 최경민 프론트엔드 강의입니다.
+        머라하지마!머라하지마!머라하지마!머라하지마!
+        안녕하세요~ 최경민 프론트엔드 강의입니다.
+        머라하지마!머라하지마!머라하지마!머라하지마!
+        안녕하세요~ 최경민 프론트엔드 강의입니다.
+        머라하지마!머라하지마!머라하지마!머라하지마!
+        안녕하세요~ 최경민 프론트엔드 강의입니다.
+        머라하지마!머라하지마!머라하지마!머라하지마!
+        안녕하세요~ 최경민 프론트엔드 강의입니다.
+        머라하지마!머라하지마!머라하지마!머라하지마!
+        안녕하세요~ 최경민 프론트엔드 강의입니다.
+        머라하지마!머라하지마!머라하지마!머라하지마!
+        안녕하세요~ 최경민 프론트엔드 강의입니다.
+        머라하지마!머라하지마!머라하지마!머라하지마!
+    </div>
+    <style>
+        .box{
+            display: inline-block;
+            float: right;
+            width: 4em;
+            height: 4em;
+            background-color : #aaa;
+            border: 1px solid;
+        }
+
+    </style>
+    <h2>float를 블럭의 정렬로 사용하는 경우</h2>
+    <p>권장하지 않음!! float는 인라인에 이미지 삽입용 block 속성이 아님</p>
+    <p>부모블럭을 무시하고 주변의 inline요소를 당겨서 붙임</p>
+    <div>
+        <div class="box">1</div>
+        <div class="box">2</div>
+        <div class="box">3</div>
+    </div>
+    <hr style="clear: right;">
+    <div>
+        <div class="box">1</div>
+        <div class="box">2</div>
+        <div class="box">3</div>
+    </div>
+    <hr style="clear: both;">
+        <!-- div>.box{$}*3 -->
+    <div>
+        <div class="box" style="float: left">1</div>
+        <div class="box">2</div>
+        <div class="box">3</div>
+    </div>
+
+    <style>
+        .block{
+            width: 33.0%;
+            height: 4em;
+            box-sizing: border-box; /* border를 포함하는 넓이 */
+            display: inline-block;
+            border: 1px solid;
+            background-color: #00f;
+        }
+
+    </style>
+    <!-- div>div.block*3 -->
+    <hr style="clear: both;">
+    <div>
+        <div class="block"></div><div class="block"></div><div class="block"></div>
+    </div>
+        <hr style="clear: both;">
+        <h2>line 속성은 라인개행(\n enter)을 " "로 출력</h2>
+    <div>
+        <div class="block"></div>
+        <div class="block"></div>
+        <div class="block"></div>
+    </div>
+    <h2>float 속성을 사용하면 자석처럼 inline을 당기기 때문에 " "을 무시</h2>
+    <div>
+        <div class="block" style="float: left"></div>
+        <div class="block" style="float: left"></div>
+        <div class="block" style="float: left"></div>
+    </div>
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

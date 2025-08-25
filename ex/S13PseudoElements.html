@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+<section>
+    <h2>CSS 의사 요소 선택자</h2>
+    <ul>
+        <li>::before - 요소의 내용 앞에 가상의 콘텐츠를 추가</li>
+        <li>::after - 요소의 내용 뒤에 가상의 콘텐츠를 추가</li>
+        <li>::first-letter - 첫 번째 글자에 스타일 적용</li>
+        <li>::first-line - 첫 번째 줄에 스타일 적용</li>
+        <li>::selection - 사용자가 선택한 텍스트에 스타일 적용</li>
+        <li>::marker - 목록 불릿이나 번호에 스타일 적용</li>
+    </ul>
+</section>
+
+<section>
+    <h2>사용 예시</h2>
+    <ul>
+        <li>
+            <strong>p::before { content: "★ "; color: gold; }</strong> - 문단 앞에 별 추가
+        </li>
+        <li>
+            <strong>p::after { content: " (끝)"; color: gray; }</strong> - 문단 뒤에 '(끝)' 추가
+        </li>
+        <li>
+            <strong>p::first-letter { font-size: 2em; }</strong> - 첫 글자 확대
+        </li>
+        <li>
+            <strong>p::first-line { color: blue; }</strong> - 첫 줄 색상 변경
+        </li>
+        <li>
+            <strong>::selection { background: yellow; }</strong> - 선택 영역 배경 노랑
+        </li>
+        <li>
+            <strong>li::marker { color: red; }</strong> - 리스트 불릿 빨강
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>실습 예제</h2>
+    <style>
+        p::before {
+            content: "★ ";
+            color: gold;
+        }
+        p::after {
+            content: " (끝)";
+            color: gray;
+        }
+        p::first-letter {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        p::first-line {
+            color: blue;
+        }
+        ::selection {
+            background: yellow;
+            color: black;
+        }
+        li::marker {
+            color: red;
+            font-size: 1.2em;
+        }
+    </style>
+    <p>이것은 예시 문단입니다. CSS 의사 요소를 사용하여 스타일을 적용하는 방법을 보여줍니다. 첫 번째 글자와 첫 번째 줄에 특별한 스타일이 적용됩니다.</p>
+    <ul>
+        <li>첫 번째 항목입니다.</li>
+        <li>두 번째 항목입니다.</li>
+        <li>세 번째 항목입니다.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>주의사항</h2>
+    <ul>
+        <li>::before, ::after는 반드시 <strong>content</strong> 속성을 지정해야 표시됨</li>
+        <li>CSS3부터는 <strong>::</strong> (더블 콜론) 표기를 권장</li>
+        <li>의사 요소는 HTML에 없는 가상의 요소에 스타일 적용</li>
+    </ul>
+</section>
+</body>
+</html>

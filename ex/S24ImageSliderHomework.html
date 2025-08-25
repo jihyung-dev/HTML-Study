@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>id 없이 순서 기반 CSS 슬라이더(동작 보장)</title>
+    <style>
+        /* 기본 레이아웃 */
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #c9d6ff, #e2e2e2);
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        }
+        main{
+            height: 70vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .slider {
+            position: relative;
+            width: 90vw;
+            /*aspect-ratio : 요소의 가로 세로 비율을 지정하는 속성*/
+            aspect-ratio: 16 / 9;
+            border-radius: 16px;
+            overflow: hidden;                /* 내부를 깔끔히 */
+            box-shadow: 0 20px 40px rgba(0,0,0,.2);
+            background: #111;
+        }
+        .dots{
+            position: absolute;
+            width: 100%;
+            z-index: 999;
+            bottom: 1em;
+            text-align: center;
+        }
+        /* 도트 = 라디오 자체 (id/label 불필요) */
+        .dots > input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            bottom: 14px;
+            width: 18px; height: 18px;       /* 히트 영역 충분히 */
+            border-radius: 50%;
+            background: rgba(255,255,255,.45);
+            cursor: pointer;
+            transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+            outline: none;
+            z-index: 5;                      /* 트랙 위로 올려 클릭 보장 */
+            border: none;
+        }
+        .dots > input[type="radio"]:hover {
+            transform: scale(1.15);
+        }
+        .dots > input[type="radio"]:checked {
+            background: #fff;
+        }
+
+
+        /* 슬라이드 트랙 */
+        .slides {
+            position: relative;
+            height: 100%;
+            display: flex;
+            transition: transform .6s ease;
+            z-index: 1;                      /* 도트보다 아래 */
+        }
+        .slide {
+            flex-grow: 0;
+            flex-shrink: 0;
+            flex-basis: 100%;
+            /*flex: 0 0 100%;  부모 폭의 100%를 고정*/
+            height: 100%;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            font-weight: 700;
+            letter-spacing: .5px;
+            user-select: none;
+            position: relative;
+        }
+        .caption-wrap{
+            position: absolute;
+            z-index: 999;
+            top: calc(50% - 3ex);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        /* 캡션 */
+        .caption {
+            background: rgba(0,0,0,.35);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        /* 데모 배경(이미지 대신) */
+        .s1 { background: linear-gradient(120deg, #3a7bd5, #00d2ff); }
+        .s2 { background: linear-gradient(120deg, #f7971e, #ffd200); }
+        .s3 { background: linear-gradient(120deg, #8e2de2, #4a00e0); }
+        .s4 { background: linear-gradient(120deg, #ff512f, #dd2476); }
+
+        /* 체크된 라디오의 '순서'에 따라 트랙 이동 (id 없이 nth-of-type만 사용) */
+        .slider:has(input:nth-of-type(1):checked) .slides { transform: translateX(0); }
+        .slider:has(input:nth-of-type(2):checked) .slides { transform: translateX(-100%); }
+        .slider:has(input:nth-of-type(3):checked) .slides { transform: translateX(-200%); }
+        .slider:has(input:nth-of-type(4):checked) .slides { transform: translateX(-300%); }
+
+        /* 반응형 폰트 */
+        .slide h2 {
+            font-size: clamp(20px, 4vw, 42px);
+            margin: 0;
+            text-shadow: 0 6px 18px rgba(0,0,0,.35);
+        }
+
+        .slide img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display:block;
+        }
+    </style>
+</head>
+<body>
+<main>
+
+    <div class="slider">
+        <div class="dots">
+            <!-- 도트(=라디오) 4개: name 동일, id/label 불필요 -->
+            <input type="radio" name="slides" aria-label="1번 슬라이드" checked>
+            <input type="radio" name="slides" aria-label="2번 슬라이드">
+            <input type="radio" name="slides" aria-label="3번 슬라이드">
+            <input type="radio" name="slides" aria-label="4번 슬라이드">
+        </div>
+
+        <!-- 슬라이드 트랙 -->
+        <div class="slides">
+            <section class="slide s1">
+
+                <img src="/src/img/cat.webp">
+                <div class="caption-wrap">
+                    <h2>Slide 1</h2>
+                    <p class="caption">도트=라디오, 순서 기반 전환</p>
+                </div>
+            </section>
+            <section class="slide s2">
+                <div class="caption-wrap">
+                    <h2>Slide 2</h2>
+                    <p class="caption">css 선택자로만 동작 </p>
+                </div>
+            </section>
+            <section class="slide s3">
+                <div class="caption-wrap">
+                    <h2>Slide 3</h2>
+                    <p class="caption">id 없이 순서로 동작 </p>
+                </div>
+            </section>
+            <section class="slide s4">
+                <div class="caption-wrap">
+                    <h2>Slide 4</h2>
+                    <p class="caption">transition+transform </p>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+<div>
+    <h2>과제: id 없이 순서 기반 CSS 슬라이더 만들기</h2>
+
+    <ul>
+        <li>목표
+            HTML과 CSS만 사용해서 <strong>이미지 슬라이더</strong>를 구현한다. JavaScript는 사용하지 않으며,
+            <code>id</code>나 <code>class</code> 이름에 의존하지 않고 <strong>순서(nth-of-type)</strong>와 <strong>:has()</strong> 선택자만으로 동작하도록 만든다.
+        </li>
+
+        <li>구현 방식
+            <ul>
+                <li>도트 네비게이션은 <code>&lt;input type="radio"&gt;</code>를 사용해 만든다. 같은 name을 지정해 한 번에 하나만 선택된다.</li>
+                <li><code>.slider:has(input:nth-of-type(n):checked) .slides</code> 규칙을 활용해, n번째 라디오 버튼이 선택되면 <code>.slides</code> 트랙을 <code>transform: translateX()</code>로 이동시킨다.</li>
+                <li>트랙(.slides)은 <code>display: flex;</code>로 옆으로 나열하고, 전체 너비는 <code>슬라이드 개수 × 100%</code>가 된다.</li>
+                <li>각 슬라이드(.slide)는 <code>flex: 0 0 100%;</code>를 적용해 뷰포트(.slider)의 100%를 차지한다. 따라서 translateX(-100%) 하면 정확히 한 장씩 이동한다.</li>
+                <li>부드러운 전환을 위해 <code>transition</code> 속성을 사용한다.</li>
+            </ul>
+        </li>
+
+        <li>디자인 요구
+            <ul>
+                <li>슬라이더에는 <code>aspect-ratio: 16/9</code>를 적용해 일정한 비율을 유지한다.</li>
+                <li>도트는 hover 시 크기가 커지고, 선택되면 색상이 흰색으로 바뀌어 현재 슬라이드를 표시한다.</li>
+                <li>슬라이드 안에는 텍스트 캡션, 이미지, 또는 단순한 배경 색상을 넣을 수 있다.</li>
+            </ul>
+        </li>
+
+        <li>평가 기준
+            <ul>
+                <li>라디오 버튼의 순서만으로 슬라이드 전환이 정확히 동작하는가?</li>
+                <li>전환 애니메이션이 자연스럽게 보이는가?</li>
+                <li>슬라이더 비율과 도트 UI가 반응형 환경에서도 유지되는가?</li>
+                <li>코드가 단순하고 재사용하기 좋은 구조인가?</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

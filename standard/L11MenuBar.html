@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>메뉴바 만들기</title>
+    <style>
+        #home-menu{
+            background-color: rgba(44, 56, 148, 0.54);
+            position: sticky;
+            top: 0;
+
+        }
+        #home-menu .menu>li{
+            display: inline-block;
+            color: white;
+            font-size: 0.8em;
+            padding: 1em;
+            position: relative;
+        }
+        #home-menu .menu>li:hover .submenu{
+            display: inline-block;
+
+        }
+
+        #home-menu ul.submenu{
+            position: absolute;
+            display: none;
+            background-color: #3b444f;
+            left: 1em;
+            top: 3em;
+            list-style: none;
+            padding: 0.5em 1em;
+            width: fit-content;
+        }
+        #home-menu ul.submenu>li {
+            width: 6em;
+            padding: .5em;
+        }
+        #home-menu ul.submenu>li:hover {
+            background-color: #6a8fdf;
+        }
+
+        #home-menu ul.submenu>li>a{
+            color: white;
+            text-decoration: none;
+        }
+
+
+
+        body    {
+            margin: 0;
+        }
+        main{
+            min-height: 80vh;
+        }
+        footer {
+            margin: 4rem 0;
+            padding: 2rem 1rem;
+            background-color: rgba(15, 15, 128, 0.82);
+            color: #fff;
+        }
+        footer>ul{
+            list-style: none;
+        }
+
+
+    </style>
+
+
+</head>
+<body>
+
+<!--  시멘틱 요소 : 검색엔진 봇에게 알려줌 : 사이트 구조나 내용을 알림 => SEO -->
+
+    <header>
+        <h1>메뉴바 홈</h1>
+    </header>
+    <!-- id: 낙타표기법 권장( but 요즘은 '-'를 많이 사용하는 추세)-->
+    <nav id="home-menu">
+        <!--  header : 사이트 제목, 사이트 홈
+              nav : 사이트 내에서 이동할 수 있는 리소스의 링크
+              main : 사이트의 본문
+              footer : 사이트 운영방침, 사이트를 운영하는 회사 정보
+        -->
+        <ul class="menu">
+            <li>자바수업
+                <ul class="submenu">
+                    <li><a href="./a">기본문법</a></li>
+                    <li><a href="./b">입출력</a></li>
+                    <li><a href="./c">소켓통신</a></li>
+                    <li><a href="./d">GUI</a></li>
+                </ul>
+            </li>
+
+            <li>프론트엔드수업
+                <!-- ul.submenu>(li>a[href="#"]{$$})*5 -->
+                <ul class="submenu">
+                    <li><a href="#">01</a></li>
+                    <li><a href="#">02</a></li>
+                    <li><a href="#">03</a></li>
+                    <li><a href="#">04</a></li>
+                    <li><a href="#">05</a></li>
+                </ul>
+            </li>
+
+            <li>빅데이터수업
+                <!-- ul.submenu>(lie>a[href=#]{$})*3-->
+                <ul class="submenu">
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                </ul>
+
+            </li>
+        </ul>
+    </nav>
+    <main>
+        <h2>메뉴바 만들기 수업</h2>
+        <p>smu에서 진행하는 엔지니어 양성과정</p>
+    </main>
+    <footer>
+        <ul>
+            <li>회사명 : 일못하는 SMU</li>
+            <li>대표 : 최경민</li>
+            <li>사업자 등록번호 : 123-45-6789</li>
+            <li>주소 : 서울시 금천구 가산동 123-45번지</li>
+            <li>이메일 : smu@gmail.com</li>
+        </ul>
+
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>부트스트랩</title>
+    <link rel="stylesheet" href="/src/bootstrap-5.3.7/bootstrap-5.3.7/dist/css/bootstrap.css">
+    <script src="/src/bootstrap-5.3.7/bootstrap-5.3.7/dist/js/bootstrap.bundle.js"></script>
+    <script>
+        <!-- 화면에 렌더링 된 요소(node 개체)를 제어하는게 js가 하는일 -->
+        document.addEventListener("DOMContentLoaded", function() {
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        })
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-3">부트스트랩</h1>
+        <p>source를 추가하면 자동완성 제공</p>
+        <h2>
+            <button>버튼</button>
+            <button class="btn btn-outline-warning">버튼</button>
+        </h2>
+
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">01</li>
+            <li class="breadcrumb-item active">02</li>
+            <li class="breadcrumb-item">03</li>
+            <li class="breadcrumb-item">04</li>
+            <li class="breadcrumb-item">05</li>
+        </ul>
+        <!-- Size관련 : 외우셔야합니다~!!!! -->
+        <!-- xs(작은핸드폰 iPhone se), sm(핸드폰)
+             md(큰핸드폰(폴더블)or작은태블릿) lg(작은모니터), xl(일반모니터) xxl(큰모니터)-->
+
+        <!-- 클래스가 복잡하고, 유지보수가 조금 복잡할 수 있다~-->
+
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between justify-content-lg-start">
+                최경민
+                <span class="badge bg-dark">
+                    01
+                </span>
+            </li>
+            <li class="list-group-item active">02</li>
+            <li class="list-group-item">03</li>
+            <li class="list-group-item">04</li>
+            <li class="list-group-item">05</li>
+        </ul>
+
+        <h3>툴팁</h3>
+        <button title="기본제공투우우울팁">툴팁</button>
+        <button data-bs-title="안녕" data-bs-toggle="tooltip" data
+
+        >부트스트랩 툴팁</button>
+<!--        <script>-->
+<!--            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')-->
+<!--            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))-->
+<!--        </script>-->
+
+        <p>
+            <button id="toast1-btn" class="btn btn-primary">1번 토스트 열기</button>
+            <button id="toast-all-btn" class="btn btn-danger">모든 토스트 열기</button>
+        </p>
+
+
+        <div class="toast-container">
+            <div id="toast1" class="toast">
+                <div class="toast-header">
+                    <strong class="me-auto">제목입니다</strong>
+                    <small>20분 전</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="close"></button>
+                </div>
+                <div class="toast-body">
+                    일어나~~~
+                </div>
+            </div>
+
+            <div id="toast2" class="toast">
+                <div class="toast-header">
+                    <strong class="me-auto">제목입니다</strong>
+                    <small>30분 전</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="close"></button>
+                </div>
+                <div class="toast-body">
+                    일어나~~~제발
+                </div>
+            </div>
+        </div>
+        <script>
+            const toast1Btn = document.getElementById('toast1-btn');
+            const toast1 = document.getElementById('toast1');
+            const toasts = document.getElementsByClassName('toast')
+            const toastAllBtn=document.getElementById('toast-all-btn');
+            //[toast1.toast2]
+
+            toastAllBtn.addEventListener("click", function(){
+                for(let toast of toasts){
+                    toast=new bootstrap.Toast(toast);
+                    toast.show();
+                }
+
+            });
+
+            console.log(toasts);
+
+
+            console.log(toast1Btn);
+            console.log(toast1);
+
+            toast1Btn.onclick = function () {
+                // console.log("안녕!!");
+                // toast1.classList.toggle('show');
+                const toast=new bootstrap.Toast(toast1);
+                toast.show();
+            }
+
+
+
+
+        </script>
+
+
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    </div>
+</body>
+</html>

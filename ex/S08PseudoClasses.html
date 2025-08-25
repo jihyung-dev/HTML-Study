@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: white;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        ul {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>의사 클래스(Pseudo-class)</h1>
+<section>
+    <h2>의사 클래스(Pseudo-class)란?</h2>
+    <ul>
+        <li>HTML 요소의 특정 **상태나 조건**에 따라 스타일을 적용할 수 있도록 해주는 CSS 선택자입니다.</li>
+        <li>예를 들어, 마우스를 올렸을 때(`:hover`), 체크박스가 선택됐을 때(`:checked`) 등에만 적용되는 스타일을 만들 수 있습니다.</li>
+        <li><strong>콜론(:)</strong>으로 시작하며, HTML 구조나 상태에 따라 요소를 선택합니다.</li>
+    </ul>
+</section>
+<section>
+    <h2>:hover</h2>
+    <ul>
+        <li>마우스를 요소 위에 올렸을 때 적용</li>
+        <li>
+            예시:
+            <pre><code>
+button:hover {
+  background-color: gold;
+}
+      </code></pre>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>:active</h2>
+    <ul>
+        <li>요소를 클릭하는 순간 (눌리는 중) 적용</li>
+        <li>
+            예시:
+            <pre><code>
+a:active {
+  color: red;
+}
+      </code></pre>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>:focus</h2>
+    <ul>
+        <li>요소에 포커스가 갔을 때 (ex. input 클릭 시)</li>
+        <li>
+            예시:
+            <pre><code>
+input:focus {
+  border-color: blue;
+}
+      </code></pre>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>:checked</h2>
+    <ul>
+        <li>체크박스나 라디오 버튼이 선택되었을 때 적용</li>
+        <li>
+            예시:
+            <pre><code>
+input:checked + label {
+  color: green;
+}
+      </code></pre>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>:disabled / :enabled</h2>
+    <ul>
+        <li>폼 요소가 비활성화 / 활성화 상태일 때 적용</li>
+        <li>
+            예시:
+            <pre><code>
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+      </code></pre>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>:nth-child(n)</h2>
+    <ul>
+        <li>부모의 n번째 자식 요소에 적용</li>
+        <li>
+            예시:
+            <pre><code>
+li:nth-child(2) {
+  color: orange;
+}
+      </code></pre>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>:first-child / :last-child</h2>
+    <ul>
+        <li>부모 요소의 첫 번째 / 마지막 자식 요소에 스타일 적용</li>
+        <li>
+            예시:
+            <pre><code>
+p:first-child {
+  font-weight: bold;
+}
+      </code></pre>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>:not(selector)</h2>
+    <ul>
+        <li>특정 요소를 제외한 나머지에 스타일 적용</li>
+        <li>
+            예시:
+            <pre><code>
+div:not(.active) {
+  opacity: 0.5;
+}
+      </code></pre>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>:is(...)</h2>
+    <ul>
+        <li>여러 선택자를 묶어서 하나로 간결하게 작성</li>
+        <li>
+            예시:
+            <pre><code>
+:is(h1, h2, h3) {
+  font-family: sans-serif;
+}
+      </code></pre>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>:empty</h2>
+    <ul>
+        <li>내용이 완전히 없는 요소에만 스타일 적용 (공백도 없어야 적용됨)</li>
+        <li>
+            예시:
+            <pre><code>
+div:empty {
+  background-color: lightgray;
+}
+      </code></pre>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>:root</h2>
+    <ul>
+        <li>HTML 문서의 최상위 요소(html)를 선택</li>
+        <li>CSS 변수 정의에 자주 사용</li>
+        <li>
+            예시:
+            <pre><code>
+:root {
+  --main-color: royalblue;
+}
+      </code></pre>
+        </li>
+    </ul>
+</section>
+<style>
+    /* 공통 스타일 */
+    .example-box {
+        padding: 0.5em 1em;
+        margin: 1em 0;
+        border: 2px solid #ccc;
+        display: inline-block;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    /* 1. :hover */
+    .hover-box:hover {
+        background-color: gold;
+        color: black;
+    }
+
+    /* 2. :active */
+    .active-box:active {
+        background-color: tomato;
+        color: white;
+    }
+
+    /* 3. :focus */
+    input:focus {
+        outline: none;
+        border-color: royalblue;
+        box-shadow: 0 0 5px royalblue;
+    }
+
+    /* 4. :checked */
+    input[type="checkbox"]:checked + label {
+        color: green;
+        font-weight: bold;
+    }
+
+    /* 5. :disabled */
+    button:disabled {
+        background-color: #ddd;
+        color: gray;
+        cursor: not-allowed;
+    }
+
+    /* 6. :nth-child */
+    ul li:nth-child(odd) {
+        background-color: #f0f8ff;
+    }
+
+    /* 7. :first-child */
+    .first-last p:first-child {
+        font-weight: bold;
+        color: navy;
+    }
+
+    /* 8. :not */
+    .not-box:not(.highlight) {
+        opacity: 0.4;
+    }
+
+    /* 9. :empty */
+    div.empty-box:empty {
+        width: 100px;
+        height: 30px;
+        background-color: #eee;
+        border: 1px dashed gray;
+    }
+
+    /* 10. :root + 변수 */
+    :root {
+        --main-color: crimson;
+    }
+    .root-box {
+        color: var(--main-color);
+        border: 2px solid var(--main-color);
+    }
+</style>
+<h2>:hover</h2>
+<div class="example-box hover-box">마우스를 올려보세요</div>
+
+<h2>:active</h2>
+<div class="example-box active-box">눌러보세요</div>
+
+<h2>:focus</h2>
+<input type="text" placeholder="여기를 클릭해보세요">
+
+<h2>:checked</h2>
+<input type="checkbox" id="check1">
+<label for="check1">체크하면 스타일 변경</label>
+
+<h2>:disabled</h2>
+<button disabled>비활성화된 버튼</button>
+
+<h2>:nth-child</h2>
+<ul>
+    <li>1번째 항목</li>
+    <li>2번째 항목</li>
+    <li>3번째 항목</li>
+    <li>4번째 항목</li>
+</ul>
+
+<h2>:first-child</h2>
+<div class="first-last">
+    <p>첫 번째 단락</p>
+    <p>두 번째 단락</p>
+</div>
+
+<h2>:not</h2>
+<div class="example-box not-box">기본 박스 (흐림)</div>
+<div class="example-box not-box highlight">highlight 박스</div>
+
+<h2>:empty</h2>
+<div class="empty-box"></div>
+
+<h2>:root (CSS 변수)</h2>
+<div class="example-box root-box">변수로 지정된 색상 사용</div>
+
+</body>
+</html>

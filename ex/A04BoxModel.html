@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>박스모델 & display 속성 실습 과제 </title>
+</head>
+
+<style>
+    #div1 {
+        background-color: red;
+        width: 300px;
+        height: 100px;
+        padding: 20px;
+        margin: 20px auto;
+    }
+    #div1 span{
+        color: #444444;
+        display: inline;
+    }
+    #div1 img{
+        display: inline-block;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+    }
+    #div1 a {
+        display: inline;
+        padding: 10px 20px;
+        margin: 10px 0;
+    }
+    #div1 button {
+        width: 100px;
+        height: 30px;
+        text-align: justify;
+        padding: 5px;
+    }
+
+    #div2 {
+        background-color: mediumpurple;
+        width: 300px;
+        height: 100px;
+        padding: 20px;
+        margin: 20px auto;
+    }
+    #div2 span{
+        display: block;
+        color: yellow;
+        display: compact;
+    }
+    #div2 img{
+        display: block;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+    }
+    #div2 a {
+        display: block;
+        padding: 10px 20px;
+        margin: 10px 0;
+    }
+    #div2 button {
+        display: block;
+        width: 100px;
+        height: 30px;
+        text-align: justify;
+        padding: 5px;
+    }
+    .picture-wrap {
+        border: 1px solid #444444;
+        margin: 40px 0;
+        text-align: center;
+    }
+    .picture{
+        display: inline-block;
+        background-color: seashell;
+        width: 29%;
+        padding: 20px;
+    }
+
+    .picture img{
+        display: initial;
+        width : 100%;
+        object-fit: cover;
+        border: 20px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .picture span {
+        text-align: left;
+
+    }
+
+</style>
+
+<body>
+    <div id="div1">
+        <br><br><br><br><br>
+        <li><span>디즈니 영화중엔 <mark>In to the Unknown~~~!!!!</mark>을 부르는 영화가 있찌요  </span>
+        </li>
+        <br><br>
+            <img src="/src/img/mental.png" alt="멘탈 이미지">
+        <a href="https://www.youtube.com/@%EC%A0%95%EC%84%9C%EB%B6%88%EC%95%88%EA%B9%80%ED%96%84%EC%B0%8C"> YOUTUBE</a>
+        <button> 벝은 </button>
+    </div>
+
+    <br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br>
+    <div id="div2">
+        <span>Love is an open door~~~!!!!</span>
+        <img src="/src/img/mental.png" alt="멘탈 이미지">
+        <a href="https://www.youtube.com/@%EC%A0%95%EC%84%9C%EB%B6%88%EC%95%88%EA%B9%80%ED%96%84%EC%B0%8C"> YOUTUBE</a>
+        <button> 벝은 </button>
+    </div>
+
+
+
+<!--흠 뭐가 다른지 잘 모르겠다요 -->
+
+    <br><br><br><br><br><br><br><br><br><br>
+
+    <div class="picture-wrap">
+        <div class="picture">
+            <img src="/src/img/POE.jpg" alt="PathOfExile">
+            <span>
+                PathOfExile
+            </span>
+        </div>
+        <div class="picture">
+            <img src="/src/img/whopper.jpg" alt="Whopper">
+            <span>
+                몬스터 X 와퍼
+            </span>
+        </div>
+        <div class="picture">
+            <img src="/src/img/astonished.jpg" alt="놀란 사진">
+            <span>
+                오마이가쉬
+            </span>
+        </div>
+        <br>
+        <br><br>
+    </div>
+</body>
+
+
+</html>

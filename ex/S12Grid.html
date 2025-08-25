@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <title>CSS Grid 기초 — 개념 + 예시 + 속성설명</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        *{ box-sizing:border-box }
+        body{ margin:0; font:16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color:#111; background:#fafafa }
+        header{ padding:24px 16px; background:#111; color:#fff }
+        main{ max-width:900px; margin:0 auto; padding:20px 16px }
+        section{ background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:16px; margin:16px 0 }
+        h2{ margin:0 0 10px 0; font-size:20px }
+        p{ margin:8px 0 }
+        .note{ padding:10px; border-left:4px solid #3b82f6; background:#eff6ff; border-radius:8px; margin:8px 0 }
+        pre{ background:#0f172a; color:#e5e7eb; padding:12px; border-radius:10px; overflow:auto; margin:10px 0 }
+        code{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace }
+
+        /* 공통 데모 박스 */
+        .demo{ border:1px dashed #cbd5e1; background:#fff; border-radius:10px; padding:12px; margin:10px 0 }
+        .cell{ background:#f3f4f6; border:1px solid #e5e7eb; border-radius:8px; padding:10px; text-align:center }
+
+        /* 예시 1: Grid 시작하기 */
+        .ex1{
+            display:grid;                /* Grid를 쓰겠다는 선언 */
+            grid-template-columns: 1fr 1fr; /* 열 2개(남은공간을 1:1로 나눔) */
+            gap: 12px;                   /* 칸 사이 간격 */
+        }
+
+        /* 예시 2: 열 너비 지정 */
+        .ex2{
+            display:grid;
+            grid-template-columns: 120px 1fr 120px; /* 왼/오 120px 고정, 가운데는 남은공간 */
+            gap: 8px;
+        }
+
+        /* 예시 3: repeat()로 간단히 */
+        .ex3{
+            display:grid;
+            grid-template-columns: repeat(3, 1fr); /* 1fr짜리 칼럼 3개 반복 */
+            gap: 10px;
+        }
+
+        /* 예시 4: minmax() + auto-fit */
+        .ex4{
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 10px;
+        }
+
+        /* 예시 5: 아이템 위치 조정(grid-column/row) */
+        .ex5{
+            display:grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(3, 80px);
+            gap: 8px;
+        }
+        .ex5 .wide{ grid-column: 1 / 4 }     /* 1번 라인에서 3번 라인 전까지(가로 2칸) */
+        .ex5 .tall{ grid-row: 1 / 2 }        /* 1번 라인에서 3번 라인 전까지(세로 2칸) */
+
+        /* 예시 6: 정렬(place-items, place-self) */
+        .ex6{
+            display:grid;
+            grid-template-columns: repeat(3, 140px);
+            grid-template-rows: repeat(2, 90px);
+            gap: 8px;
+            place-items: center;   /* 각 칸 안의 내용 정렬(가로/세로 모두 가운데) */
+            border:1px solid #e5e7eb; border-radius:8px; padding:8px;
+        }
+        .ex6 .cell:nth-child(2){ place-self: start end } /* 이 칸만 위-오른쪽으로 */
+
+        /* 예시 7: grid-template-areas(이름으로 배치) */
+        .ex7{
+            display:grid;
+            grid-template-columns: 160px 1fr;
+            grid-template-rows: auto 1fr auto;
+            grid-template-areas:
+        "hd hd"
+        "nv mn"
+        "ft ft";
+            gap: 8px;
+            min-height: 40vh;
+        }
+        .hd{ grid-area: hd; background:#111; color:#fff }
+        .nv{ grid-area: nv }
+        .mn{ grid-area: mn }
+        .ft{ grid-area: ft; background:#111; color:#fff }
+
+        @media (max-width:700px){
+            .ex7{
+                grid-template-columns: 1fr;
+                grid-template-areas:
+          "hd"
+          "nv"
+          "mn"
+          "ft";
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>CSS Grid 기초(쉬운 버전)</h1>
+    <p>가장 자주 쓰는 개념만 간단히 익히고, 바로 눈으로 확인하는 데모</p>
+</header>
+<main>
+
+    <!-- 예시 0: Grid는 언제 쓰나 -->
+    <section>
+        <h2>0) Grid는 언제 쓰나</h2>
+        <div class="note">
+            한 줄 배치만 필요하면 Flex, 행/열 2차원 배치가 필요하면 Grid가 편합니다.
+            카드 목록, 페이지 레이아웃, 사이드바 구조에 특히 유용합니다.
+        </div>
+    </section>
+
+    <!-- 예시 1 -->
+    <section>
+        <h2>1) Grid 시작하기: display, columns, gap</h2>
+        <p class="note">
+            display: grid — “Grid를 쓰겠다”는 선언입니다.<br>
+            grid-template-columns — 열(세로 트랙) 개수/크기를 정합니다.<br>
+            gap — 칸과 칸 사이 간격입니다(가로/세로 동시).
+        </p>
+        <div class="demo ex1">
+            <div class="cell">1</div>
+            <div class="cell">2</div>
+            <div class="cell">3</div>
+            <div class="cell">4</div>
+        </div>
+        <pre><code>.ex1{
+  display: grid;                 /* Grid 활성화 */
+  grid-template-columns: 1fr 1fr;/* 열 2개, 남은 공간을 1:1 분배 */
+  gap: 12px;                     /* 셀 사이 간격 */
+}</code></pre>
+    </section>
+
+    <!-- 예시 2 -->
+    <section>
+        <h2>2) 고정 + 유동 혼합: 120px 1fr 120px</h2>
+        <p class="note">
+            1fr — 남은 공간을 “비율”로 나눕니다.<br>
+            120px — 고정 너비 칼럼입니다. 고정과 fr을 섞어 자주 씁니다.
+        </p>
+        <div class="demo ex2">
+            <div class="cell">왼쪽 120px</div>
+            <div class="cell">가운데 1fr(남은공간)</div>
+            <div class="cell">오른쪽 120px</div>
+            <div class="cell">A</div>
+            <div class="cell">B</div>
+            <div class="cell">C</div>
+        </div>
+        <pre><code>.ex2{
+  display: grid;
+  grid-template-columns: 120px 1fr 120px;
+  gap: 8px;
+}</code></pre>
+    </section>
+
+    <!-- 예시 3 -->
+    <section>
+        <h2>3) repeat()로 간단히 N열 만들기</h2>
+        <p class="note">
+            repeat(3, 1fr) — 같은 패턴을 3번 반복합니다. 코드가 짧아집니다.
+        </p>
+        <div class="demo ex3">
+            <div class="cell">1</div>
+            <div class="cell">2</div>
+            <div class="cell">3</div>
+            <div class="cell">4</div>
+            <div class="cell">5</div>
+            <div class="cell">6</div>
+        </div>
+        <pre><code>.ex3{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 1fr 열 3개 */
+  gap: 10px;
+}</code></pre>
+    </section>
+
+    <!-- 예시 4 -->
+    <section>
+        <h2>4) 최소~최대 크기: minmax() + auto-fit</h2>
+        <p class="note">
+            minmax(최소, 최대) — 칼럼이 너무 좁아지지 않게 최소폭을 보장합니다.<br>
+            auto-fit — 가능하면 칼럼을 접었다 펴서 빈 칸 없이 딱 맞게 채웁니다.
+        </p>
+        <div class="demo ex4">
+            <div class="cell">카드 1</div>
+            <div class="cell">카드 2</div>
+            <div class="cell">카드 3</div>
+            <div class="cell">카드 4</div>
+            <div class="cell">카드 5</div>
+            <div class="cell">카드 6</div>
+        </div>
+        <pre><code>.ex4{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}</code></pre>
+    </section>
+
+    <!-- 예시 5 -->
+    <section>
+        <h2>5) 아이템 위치 지정: grid-column / grid-row</h2>
+        <p class="note">
+            grid-column: 시작라인 / 끝라인 — 가로로 몇 칸 차지할지 지정합니다.<br>
+            grid-row: 시작라인 / 끝라인 — 세로로 몇 칸 차지할지 지정합니다.
+        </p>
+        <div class="demo ex5">
+            <div class="cell wide">가로 2칸</div>
+            <div class="cell">셀</div>
+            <div class="cell tall">세로 2칸</div>
+            <div class="cell">셀</div>
+            <div class="cell">셀</div>
+            <div class="cell">셀</div>
+            <div class="cell">셀</div>
+            <div class="cell">셀</div>
+        </div>
+        <pre><code>.ex5{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 80px);
+  gap: 8px;
+}
+.ex5 .wide{ grid-column: 1 / 3 } /* 1~3 라인(= 2칸) */
+.ex5 .tall{ grid-row: 1 / 3 }   /* 1~3 라인(= 2칸) */</code></pre>
+    </section>
+
+    <!-- 예시 6 -->
+    <section>
+        <h2>6) 정렬: place-items(전체), place-self(개별)</h2>
+        <p class="note">
+            place-items — 모든 칸 안의 내용 정렬(가로+세로 단축).<br>
+            place-self — 특정 아이템 한 개만 따로 정렬.
+        </p>
+        <div class="demo ex6">
+            <div class="cell">center</div>
+            <div class="cell">start end</div>
+            <div class="cell">center</div>
+            <div class="cell">center</div>
+            <div class="cell">center</div>
+            <div class="cell">center</div>
+        </div>
+        <pre><code>.ex6{
+  display: grid;
+  grid-template-columns: repeat(3, 140px);
+  grid-template-rows: repeat(2, 90px);
+  gap: 8px;
+  place-items: center;      /* 각 칸의 내용 가운데 */
+}
+.ex6 .cell:nth-child(2){
+  place-self: start end;    /* 이 칸만 위-오른쪽 */
+}</code></pre>
+    </section>
+
+    <!-- 예시 7 -->
+    <section>
+        <h2>7) 이름으로 배치: grid-template-areas</h2>
+        <p class="note">
+            grid-template-areas — 레이아웃을 그림처럼 선언합니다.<br>
+            grid-area — 각 박스를 해당 이름에 연결합니다.<br>
+            미디어쿼리로 이름 배열만 바꿔도 손쉽게 재배치됩니다.
+        </p>
+        <div class="demo ex7">
+            <div class="cell hd">Header</div>
+            <div class="cell nv">Nav</div>
+            <div class="cell mn">Main</div>
+            <div class="cell ft">Footer</div>
+        </div>
+        <pre><code>.ex7{
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "hd hd"
+    "nv mn"
+    "ft ft";
+  gap: 8px;
+}
+.hd{ grid-area: hd } .nv{ grid-area: nv }
+.mn{ grid-area: mn } .ft{ grid-area: ft }
+
+@media (max-width:700px){
+  .ex7{
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "hd"
+      "nv"
+      "mn"
+      "ft";
+  }
+}</code></pre>
+    </section>
+
+    <!-- 마지막: 체크 -->
+    <section>
+        <h2>끝내기 전에 체크</h2>
+        <div class="note">
+            display: grid를 썼는가? gap으로 간격을 줬는가?<br>
+            columns/rows, repeat(), fr, minmax()의 의미가 헷갈리지 않는가?<br>
+            아이템 배치(grid-column/row)와 정렬(place-items/self)을 구분할 수 있는가?
+        </div>
+    </section>
+
+</main>
+</body>
+</html>

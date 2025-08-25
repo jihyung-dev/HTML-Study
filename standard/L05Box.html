@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>박스모델</title>
+</head>
+<style>
+    div.box{
+        background-color: rgba(220, 20, 60, 0.5);
+        /*height: auto; 컨텐츠의 높이로 블럭이 늘어남
+        (브라우저가 스크롤로 ui를 제공하므로) */
+        /*width: 100%; 브라우저의 너비 기준 100% */
+    }
+
+    .square{
+        /*width 와 height 는 컨텐츠의 크기(기본값),  */
+        /*box-sizing: content-box;*/
+        box-sizing: content-box;
+        /*width 와 height는 border의 크기  */
+
+        width: 200px;
+        height: 200px;
+        /*overflow: visible; 컨텐츠가 블럭의 밖으로 표시(높이고정 시)*/
+        /*overflow: hidden; 밖으로 나온 컨텐츠 숨기기 */
+        overflow: scroll; /*컨텐츠를 스크롤로 표시*/
+
+        /*단축표기법(shorthand)*/
+        /*border: 5px #00ff00 dashed;*/
+        /*padding-right: 10px;*/
+        /*padding-left: 20px;*/
+        /*padding-top: 30px;*/
+        /*padding-bottom: 70px;*/
+        /*padding: 30px 20px 70px 10px;*/
+        /* 순서 :   top  bottom left right*!*/
+
+        /*padding: 20px 50px;*/
+        paddding: 20px;
+        /*사이즈(width)가있는 block의 중앙정렬은 좌우 여백을 auto로 지정 */
+        margin: 20px auto;
+
+
+    }
+
+
+</style>
+<body>
+    <h1>블럭의 박스 모델을 확인하자</h1>
+
+    <div>
+        <div class="box">
+            안녕!
+            ㅇㅇㅇ
+        </div>
+    </div>
+    <hr>
+    <div>
+        <div class="box square">
+            나~는 컨텐츱니다 ~
+            나~는 컨텐츱니다 ~
+            나~는 컨텐츱니다 ~
+            나~는 컨텐츱니다 ~
+            나~는 컨텐츱니다 ~
+            나~는 컨텐츱니다 ~
+        </div>
+    </div>
+
+    <ul>
+        <li>display:block 속성의 모든 요소의 기본 너비는 브라우저 너비,
+            컨텐츠가 높이를 결정
+        </li>
+        <li>html의 컨텐츠는 /n 라인개행을 무시</li>
+        <li>block의 높이를 지정하면 고정 크기로 바뀐다.
+            컨텐츠가 많으면 밖으로 나오게된다.(overflow:visible)</li>
+        <li>overflow 컨텐츠가 블럭을 나왔을 때 어떻게 보일지를 결정
+            (visible, hidden, scroll)</li>
+        <li>박스모델의 contents의 기본값은 border를 포함하지 않는다
+            (넓이 높이는 컨텐츠의 크기
+        </li>
+        <li>
+            box-sizing은 대부분의 사람이 border까지를 컨텐츠로
+        </li>
+    </ul>
+
+
+    <h2>방향 단축</h2>
+    <ul>
+        <li>padding: A; -> 모든 방향 A</li>
+        <li>padding : A B; -> 위아래 A 좌우 B</li>
+        <li>padding : A B C; -> 위 A, 좌우 B, 아래 C=/</li>
+        <li>padding : A B C D; -> 위 A, 오른쪽 B, 아래 C, 왼쪽 D (시계방향)</li>
+    </ul>
+
+    <style>
+        #profile-back {
+            width: 300px;
+            height: 300px;
+            background-color: #ffffee;
+            margin: 40px auto;
+            border: .2px solid gold;
+            border-radius: 30px 10px 0px 10px;
+            text-align: center;
+        }
+        #profile-back>.img-back{
+            /*width: fit-content;*/
+            /*margin: 40px auto;*/
+            /*text-align: center;*/
+            display: inline-block;
+            /* inline-block을 지정하면 너비 높이가 컨텐츠 크기로 크기 변경*/
+            margin-top: 50px;
+
+        }
+        #profile-back .img-back img {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+        }
+        #profile-back ul{
+            list-style-type: none;
+            padding-left: 0;
+        }
+        /*의사클래스 선택자!*/
+        #profile-back ul>li:nth-child(1){
+            font-weight: bold;
+            font-size: 20px;
+            color: rgb(130, 137, 79);
+        }
+        #profile-back ul>li:nth-child(2){
+            font-size: 15px;
+            margin: 5px 0;
+        }
+
+    </style>
+
+    <div>
+        <div id="profile-back">
+            <div class="img-back">
+                <img src="../src/img/cat.jpg" alt="">
+                <ul>
+                    <li>김지형</li>
+                    <li>풀스택 개발자</li>
+                    <li>aiu.614.dev@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

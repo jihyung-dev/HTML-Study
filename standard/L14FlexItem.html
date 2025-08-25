@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>flex item</title>
+
+<style>
+    .flex-container {
+        display: flex;
+        border: 1px solid;
+        height: 4em;
+    }
+    /*flex item*/
+    .flex-container>div{
+        border: 1px solid rosybrown;
+        background-color: rgba(210, 96, 96, 0.31);
+    }
+
+</style>
+</head>
+
+<body>
+
+    <h1>flex 아이템 속성 : item에 직접 작성하는 스타일 속성</h1>
+    <h2>flex-order</h2>
+    <div class="flex-container">
+        <div style="order:3">01</div>
+        <div style="order:2">02</div>
+        <div style="order:1">03</div>
+    </div>
+
+    <h2>flex-grow : 아이템의 가로비율</h2>
+    <div class="flex-container">
+        <div style="flex-grow: 1">01</div>
+        <div style="flex-grow: 1">02</div>
+        <div style="flex-grow: 1">03</div>
+    </div>
+    <div class="flex-container">
+        <div style="flex-grow: 1">01</div>
+        <div style="flex-grow: 2">02</div>
+        <div style="flex-grow: 1">03</div>
+    </div>
+    <div class="flex-container">
+        <div style="flex-grow: 1">01</div>
+        <div style="flex-grow: 4">02</div>
+        <div style="flex-grow: 2">03</div>
+    </div>
+
+    <h2>flex-basic : 아이템의 개별 크기를 지정(px, em, rem 단위)</h2>
+    <div class="flex-container">
+        <div style="flex-basis: 100px">01</div>
+        <div style="flex-basis: 150px">02</div>
+        <div style="flex-basis: 200px">03</div>
+    </div>
+
+    <h2>flex-shrink : 공간이 부족하면 얼마나 줄어들건가</h2>
+    <div class="flex-container">
+        <div style="flex-basis : 400px; flex-shrink: 1">01</div>
+        <div style="flex-basis : 400px; flex-shrink: 2">02</div>
+        <div style="flex-basis : 400px; flex-shrink: 1">03</div>
+    </div>
+</body>
+</html>

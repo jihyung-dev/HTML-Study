@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>float</title>
+</head>
+<link rel="stylesheet" href="/src/css/study.css">
+<body>
+<h1>인라인에 블럭을 추가하는 float</h1>
+
+<section>
+
+    <h2>float</h2>
+
+    <ul>
+        <li><strong>개념</strong>
+            요소를 문서의 일반적인 흐름에서 분리해 좌측이나 우측으로 배치하고, 다른 인라인 요소들이 그 옆을 감싸도록 하는 CSS 속성.
+            원래는 이미지 옆에 텍스트를 흐르게 하기 위해 만들어졌지만, 과거에는 레이아웃 제작에도 많이 사용됨.</li>
+
+        <li><strong>속성 값</strong>
+            - <code>none</code> : 기본값, float 적용 안 함
+            - <code>left</code> : 요소를 왼쪽으로 띄움
+            - <code>right</code> : 요소를 오른쪽으로 띄움
+            - <code>inherit</code> : 부모의 float 값 상속</li>
+
+        <li><strong>해제 방법(clear)</strong>
+            float된 요소의 영향을 받지 않게 하려면 clear 속성 사용
+            - <code>clear: left;</code> : 왼쪽 float 해제
+            - <code>clear: right;</code> : 오른쪽 float 해제
+            - <code>clear: both;</code> : 양쪽 float 해제</li>
+
+        <li><strong>문제점과 해결책</strong>
+            부모 요소가 float 자식의 높이를 인식하지 못하는 문제 발생.
+            해결 방법:
+            - 부모에 <code>overflow: hidden;</code> 또는 <code>overflow: auto;</code> 적용
+            - CSS clearfix 기법 사용 (가상 요소 <code>::after</code>로 clear 적용)
+            - 레이아웃 목적이라면 float 대신 flexbox나 grid 사용 권장</li>
+    </ul>
+</section>
+<section>
+    <h2>float 예시</h2>
+    <ul>
+        <li><strong>일반적 인라인 요소</strong>
+            <img src="/src/img/치즈냥이.webp" alt="예시 이미지" style=" margin-right: 10px; width: 150px;">
+            <p>이 문장은 이미지 오른쪽에 표시됩니다.</p>
+        </li>
+        <li><strong>이미지와 텍스트 감싸기</strong>
+            <img src="/src/img/치즈냥이.webp" alt="예시 이미지" style="float: left; margin-right: 10px; width: 150px;">
+            <p>float을 사용하면 이미지 옆으로 텍스트가 자연스럽게 감쌉니다.</p>
+        </li>
+
+        <li style="clear: left;">
+            <strong>2단 레이아웃</strong>
+            <p>
+<div style="float: left; width: 50%; background: lightblue;">왼쪽 영역</div>
+<div style="float: right; width: 50%; background: lightgreen;">오른쪽 영역</div>
+<div style="clear: both;"></div>
+      </p>
+            설명: 왼쪽과 오른쪽을 각각 float으로 배치하고, 마지막에 clear를 적용하여 부모 영역이 무너지는 것을 방지합니다.
+        </li>
+
+        <li><strong>메뉴 가로 배치</strong>
+            <p>
+<ul style="list-style: none; margin: 0; padding: 0;">
+  <li style="float: left; margin-right: 10px;">메뉴1</li>
+  <li style="float: left; margin-right: 10px;">메뉴2</li>
+  <li style="float: left;">메뉴3</li>
+</ul>
+<div style="clear: both;"></div>
+      </p>
+            설명: 각 메뉴 항목을 왼쪽으로 띄워 가로로 배치합니다.
+        </li>
+    </ul>
+</section>
+<section>
+    <h2>clear를 사용하는 이유</h2>
+    <ul>
+        <li><strong>float 영향 제거</strong>
+            float된 요소는 문서의 일반적인 흐름에서 벗어나 좌우에 띄워지므로, 뒤따르는 요소가 그 옆에 배치되거나 겹칠 수 있습니다. clear는 해당 방향의 float 요소 옆에 오지 않게 합니다.
+        </li>
+
+        <li><strong>레이아웃 무너짐 방지</strong>
+            부모 안의 자식 요소가 모두 float이면, 부모가 자식의 높이를 인식하지 못해 영역이 0이 됩니다. clear를 사용하면 다음 요소가 float 아래로 내려가면서 부모 영역이 정상적으로 잡힙니다.
+        </li>
+
+        <li><strong>가독성과 구조 유지</strong>
+            float된 요소와 그 다음 요소 사이의 시각적·구조적 구분을 명확히 하여, 레이아웃이 의도한 대로 유지됩니다.
+        </li>
+
+        <li><strong>방향 지정 가능</strong>
+            <code>clear: left</code>, <code>clear: right</code>, <code>clear: both</code>를 통해 어느 방향의 float을 피할지 명확히 설정할 수 있습니다.
+        </li>
+    </ul>
+</section>
+<section>
+    <h2>float 실습 과제</h2>
+    <ul>
+        <li><strong>과제 1: 이미지와 텍스트 감싸기</strong>
+            - 150px 크기의 이미지를 왼쪽에 float 시키고, 오른쪽에는 3~4줄의 텍스트를 배치하세요.
+            - 이미지와 텍스트 사이에는 10px의 간격을 주세요.
+        </li>
+
+        <li><strong>과제 2: 2단 레이아웃 만들기</strong>
+            - 화면 너비의 절반씩 차지하는 두 개의 div를 만들고,
+            왼쪽은 하늘색, 오른쪽은 연두색 배경을 적용하세요.
+            - float을 사용해 좌우 배치하고, clear를 이용해 부모 높이가 사라지지 않게 처리하세요.
+        </li>
+
+        <li><strong>과제 3: 가로 메뉴 만들기</strong>
+            - ul 태그 안에 li 5개를 만들고, float을 사용해 가로로 배치하세요.
+            - 각 li 사이에는 15px의 간격을 주세요.
+            - 마지막에 clear를 사용해 메뉴 아래에 본문이 겹치지 않게 하세요.
+        </li>
+
+    </ul>
+</section>
+
+<style>
+    /* 과제 1 */
+    .float-img-text img {
+        float: left;
+        width: 150px;
+        margin-right: 10px;
+    }
+
+    /* 과제 2 */
+    .two-column {
+        overflow: hidden; /* 부모가 자식 float 높이 인식하도록 */
+        margin-bottom: 2em;
+    }
+    .left-box {
+        float: left;
+        width: 50%;
+        background-color: #a0d8ef;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    .right-box {
+        float: right;
+        width: 50%;
+        background-color: #b7e4c7;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* 과제 3 */
+    .horizontal-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1em 0;
+        overflow: hidden; /* 부모 높이 유지 */
+        background-color: #333;
+    }
+    .horizontal-menu li {
+        float: left;
+        margin-right: 15px;
+    }
+    .horizontal-menu li:last-child {
+        margin-right: 0;
+    }
+    .horizontal-menu a {
+        color: white;
+        text-decoration: none;
+        display: block;
+        padding: 10px 15px;
+    }
+    .horizontal-menu a:hover {
+        background-color: #555;
+    }
+
+</style>
+
+<!-- 과제 1 -->
+<section class="float-img-text">
+    <h2>과제 1: 이미지와 텍스트 감싸기</h2>
+    <img src="/src/img/치즈냥이.webp" alt="샘플 이미지" style="width: 4em" />
+    <p>
+        이 문장은 이미지 오른쪽에 자연스럽게 감싸여 표시됩니다.
+        float 속성을 통해 이미지가 왼쪽에 떠 있고, 텍스트가 그 옆에 흐릅니다.
+        이 문장은 이미지 오른쪽에 자연스럽게 감싸여 표시됩니다.
+        float 속성을 통해 이미지가 왼쪽에 떠 있고, 텍스트가 그 옆에 흐릅니다.
+        이 문장은 이미지 오른쪽에 자연스럽게 감싸여 표시됩니다.
+        float 속성을 통해 이미지가 왼쪽에 떠 있고, 텍스트가 그 옆에 흐릅니다.
+
+    </p>
+</section>
+
+<!-- 과제 2 -->
+<section class="two-column">
+    <h2>과제 2: 2단 레이아웃 만들기</h2>
+    <div class="left-box">
+        왼쪽 영역입니다. 이 박스는 화면의 50% 너비를 차지하고 하늘색 배경입니다.
+    </div>
+    <div class="right-box">
+        오른쪽 영역입니다. 이 박스는 화면의 50% 너비를 차지하고 연두색 배경입니다.
+    </div>
+</section>
+
+<!-- 과제 3 -->
+<section>
+    <h2>과제 3: 가로 메뉴 만들기</h2>
+    <ul class="horizontal-menu">
+        <li><a href="#">메뉴1</a></li>
+        <li><a href="#">메뉴2</a></li>
+        <li><a href="#">메뉴3</a></li>
+        <li><a href="#">메뉴4</a></li>
+        <li><a href="#">메뉴5</a></li>
+    </ul>
+</section>
+
+</body>
+</html>

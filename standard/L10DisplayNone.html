@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>요소를 보이지 않게 하기</title>
+
+    <style>
+        .box{
+            width: 3em;
+            height: 3em;
+            display: inline-block;
+            background-color: #6ab8df;
+
+        }
+
+
+
+    </style>
+
+</head>
+<body>
+
+    <h1>다양한 방법으로 요소를 숨겨봅시다.</h1>
+
+    <ul>
+        <li> hidden :
+            <div class="box" hidden>
+            </div>
+            hidden은 input만 사라짐
+            <input type="text" hidden>
+        </li>
+
+        <li>
+            display:none
+            <div class="box" style="display: none"></div>
+            (요소가 없는 것처럼 취급됨)
+        </li>
+
+        <li>
+            opacity (투명도) : 0
+            <div class="box"
+                 style="opacity:0"
+            ></div>
+            (보이지만 않음)
+        </li>
+
+        <li>
+            width: 0
+            <div class="box" style="width: 0">
+                컨텐츠
+            </div>
+            요소의 크기를 0으로 만들어도 컨텐츠는 없어지지않음
+        </li>
+
+        <li> width: 0; overflow: hidden;
+            <div class="box" style=" width: 0; overflow: hidden">
+                컨텐츠
+            </div>
+            넘쳐흐르는 컨텐츠를 hidden으로 감춘다.
+        </li>
+        <li> border가 존재하면 크기로 사라지게 하지 못함
+            <div class="box" style="border: 1px solid; width:0;"></div>
+        </li>
+
+        <li>
+            box-sizing: border-box로 해도
+            크기가 무관하게 border가 생성
+            (무조건 border-width=0으로 지정, border:none)
+            <div class="box" style="
+            border: 1px solid;   /*border: 0px or border: none; */
+            box-sizing: border-box;
+            width:0;"
+            ></div>
+        </li>
+
+        <li>visibility: hidden (default: visible)
+            <div class="box" style="visibility: hidden"
+            ></div>
+            요소는 존재하지만 보이지 않게 하는 방법
+        </li>
+
+        <li>transform:scale(0) :
+            <div class="box" style="transform: scale(0.1)"
+            ></div>
+            transform을 이용해 제거
+            실제로 줄었지만, 공간은 남음,
+        </li>
+
+        <li>
+            <div class="box"></div>
+        </li>
+    </ul>
+
+    <style>
+        div.box:hover{
+            /*display: none;*/
+            opacity: 0;
+            /*background-color: olive;*/
+        }
+
+    </style>
+
+    <h2>의사 클래스 (상태) </h2>
+    <div>
+        <div class="box d-none"></div>
+    </div>
+
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+
+
+
+</body>
+</html>

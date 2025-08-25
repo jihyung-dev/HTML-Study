@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        /* 공통 스타일 */
+        body {
+            margin: 0;
+            font-family: sans-serif;
+        }
+
+        /* 메뉴바 스타일 */
+        nav {
+            position: sticky;
+            top: 0;
+            background-color: #2c3e50;
+            padding: 1em;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-start;
+            gap: 2em;
+        }
+
+        nav ul li {
+            position: relative;
+            color: white;
+            cursor: pointer;
+        }
+
+        nav ul li:hover {
+            background-color: rgba(52, 73, 94, 0.45);
+        }
+
+        /* 소메뉴 */
+        .submenu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #ecf0f1;
+            padding: 0.5em 1em;
+            border: 1px solid #bdc3c7;
+            min-width: 150px;
+        }
+
+        .submenu li {
+            color: #2c3e50;
+            padding: 0.3em 0;
+        }
+
+        li:hover .submenu {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sticky HOME</h1>
+    <nav>
+        <ul>
+            <li>메뉴 1
+                <ul class="submenu">
+                    <li>소메뉴 1</li>
+                    <li>소메뉴 2</li>
+                </ul>
+
+            </li>
+            <li>메뉴 2
+                <ul class="submenu">
+                    <li>소메뉴 1</li>
+                    <li>소메뉴 2</li>
+                </ul>
+            </li>
+            <li>메뉴 3
+                <ul class="submenu">
+                    <li>소메뉴 A</li>
+                    <li>소메뉴 B</li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+<section>
+    <h2>Sticky 메뉴바 과제 요구 사항</h2>
+    <ul>
+        <li>메뉴바는 <strong>position: sticky</strong>로 고정되어야 한다 (top: 0)</li>
+        <li>메뉴바는 <strong>가로 막대 형태</strong>로 화면 상단에 왼쪽 정렬되어야 한다</li>
+        <li>대메뉴 항목은 <strong>ul > li</strong> 형태로 구성</li>
+        <li>각 대메뉴에 마우스를 올리면 <strong>소메뉴가 드롭다운으로 표시</strong>된다</li>
+        <li>기본 상태에서 소메뉴는 <strong>display: none</strong>으로 숨김</li>
+        <li><strong>li:hover .submenu</strong> 를 활용하여 소메뉴를 표시</li>
+        <li>추가로 <strong>transition</strong>을 이용해 부드러운 애니메이션 가능</li>
+    </ul>
+    <h2>Sticky 메뉴바 테스트</h2>
+    <p>스크롤을 내려도 메뉴바는 상단에 고정되어 있어야 합니다.</p>
+    <p style="height: 2000px;">스크롤 테스트용 긴 공간입니다.</p>
+
+</section>
+</body>
+</html>

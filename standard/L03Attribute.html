@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>요소 속성 정의법</title>
+</head>
+<body>
+    <h1>요소 속성 정의법</h1>
+    <p>요소의 속성은 노드개체의 상태를 바꾼다.</p>
+    <p>노드개체 : 요소가 브라우저에 출력된 상태 (객체, 이벤트 리스너가 정의됨)</p>
+    <h2>input 요소의 type 속성</h2>
+    <p>type, name, value는 input 요소만 사용하는 속성 </p>
+    <ul>
+        <li><input > type의 기본값(default:처음부터 지정된..)은 text </li>
+        <li><input type="text" value="안녕하세요!"></li>
+        <li><input type="button" value="버튼입니다."></li>
+        <li><button>버튼입니다.</button></li>  <!-- 개발자들이 선호하는 버튼 -->
+        <li>
+            <input type="checkbox">
+            <input type="checkbox" checked>
+            : checked 속성 자체에 true 라는 값을 갖는다.(없으면 false)
+<!--            <input type="checkbox" checked="checked"> -->
+        </li>
+        <li> <!-- 복수 선택 가능한 버튼 -->
+            소설읽기 <input type="checkbox" name="hobby" value="소설읽기">
+            웹툰보기 <input type="checkbox" name="hobby" value="웹툰보기">
+            만화보기 <input type="checkbox" name="hobby" value="만화보기">
+
+
+        </li>
+        <li> <!-- 하나만 선택 가능한 버튼 -->
+            남자 <input type="radio" name="gender" value="male">  <!-- name이 같을때 하나만 눌림 -->
+            여자 <input type="radio" name="gender" value="female">
+
+        </li>
+    </ul>
+    <h2>공통 속성</h2>
+    <p id="globalP">id,class,data-*,style</p>
+    <ul id="globalP">
+        <li class="red">id : html 문서 내에서 유일한 요소를 지정</li>
+        <li class="red">class : 복수의 이름을 지정 </li>
+        <li data-color="ere="> data-* : 사용자 지정 속성</li>
+        <li data-color="white" style="color:aqua"> style : 요소에 그래픽을 지정 </li>
+        <li title ="툴팁입니다!">title : 툴팁제공</li>
+        <li hidden>hidden: 보이지 않게 합니다.(hidden이 있으면 true)</li>
+
+    </ul>
+    <h2>리소스를 참조하는 속성</h2>
+    <p>href(Hypertext Reference),src(Resource)</p>
+    <ul>
+        <li>
+            <a href="L02BlockInlineElement.html"> 상대주소로 이동</a>
+        </li>
+        <li>
+            <a href="http://naver.com"> 절대주소로 다른 서버로 이동(네이버)</a>
+        </li>
+        <li>
+            <img src="../src/img/cat.jpg" width="100" alt="하얀 냥이 이미지">
+            <img src="../src/img/cat.jpg" style="width: 100px;" alt="하얀 냥이 이미지">
+        </li>
+        
+        
+    </ul>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

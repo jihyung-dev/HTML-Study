@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Flex_Subject</title>
+</head>
+<style>
+    .fixed {
+        top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 5%;
+        list-style: none;
+        width: 100%;
+        padding: 0;
+        background-color: rgba(255, 255, 255, 0);
+    }
+
+    .fixed>li{
+        line-height: 1.2rem;
+        color: rgba(47, 44, 44, 0.47);
+
+    }
+
+    .fixed>li>a{
+        color: #000000;
+        text-decoration: none;
+    }
+
+    .store-wrap{
+        display: flex;
+        overflow: hidden;
+        position: absolute;
+        background-color: rgb(255, 255, 255);
+        width: 100%;
+        height: 0;
+        left: 0;
+        justify-content: center;
+        top: 2rem;
+
+        transition: height 0.2s ease-out;
+
+    }
+    .store-content {
+        display: flex;
+        width: 1024px;
+
+    }
+    .store-content>div{
+        max-width: 18rem;
+        min-width: 18%;
+    }
+    .store-subtitle>ul{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .store-hover:hover >.store-wrap {
+        height: 22rem;
+    }
+
+    .shop-main {
+        position: relative;
+        letter-spacing: -1.2px;
+        line-height: 2.3rem;
+        width: 17.3rem;
+    }
+    .others{
+        list-style: none    ;
+        padding: 0;
+        color : rgba(40, 38, 38, 0.91);
+        font-weight: bold;
+        letter-spacing: normal;
+    }
+
+    .store-main-content > li {
+        list-style: none;
+        font-size: 1.5rem;
+        color: #333333;
+        position: relative;
+        font-weight: bold;
+        padding: 0;
+    }
+    .shop-main-title{
+        letter-spacing: 0px;
+        line-height:2.3rem;
+    }
+    .roof{
+
+        display: flex;
+        justify-content: center;
+        position: sticky;
+        top: 0;
+
+    }
+    .roof>.nav-wrap>.fixed{
+        width: 1024px;
+        background-color: white;
+        height: 48px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+
+    /*----------------------------------------------body----------------------------------------------------*/
+    .body1{
+        background-color: rgba(236, 236, 236, 0.58);
+        height: fit-content;
+    }
+    .body1-text{
+        text-align: center;
+        font-size: 2.7rem;
+        font-weight: bold;
+        letter-spacing: -1px;
+    }
+    .body1-text-2{
+        font-size: 1.6rem;
+        font-weight: normal;
+    }
+    .body1-text-3{
+        background-image: linear-gradient(to right, #2c3e50,#0090f7, #ba62fc, #f2416b, #f55600, #d7d715);
+        background-clip: text;
+        color: transparent;
+        font-size: 1.2rem;
+        font-weight: normal;
+        letter-spacing: -0.7px;
+        text-align: center;
+    }
+    .body1-button-wrap>button{
+        height: 2rem;
+        width: 6.5rem;
+        background-color: #3498db;
+        border: none;
+        color: white;
+        border-radius: 15px;
+        font-weight: normal;
+    }
+    .body1-button-wrap>.button2{
+        background-color: white;
+        border: 1px;
+        border-style: solid;
+        border-color: #3498db;
+        color: #3498db;
+    }
+    .body1-button-wrap>button:hover{
+
+    }
+
+    .body1-button-wrap>button:active{
+
+    }
+
+
+</style>
+
+<body>
+
+<div class="roof">
+    <nav class="nav-wrap" style="">
+        <ul class="fixed">
+            <li><a href="">Apple</a></li>
+            <li class="store-hover"><a href="">Store</a>
+                <div class="store-wrap">
+                    <div class="store-content">
+                        <div class="shop-main">
+                            <div class="shop-main-title">shop
+                            </div>
+
+                            <ul class="store-main-content" style="padding: 0;">
+                                <li>Shop the Latest</li>
+                                <li>Mac</li>
+                                <li>iPad</li>
+                                <li>iPhone</li>
+                                <li>Apple Watch</li>
+                                <li>Apple Vision Pro</li>
+                                <li>Accessories</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <div class="shop-main-title">Quick Links
+                            </div>
+                            <ul class="others">
+                                <li>Find a Store</li>
+                                <li>Order Status</li>
+                                <li>Apple Trade In</li>
+                                <li>Financing</li>
+                                <li>Personal Setup</li>
+                                <li>Coolege Student Offer</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="shop-main-title">Shop Special Stores
+                            </div>
+                            <ul class="others">
+                                <li>Certified Refurbished</li>
+                                <li>Education</li>
+                                <li>Business</li>
+                                <li>Veterans and Military</li>
+                                <li>Government</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </li>
+            <li class="Mac"><a href="">Mac</a></li>
+            <li class="iPad"><a href="">iPad</a></li>
+            <li class="iPhone"><a href="">iPhone</a></li>
+            <li class="Watch"><a href="">Watch</a></li>
+            <li class="Vision"><a href="">Vision</a></li>
+            <li class="AirPods"><a href="">AirPods</a></li>
+            <li class="TV & Home"><a href="">TV & Home</a></li>
+            <li class="Entertainment"><a href="">Entertainment</a></li>
+            <li class="Accessories"><a href="">Accessories</a></li>
+            <li class="Support"><a href="">Support</a></li>
+            <li><a href="">Search</a></li>
+            <li><a href="">Shop</a></li>
+        </ul>
+    </nav>
+</div>
+
+<!--                       body                      -->
+
+<div class="body1">
+    <div class="body1-text">
+        <div style="height: "></div>
+        <div class="body1-text-1">iPhone
+        </div>
+        <div class="body1-text-2">Meet the iPhone 16 Family.
+        </div>
+    <div class="body1-button-wrap">
+
+
+        <button class="button1" value="Learn more">Learn more
+        </button>
+
+        <button class="button2" value="Shop iPhone">Shop iPhone
+        </button>
+    </div>
+    <span class="body1-text-3">Built for Apple Intelligence.</span>
+
+        <br>
+        <img src="/src/img/giveme-real-removebg-preview.png" alt=""><div style="background-color: white; height: 0.8rem;">
+    </div>
+
+    </div>
+
+
+</div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

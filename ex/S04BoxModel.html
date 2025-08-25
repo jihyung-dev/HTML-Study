@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>박스 모델</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: white;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        ul {
+            margin-left: 20px;
+        }
+    </style>
+
+</head>
+<body>
+<h1>📦 CSS 박스 모델(Box Model) 정리</h1>
+    <section>
+        <h2>1. 박스 모델이란?</h2>
+        <ul>
+            <li>HTML 요소는 기본적으로 박스 형태로 구성되며, 각 요소는 다음과 같은 구조를 가짐</li>
+            <li>구성 요소 (안쪽부터 바깥쪽 순서): <strong>content → padding → border → margin</strong></li>
+            <li>박스 모델은 요소의 전체 크기를 결정하는 중요한 기준</li>
+        </ul>
+    </section>
+    <section>
+        <h2>2.box 모델의 구성 요소 설명</h2>
+        <ul>
+            <li><strong>Content</strong>: 요소의 실제 콘텐츠 영역 (텍스트, 이미지 등)</li>
+            <li><strong>Padding</strong>: 콘텐츠와 테두리 사이의 여백</li>
+            <li><strong>Border</strong>: 요소의 테두리</li>
+            <li><strong>Margin</strong>: 요소와 외부 요소 사이의 여백</li>
+        </ul>
+    </section>
+    <section>
+        <h2>3. 박스 크기 계산 방식</h2>
+        <ul>
+            <li>기본적으로 <code>width</code>와 <code>height</code>는 <strong>content 영역만을 의미</strong></li>
+            <li><code>box-sizing: content-box</code>: 기본값 (content만 width/height 포함)</li>
+            <li><code>box-sizing: border-box</code>: padding과 border를 포함한 크기로 계산</li>
+            <li>대부분의 실무에서는 <code>border-box</code>를 선호 (예상 가능한 박스 크기 설정 가능)</li>
+        </ul>
+    </section>
+    <section>
+    <h2>4. 요소 크기 고정과 overflow</h2>
+    <ul>
+        <li><strong>높이 또는 너비를 고정</strong>하면 콘텐츠가 넘칠 수 있음</li>
+        <li><code>overflow</code> 속성으로 넘치는 콘텐츠 처리 방식 지정</li>
+        <li>
+            주요 값:
+            <ul>
+                <li><code>visible</code>: 넘친 콘텐츠 표시 (기본값)</li>
+                <li><code>hidden</code>: 넘친 콘텐츠 잘라냄</li>
+                <li><code>scroll</code>: 항상 스크롤 표시</li>
+                <li><code>auto</code>: 콘텐츠 넘칠 때만 스크롤 생성</li>
+            </ul>
+        </li>
+    </ul>
+    </section>
+    <section>
+        <h2>5. 방향별 padding / margin 단축 표기법</h2>
+        <ul>
+            <li><code>padding: A;</code> → 네 방향 모두 A</li>
+            <li><code>padding: A B;</code> → 위아래 A, 좌우 B</li>
+            <li><code>padding: A B C;</code> → 위 A, 좌우 B, 아래 C</li>
+            <li><code>padding: A B C D;</code> → 위 A, 오른쪽 B, 아래 C, 왼쪽 D (시계방향)</li>
+        </ul>
+    </section>
+    <section>
+        <h2>6. block 요소와 크기</h2>
+        <ul>
+            <li>block 요소는 기본적으로 <strong>width: 100%</strong> (부모 너비 채움)</li>
+            <li><code>height: auto</code>일 경우, 콘텐츠의 높이에 따라 자동 증가</li>
+            <li>width가 고정된 block 요소를 가운데 정렬하려면 <code>margin: 0 auto;</code> 사용</li>
+        </ul>
+    </section>
+    <section>
+        <h2>7. inline-block 요소</h2>
+        <ul>
+            <li>inline 요소처럼 나란히 배치되지만, <strong>width / height 지정 가능</strong></li>
+            <li>이미지, 버튼, 폼 요소 등에 자주 사용</li>
+        </ul>
+    </section>
+    <section>
+        <h2>8. 참고 예시</h2>
+        <ul>
+            <li><code>border: 5px dashed green;</code> → 테두리 두께 5px, 초록색, 점선</li>
+            <li><code>border-width: top right bottom left;</code> → 방향별로 테두리 너비 지정</li>
+            <li><code>border-color: top right bottom left;</code> → 방향별로 색상 지정</li>
+            <li><code>margin: 20px auto;</code> → 위아래 20px, 좌우 자동 정렬 (중앙 정렬)</li>
+        </ul>
+    </section>
+    <section>
+        <h2>9.대표적인 Block 요소(display:block)</h2>
+        <ul>
+            <li>&lt;div&gt; : 레이아웃 용도로 가장 많이 사용되는 블럭</li>
+            <li>&lt;p&gt; : 문단(Paragraph), 텍스트 단락 표현</li>
+            <li>&lt;h1&gt; ~ &lt;h6&gt; : 제목 태그 (h1이 가장 크고 중요)</li>
+            <li>&lt;ul&gt;, &lt;ol&gt;, &lt;li&gt; : 목록 태그 (순서 없음/있음)</li>
+            <li>&lt;header&gt;, &lt;footer&gt; : 문서나 영역의 머리말, 꼬리말</li>
+            <li>&lt;section&gt;, &lt;article&gt;, &lt;aside&gt;, &lt;nav&gt; : 시맨틱 구조 태그</li>
+            <li>&lt;table&gt; : 표를 만들기 위한 블럭</li>
+            <li>&lt;form&gt;, &lt;fieldset&gt; : 입력 영역 그룹화</li>
+            <li>&lt;hr&gt; : 수평선 (구분선)</li>
+            <li>&lt;blockquote&gt; : 인용문 표현</li>
+        </ul>
+    </section>
+    <section>
+        <h2>10.대표적인 Inline-Block 요소</h2>
+        <ul>
+            <li>&lt;img&gt; : 이미지를 삽입하며, 기본적으로 inline-block</li>
+            <li>&lt;input&gt; : 사용자 입력 필드 (text, radio, checkbox 등)</li>
+            <li>&lt;button&gt; : 버튼 요소</li>
+            <li>&lt;select&gt; : 드롭다운 선택 목록</li>
+            <li>&lt;textarea&gt; : 여러 줄 입력 필드</li>
+            <li>&lt;label&gt; : 폼 요소에 대한 설명</li>
+            <li>&lt;iframe&gt; : 인라인 프레임 (다른 HTML 문서 삽입)</li>
+            <li>&lt;video&gt;, &lt;audio&gt; : 미디어 요소 (컨트롤러 포함)</li>
+            <li>&lt;canvas&gt; : 그래픽 그리기 위한 요소</li>
+            <li>커스텀 스타일을 통해 <code>display: inline-block;</code>으로 지정한 모든 요소</li>
+        </ul>
+    </section>
+    <section>
+        <h2>11.Inline 요소의 박스 모델 특징</h2>
+        <ul>
+            <li>줄 바꿈이 되지 않고, 옆으로 배치된다 (같은 라인에 나란히 정렬)</li>
+            <li>컨텐츠의 크기만큼만 가로 영역을 차지한다</li>
+            <li>width와 height 속성은 무시된다 (지정해도 적용되지 않음)</li>
+            <li>padding과 margin 중 좌우(Left, Right)는 적용된다</li>
+            <li>padding과 margin 중 상하(Top, Bottom)는 공간에 영향을 주지 않거나 겹침 현상 발생</li>
+            <li>box-sizing 속성은 기본적으로 content-box이며, 실질적으로는 제한적 효과</li>
+            <li>박스 모델을 완전히 적용하려면 display 속성을 inline-block 또는 block으로 변경해야 한다</li>
+        </ul>
+    </section>
+    <section>
+        <h2>12.대표적인 Inline 요소(box모델이 적용되지 않음)</h2>
+        <ul>
+            <li>&lt;span&gt; : 의미 없는 텍스트 구분용 인라인 컨테이너</li>
+            <li>&lt;a&gt; : 하이퍼링크 텍스트</li>
+            <li>&lt;strong&gt; : 중요 강조 (굵게)</li>
+            <li>&lt;em&gt; : 감정적 강조 (기울임)</li>
+            <li>&lt;br&gt; : 줄바꿈 (라인 브레이크)</li>
+            <li>&lt;q&gt; : 짧은 인라인 인용문 (큰 따옴표)</li>
+            <li>&lt;abbr&gt; : 약어(abbreviation) 정의</li>
+            <li>&lt;cite&gt; : 출처 표기</li>
+            <li>&lt;code&gt; : 인라인 코드(모노스페이스 폰트)</li>
+            <li>&lt;mark&gt; : 하이라이트(형광펜 표시)</li>
+            <li>&lt;time&gt; : 날짜/시간 표기</li>
+            <li>&lt;sub&gt;, &lt;sup&gt; : 아래 첨자 / 위 첨자</li>
+            <li>&lt;b&gt;, &lt;i&gt;, &lt;u&gt; : 단순한 굵기, 기울임, 밑줄 (의미 없음)</li>
+            <li>&lt;address&gt;: 문서 작성자의 연락처 정보, 블록 요소, 기울임, 바닥글이나 작성자 정보에 사용</li>
+            <li>&lt;pre&gt;: 포맷팅 보존된 코드 블록, 블록 요소, 고정폭 글꼴, 공백 유지, 여러 줄 코드에 사용</li>
+            <li>&lt;kbd&gt;: 키보드 입력 내용, 인라인 요소, 고정폭 글꼴, 입력 안내 예: Ctrl + S</li>
+            <li>&lt;samp&gt;: 프로그램 출력, 인라인 요소, 고정폭 글꼴, 예: 404 Not Found 출력</li>
+
+        </ul>
+    </section>
+<section>
+    <h2>13.object-fit 속성 정리</h2>
+    <ul>
+        <li>이미지나 비디오 같은 <code>replaceable 요소</code>의 콘텐츠가 <code>박스 영역</code>에 어떻게 맞춰질지 결정하는 CSS 속성</li>
+        <li>주로 <code>&lt;img&gt;</code> 태그와 함께 사용하여 이미지 크기 조절과 잘림 여부를 제어</li>
+        <li>주요 속성 값:
+            <ul>
+                <li><code>fill</code>: 기본값, 콘텐츠를 박스 크기에 맞게 늘리거나 줄여 비율 무시, 왜곡 발생 가능</li>
+                <li><code>contain</code>: 콘텐츠 비율 유지하며 박스 안에 모두 들어가도록 축소 또는 확대, 빈 공간 생길 수 있음</li>
+                <li><code>cover</code>: 콘텐츠 비율 유지하며 박스를 꽉 채우도록 확대, 일부 콘텐츠는 잘릴 수 있음</li>
+                <li><code>none</code>: 원본 크기 유지, 박스 크기와 맞지 않으면 잘릴 수 있음</li>
+                <li><code>scale-down</code>: <code>none</code> 또는 <code>contain</code> 중 더 작은 크기로 조절</li>
+            </ul>
+        </li>
+        <li>예시:
+            <pre>
+img {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+}
+      </pre>
+            이미지가 300x200 크기로 영역을 채우며, 비율 유지되지만 일부 잘릴 수 있음
+        </li>
+        <li>배경 이미지에 비슷한 효과를 주려면 <code>background-size: cover;</code> 사용</li>
+    </ul>
+</section>
+<section>
+    <h2>박스 모델 & display 속성 실습 과제</h2>
+    <ul>
+        <li>
+            &lt;div&gt; 태그를 사용해 빨간색 배경의 block 박스를 만들고, 내부에 텍스트를 넣으세요.<br>
+            (조건: width 300px, height 100px, padding 20px, margin 20px auto)
+        </li>
+        <li>
+            &lt;span&gt; 태그를 사용해 텍스트 일부를 강조하세요.<br>
+            (조건: background-color: yellow; display 속성 변경 없이 inline 상태 유지)
+        </li>
+        <li>
+            &lt;img&gt; 태그를 inline-block 박스로 인식하게 만들고, 아래와 같이 스타일을 지정하세요.<br>
+            (조건: width: 150px; height: 150px; border-radius: 50%)
+        </li>
+        <li>
+            &lt;a&gt; 태그를 사용하여 링크 텍스트를 만들고, padding과 margin을 적용해 보세요.<br>
+            (조건: display는 inline, padding: 10px 20px, margin: 10px 0 적용 시 어떻게 동작하는지 확인)
+        </li>
+        <li>
+            &lt;button&gt; 태그를 사용하여 버튼을 만들고 inline-block 요소의 특징을 확인하세요.<br>
+            (조건: width, height를 자유롭게 지정하고, text-align과 padding도 조정해볼 것)
+        </li>
+        <li>
+            display 속성의 차이를 비교하기 위한 실험을 하세요.<br>
+            같은 콘텐츠를 &lt;div&gt;, &lt;span&gt;, &lt;button&gt;으로 만들어 각각 display 속성에 따른 배치를 비교하세요.
+        </li>
+        <li>
+            하나의 &lt;section&gt; 안에 block 요소, inline 요소, inline-block 요소를 섞어서 정렬해 보세요.<br>
+            (조건: 각 요소에 border를 주고 박스 크기와 배치 방식이 어떻게 다른지 시각적으로 비교)
+        </li>
+    </ul>
+</section>
+<section>
+    <h2>CSS 박스 모델 및 display 속성 활용 실습 과제</h2>
+    <ul>
+        <li>
+            <strong>사진 갤러리 만들기:</strong><br>
+            가로 100% 너비 내에서 3개의 사진을 한 줄에 배치하세요.<br>
+            각 사진은 <code>inline-block</code> 요소로 처리하고, 너비는 부모 너비의 30%로 지정하세요.<br>
+            사진은 모두 <code>object-fit: cover;</code>를 적용해 영역에 꽉 차게 표시하세요.
+        </li>
+        <li>
+            각 사진은 200px 높이로 고정하고, <code>border</code>와 <code>padding</code>을 넣어 사진 간에 간격을 주세요.
+        </li>
+        <li>
+            사진 아래에는 사진 제목을 <code>inline</code> 요소로 표시하고, 가로로 사진과 제목이 정렬되도록 하세요.<br>
+            단, 제목은 사진 너비보다 조금 좁게(예: 90%) 하고, 줄바꿈 없이 한 줄로 나오게 만드세요.
+        </li>
+        <li>
+            부모 박스에는 <code>padding</code>과 <code>margin</code>을 적절히 적용하여 전체 갤러리가 좌우 여백과 위아래 공간을 확보하도록 하세요.
+        </li>
+    </ul>
+</section>
+<style>
+    /* 갤러리 부모 박스 */
+    .gallery {
+        width: 90%;
+        max-width: 960px;
+        margin: 20px auto;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f8f8f8;
+    }
+
+    /* 사진 + 제목을 감싸는 박스 */
+    .photo-item {
+        display: inline-block;
+        width: 30%;
+        margin: 0 1.3%; /* 좌우 간격 (3개 배치 시 총 100%) */
+        vertical-align: top; /* inline-block 세로 정렬 보정 */
+        box-sizing: border-box;
+    }
+
+    /* 사진 스타일 */
+    .photo-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border: 3px solid #444;
+        padding: 5px;
+        box-sizing: border-box;
+        display: block; /* img 태그 기본 inline-block -> block으로 변경해 아래 margin 적용 */
+        margin-bottom: 5px;
+        border-radius: 8px;
+    }
+
+    /* 사진 제목 */
+    .photo-item .title {
+        display: inline;
+        width: 90%; /* inline 요소에 width는 안 먹어서 부모 너비 대비 너비 조절은 제한적 */
+        white-space: nowrap; /* 줄바꿈 금지 */
+        overflow: hidden; /* 넘치는 텍스트 숨김 */
+        text-overflow: ellipsis; /* 넘칠 경우 ... 처리 */
+        font-weight: bold;
+        font-size: 1.1em;
+        color: #333;
+    }
+
+</style>
+<div class="gallery">
+    <div class="photo-item">
+        <img src="https://picsum.photos/id/1015/400/300" alt="사진1" />
+        <span class="title">멋진 산 풍경</span>
+    </div>
+    <div class="photo-item">
+        <img src="https://picsum.photos/id/1016/400/300" alt="사진2" />
+        <span class="title">푸른 바다와 하늘</span>
+    </div>
+    <div class="photo-item">
+        <img src="https://picsum.photos/id/1025/400/300" alt="사진3" />
+        <span class="title">숲속의 고요한 길</span>
+    </div>
+</div>
+
+<style>
+    .block-box {
+        width: 300px;
+        height: 100px;
+        background-color: red;
+        padding: 20px;
+        margin: 20px auto;
+        color: white;
+    }
+
+    .inline-highlight {
+        background-color: yellow;
+    }
+
+    .circle-img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .inline-link {
+        background-color: #f0f0f0;
+        padding: 10px 20px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+    }
+
+    .custom-button {
+        width: 200px;
+        height: 60px;
+        padding: 10px;
+        text-align: center;
+        background-color: lightblue;
+        border: none;
+        border-radius: 8px;
+    }
+
+    .compare div,
+    .compare span,
+    .compare button {
+        border: 2px solid black;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .compare div {
+        display: block;
+        background-color: #ffe4e1;
+    }
+
+    .compare span {
+        display: inline;
+        background-color: #e1ffe4;
+    }
+
+    .compare button {
+        display: inline-block;
+        background-color: #e1e8ff;
+    }
+
+    .mixed-box > * {
+        border: 1px dashed gray;
+        padding: 10px;
+        margin: 5px;
+    }
+
+    .mixed-box .block {
+        display: block;
+        background-color: #f9c2c2;
+    }
+
+    .mixed-box .inline {
+        display: inline;
+        background-color: #c2f9d9;
+    }
+
+    .mixed-box .inline-block {
+        display: inline-block;
+        background-color: #c2d4f9;
+        width: 120px;
+        height: 50px;
+    }
+</style>
+<section>
+    <h2>실습 정답 예시</h2>
+    <ul>
+        <li>
+            <div class="block-box">
+                이것은 블록 박스입니다.
+            </div>
+        </li>
+
+        <li>
+            <p>
+                이 문장에는 <span class="inline-highlight">강조된 텍스트</span>가 포함되어 있습니다.
+            </p>
+        </li>
+
+        <li>
+            <img src="https://via.placeholder.com/150" class="circle-img" alt="원형 이미지">
+        </li>
+
+        <li>
+            <a href="#" class="inline-link">인라인 링크 테스트</a>
+        </li>
+
+        <li>
+            <button class="custom-button">커스텀 버튼</button>
+        </li>
+
+        <li class="compare">
+            <div>div: block 요소</div>
+            <span>span: inline 요소</span>
+            <button>button: inline-block 요소</button>
+        </li>
+
+        <li>
+            <div class="mixed-box">
+                <div class="block">Block 요소</div>
+                <span class="inline">Inline 요소</span>
+                <div class="inline-block">Inline-block 요소</div>
+            </div>
+        </li>
+    </ul>
+</section>
+
+<style>
+    #gallery>.img-wrap>img{
+        width: 100%;
+        height: 200px;
+        object-fit: cover; /* cover : 이미지가 영역보다 클때, 이미지의 중간으로 정렬 */
+                             /* contain : 이미지 전체를 욱여넣기, 영역이 덜 참  */
+        border: 1px solid;
+        border-radius: 5px;
+    /*    border-color 는 color와 같은 색이 기본값*/
+        padding: 5px;
+    }
+    #gallery>.img-wrap{
+        display: inline-block;
+        width: 30%;
+        margin: 0 1%
+    }
+    #gallery .img-title-wrap{
+        text-align: left;
+    }
+    #gallery{
+        text-align: center;
+    }
+
+
+</style>
+
+<div id="gallery">
+    <!-- 꾸미기가 곤란해진다? 이미지 밑에 title을 주고 싶음   -->
+    <!-- 옆으로 나열되는 block : inline-block   -->
+    <div class="img-wrap">
+        <img src="../src/img/cat.jpg" alt="">
+        <!-- 줄바꿈방법 1) <br>    -->
+        <div class="img-title-wrap">
+                    <!-- 줄바꿈방법 2) <p>에 넣기     -->
+            <span>백설기 냥이</span>
+        </div>
+    </div>
+
+    <div class="img-wrap">
+        <img src="../src/img/cat.jpg" alt="">
+        <div class="img-title-wrap">
+            <span>백설기 냥이</span>
+        </div>
+    </div>
+
+    <div class="img-wrap">
+        <img src="../src/img/cat.jpg" alt="">
+        <div class="img-title-wrap">
+            <span>백설기 냥이</span>
+        </div>
+    </div>
+
+</div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

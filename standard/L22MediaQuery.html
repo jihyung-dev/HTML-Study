@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- browser의 크기가 device의 크기고, 비율을 1로 하겠다, 이것을 써야 미디어 쿼리를 사용할 수 있음 -->
+    <!-- 모니터에 브라우저(Document)가 항상 꽉차있다는 전제를 하겠다 -->
+    <title>미디어 쿼리로 반응형 웹 구현</title>
+
+    <style>
+        body{
+            background-color: gray;
+        }
+        nav>ul{
+            display: flex;
+            flex-direction: row;
+            width: 700px;
+            justify-content: space-between;
+        }
+        @media (max-width: 700px){
+            body {
+                background-color: pink;
+            }
+            nav>ul{
+                flex-direction: column;
+            }
+        }
+        @media (min-width: 400px){
+            body{
+                background-color: #7272f1;
+            }
+        }
+
+
+
+    </style>
+
+</head>
+
+<body>
+    <h1>미디어 쿼리로 반응형 웹 구현</h1>
+    <header>
+        <nav>
+            <ul>
+                <li>01HOME</li>
+                <li>02가방상품</li>
+                <li>03상의</li>
+                <li>04하의</li>
+                <li>05회원가입</li>
+            </ul>
+        </nav>
+    </header>
+</body>
+</html>
