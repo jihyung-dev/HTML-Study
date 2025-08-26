@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>자바스크립트의 변수와 상수 및 영역</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+    <h1>자바스크립트의 변수와 상수 및 영역</h1>
+    <h2>let,const,var 로 변수와 상수 선언</h2>
+    <section>
+        <h3> 자바스크립트의 변수 및 상수 선언</h3>
+        <ul>
+            <li><code>let</code> : 재할당 가능한 변수</li>
+            <li><code>const</code> : 상수, 재할당 불가</li>
+            <li><code>var</code> : 옛날 방식, 함수 범위(function scope) → 권장하지 않음</li>
+            <li>자바스크립트는 **변수 선언 시 타입을 지정하지 않음** → 동적 타입 언어</li>
+            <pre><code>let a = 10;        // 숫자
+a = "문자열";      // 자료형 변경 가능
+    </code></pre>
+        </ul>
+    </section>
+    <h2>식별자 규칙</h2>
+
+    <section>
+        <h3>식별자(Identifier) 기본 규칙 </h3>
+        <ul>
+            <li>영문자, 숫자, 밑줄(_), 달러($)만 사용 가능</li>
+            <li>첫 글자는 숫자로 시작할 수 없음</li>
+            <li>대소문자를 구분함 (count와 Count는 다른 변수)</li>
+            <li>예약어(if, for, class 등)는 변수명으로 사용할 수 없음</li>
+        </ul>
+        <h3>변수/함수 명명 규칙</h3>
+        <ul>
+            <li>camelCase(낙타 표기법) 사용 권장: myVariable, getUserName</li>
+            <li>짧고 의미 있게 작성: n → x (X), userAge (O)</li>
+            <li>동사+명사 형태로 함수 작성: getData(), calculateSum()</li>
+        </ul>
+        <h3>상수 명명 규칙</h3>
+        <ul>
+            <li>대문자 + 밑줄 표기법 사용: MAX_VALUE, API_KEY</li>
+            <li>변하지 않는 값에만 사용 (const PI = 3.14;)</li>
+        </ul>
+        <h3>클래스/생성자 명명 규칙</h3>
+        <ul>
+            <li>PascalCase(대문자 시작) 사용: User, ProductService</li>
+            <li>객체를 표현하는 명사 위주로 작성</li>
+        </ul>
+        <h3>파일/폴더, html의 class와 id 명명 규칙</h3>
+        <ul>
+            <li>소문자+하이픈(-) 권장: user-profile.js, login-form.css, header-nav</li>
+            <li>소문자+하이픈(_) 권장: user_profile.js, login_form.css</li>
+            <li>대소문자 혼용은 피하는 것이 좋음 (운영체제에 따라 충돌 가능)</li>
+        </ul>
+    </section>
+    <h2>변수 선언과 영역(Scope)</h2>
+    <section>
+        <h3>전역 변수 (Global Scope)</h3>
+        <ul>
+            <li>스크립트 전체에서 접근 가능한 변수</li>
+            <li>함수나 블록 밖에서 선언된 변수는 전역 변수</li>
+            <li>모든 하위 영역(지역)에서 참조 가능</li>
+            <li>예: let a = 10;</li>
+        </ul>
+        <h3>지역 변수 (Local Scope)</h3>
+        <ul>
+            <li>특정 블록({}) 안에서만 접근 가능한 변수</li>
+            <li>블록을 벗어나면 참조 불가</li>
+            <li>같은 이름을 전역과 별도로 선언할 수 있음 (Shadowing)</li>
+            <li>예: { let a = 20; }</li>
+        </ul>
+        <h3>스코프 체인 (Scope Chain)</h3>
+        <ul>
+            <li>변수를 찾을 때 현재 블록에서 없으면 부모 영역을 따라 올라감</li>
+            <li>가장 가까운 스코프의 변수가 우선됨</li>
+            <li>중첩 블록에서 외부 변수를 참조 가능</li>
+            <li>예: 내부 블록에서 console.log(a); → 부모 블록의 a 출력</li>
+        </ul>
+        <h2>함수 스코프</h2>
+        <ul>
+            <li>함수 내부에서 선언된 변수는 함수 안에서만 접근 가능</li>
+            <li>매개변수도 지역 변수로 간주됨</li>
+            <li>예: function sum2(a, b) { }</li>
+        </ul>
+        <h2>스코프 규칙 정리</h2>
+        <ul>
+            <li>같은 이름의 변수를 같은 스코프에서 두 번 선언 불가 (let, const)</li>
+            <li>부모 영역의 변수는 자식 영역에서 참조 가능</li>
+            <li>형제 블록 간에는 변수를 공유할 수 없음</li>
+            <li>지역 변수가 전역 변수와 같은 이름일 경우, 지역 변수가 우선됨</li>
+        </ul>
+    </section>
+    <h2>오래된 변수 var</h2>
+    <section>
+        <h2>var의 특징</h2>
+        <ul>
+            <li>1995년 도입된 오래된 변수 선언 방식</li>
+            <li>같은 스코프에서 여러 번 선언 가능</li>
+            <li>실행 컨텍스트에 의해 <strong>전역</strong>에 먼저 선언됨 (블록 {} 구분이 없음)</li>            <li>전역에서 선언하면 window(브라우저 환경) 객체의 속성이 됨</li>
+            <li>예상치 못한 변수 덮어쓰기와 버그 유발 가능</li>
+        </ul>
+        <h2>실행 컨텍스트(Execution Context)란?</h2>
+        <ul>
+            <li>자바스크립트 코드가 실행될 때 필요한 환경 정보</li>
+            <li>변수, 함수 선언, this 정보 등을 저장하는 공간</li>
+            <li>자바스크립트 엔진이 코드를 이해하고 실행하기 위한 준비 단계</li>
+        </ul>
+
+        <h2>호이스팅(Hoisting)이란?</h2>
+        <ul>
+            <li>실행 컨텍스트 생성 시, 변수 선언과 함수 선언을 스코프의 최상단으로 끌어올리는 것처럼 동작</li>
+            <!-- java에서 필드를 상단에 먼저 작성해주는것과 유사함 -->
+            <li>var 변수는 선언이 호이스팅되어 undefined로 초기화됨</li>
+            <li>할당은 원래 위치에서 이루어짐</li>
+            <li>예:
+                <pre>
+console.log(a); // undefined
+var a = 10;
+            </pre>
+            </li>
+        </ul>
+        <h2>호이스팅으로 인한 문제</h2>
+        <ul>
+            <li>선언 이전에 변수를 참조해도 에러가 발생하지 않고 undefined 출력</li>
+            <li>개발자가 의도하지 않은 값으로 코드가 실행될 수 있음</li>
+            <li>지역 변수를 의도했어도 전역으로 취급되어 버그 유발</li>
+            <li>예:
+                <pre>
+{
+    var x = 100; // 블록 무시됨
+}
+console.log(x); // 100
+            </pre>
+            </li>
+        </ul>
+        <h2>let / const와의 차이</h2>
+        <ul>
+            <li>ES6(2015)에서 도입</li>
+            <li>블록 스코프(Block Scope)를 가짐</li>
+            <li>같은 스코프에서 중복 선언 불가</li>
+            <li>호이스팅은 되지만 초기화 전까지는 TDZ(Temporal Dead Zone)에 있어서 참조 불가</li>
+            <li>즉, 선언 전에 사용하면 ReferenceError 발생</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>면접 포인트</h2>
+        <ul>
+            <li>왜 var를 사용하면 안 되는가?</li>
+            <li>호이스팅이 무엇인가?</li>
+            <li>호이스팅으로 인한 문제점은?</li>
+            <li>let과 const가 등장한 배경은 무엇인가?</li>
+        </ul>
+    </section>
+    <h2>자바스크립트의 역사</h2>
+    <section>
+        <h3>1995년: 자바스크립트 탄생</h3>
+        <ul>
+            <li>넷스케이프(Netscape)에서 브렌던 아이크(Brendan Eich)가 개발(10일)</li>
+            <li>처음 이름은 <code>Mocha</code> → <code>LiveScript</code> → 마케팅 목적으로 <code>JavaScript</code>로 개명</li>
+            <li>웹 페이지에 동적인 기능(폼 검증, 간단한 애니메이션 등)을 추가하기 위해 만들어짐</li>
+        </ul>
+        <h3>1996년~1997년: 표준화 과정</h3>
+        <ul>
+            <li>마이크로소프트가 Internet Explorer에 <code>JScript</code>라는 이름으로 탑재</li>
+            <li>혼란을 막기 위해 ECMA(유럽 전자 표준 협회)에서 표준화 추진</li>
+            <li><code>ECMAScript</code>라는 이름으로 공식 표준 제정 (1997)</li>
+        </ul>
+        <h3>1999년: ES3</h3>
+        <ul>
+            <li>ECMAScript 3 (ES3) 발표</li>
+            <li>정규 표현식, try-catch 예외 처리 등 추가</li>
+            <li>본격적인 언어로 자리잡기 시작</li>
+        </ul>
+        <h3>2009년: ES5</h3>
+        <ul>
+            <li>JSON 지원, strict mode 추가</li>
+            <li>Object 관련 메서드 확장 (<code>Object.keys</code>, <code>Object.defineProperty</code> 등)</li>
+            <li>현대 웹 개발의 초석</li>
+        </ul>
+        <h3>2015년: ES6 (ECMAScript 2015)</h3>
+        <ul>
+            <li>자바스크립트의 대규모 업그레이드</li>
+            <li><code>let</code>, <code>const</code>, <code>class</code>, <code>arrow function</code>, <code>Promise</code> 도입</li>
+            <li>모듈 시스템(<code>import/export</code>) 추가</li>
+            <li>“모던 자바스크립트”의 시작</li>
+        </ul>
+        <h3>2016년 이후: 매년 새로운 표준</h3>
+        <ul>
+            <li>ES7(2016): <code>Array.includes</code>, 지수 연산자(**)</li>
+            <li>ES8(2017): async/await</li>
+            <li>ES9(2018): rest/spread, async iteration</li>
+            <li>이후 매년 꾸준히 기능 추가 (옵셔널 체이닝, BigInt, null 병합 연산자 등)</li>
+        </ul>
+        <h3>현재</h3>
+        <ul>
+            <li>브라우저, 서버(Node.js), 모바일, 데스크톱 앱까지 활용되는 범용 언어</li>
+            <li>웹의 핵심 언어로 자리 잡음 (HTML, CSS와 함께 3대 요소)</li>
+            <li>계속해서 매년 ECMAScript 표준으로 발전 중</li>
+        </ul>
+    </section>
+    <h2>자바스크립트 표준안이 필요한 이유</h2>
+    <section>
+        <h3>웹 브라우저 경쟁 시대</h3>
+        <ul>
+            <li>1990년대 중반, 넷스케이프(Netscape)와 마이크로소프트의 인터넷 익스플로러(IE)가 시장 점유율을 놓고 치열하게 경쟁</li>
+            <li>넷스케이프는 <code>JavaScript</code>, 마이크로소프트는 <code>JScript</code>를 탑재</li>
+            <li>두 브라우저 모두 빠른 점유율 확대를 위해 독자적인 기능을 추가</li>
+            <li>결과적으로 같은 코드라도 브라우저마다 다르게 동작하는 상황 발생</li>
+        </ul>
+        <h3>독립적인 발전의 문제점</h3>
+        <ul>
+            <li>웹 표준이 없었기 때문에 각 브라우저는 호환성을 고려하지 않고 기능을 추가</li>
+            <li>개발자는 동일한 웹페이지를 만들 때 브라우저별로 따로 코드를 작성해야 했음</li>
+            <li>예: IE에서는 정상 동작하지만 Netscape에서는 깨지거나, 반대로 Netscape에서만 동작하는 코드가 존재</li>
+            <li>웹사이트 유지보수 비용 증가, 개발 생산성 저하</li>
+            <li>사용자 입장에서는 브라우저마다 다른 경험 → 인터넷의 신뢰성과 접근성에 큰 타격</li>
+            <li>결국 브라우저 경쟁이 웹 발전을 늦추는 부정적인 효과를 가져옴</li>
+        </ul>
+    </section>
+    <h2>문제</h2>
+    <section>
+        <ol>
+            <li>아래 코드의 실행 결과를 설명하시오.
+                <pre><code>console.log(a);
+var a = 10;</code></pre>
+            </li>
+
+            <li>아래 코드가 오류가 나는 이유를 설명하시오.
+                <pre><code>console.log(b);
+let b = 20;</code></pre>
+            </li>
+
+            <li>같은 이름의 변수를 같은 스코프에서 두 번 선언할 수 없는 이유를 설명하시오.
+                <pre><code>let x = 10;
+let x = 20;</code></pre>
+            </li>
+
+            <li>var가 블록을 무시하는 이유를 설명하시오.
+                <pre><code>{
+    var y = 100;
+}
+console.log(y);</code></pre>
+            </li>
+
+            <li>const로 선언된 변수를 재할당하려고 할 때 어떤 오류가 발생하는지 설명하시오.
+                <pre><code>const pi = 3.14;
+pi = 3.14159;</code></pre>
+            </li>
+
+            <li>다음 코드의 실행 결과와 이유를 설명하시오.
+                <pre><code>var z = 1;
+var z = 2;
+console.log(z);</code></pre>
+            </li>
+
+            <li>let과 const는 블록 스코프를 가진다는 것을 예시 코드로 설명하시오.
+                <pre><code>{
+    let a = 50;
+    const b = 60;
+}
+console.log(a, b);</code></pre>
+            </li>
+
+            <li>호이스팅 시 var와 let/const의 차이를 서술하시오.</li>
+
+            <li>왜 현대 자바스크립트에서는 var보다 let과 const 사용을 권장하는지 설명하시오.</li>
+
+            <li>아래 코드의 결과를 보고 스코프 체인(Scope Chain)이 어떻게 동작하는지 설명하시오.
+                <pre><code>let a = 10;
+{
+    let a = 20;
+    console.log(a);
+}
+console.log(a);</code></pre>
+            </li>
+        </ol>
+    </section>
+    <section>
+        <ol>
+            <li>
+            <pre><code>console.log(a);
+var a = 10;</code></pre>
+                정답: undefined
+                해설: var는 호이스팅되어 선언만 위로 올라가고 초기값은 undefined로 설정된다.
+            </li>
+
+            <li>
+            <pre><code>console.log(b);
+let b = 20;</code></pre>
+                정답: ReferenceError 발생
+                해설: let은 호이스팅되지만 TDZ(Temporal Dead Zone)에 걸려 초기화 전 참조가 불가능하다.
+            </li>
+
+            <li>
+            <pre><code>let x = 10;
+let x = 20;</code></pre>
+                정답: SyntaxError 발생
+                해설: 같은 스코프 내에서 let(또는 const)로 동일한 변수를 두 번 선언할 수 없다.
+            </li>
+
+            <li>
+            <pre><code>{
+    var y = 100;
+}
+console.log(y);</code></pre>
+                정답: 100
+                해설: var는 블록 스코프를 무시하고 실행 컨텍스트 전역에 등록된다.
+            </li>
+
+            <li>
+            <pre><code>const pi = 3.14;
+pi = 3.14159;</code></pre>
+                정답: TypeError 발생
+                해설: const는 상수로 재할당이 불가능하다.
+            </li>
+
+            <li>
+            <pre><code>var z = 1;
+var z = 2;
+console.log(z);</code></pre>
+                정답: 2
+                해설: var는 같은 스코프에서 여러 번 선언이 가능하고, 마지막 값으로 덮어쓴다.
+            </li>
+
+            <li>
+            <pre><code>{
+    let a = 50;
+    const b = 60;
+}
+console.log(a, b);</code></pre>
+                정답: ReferenceError 발생
+                해설: let과 const는 블록 스코프를 가지므로 블록 바깥에서 참조할 수 없다.
+            </li>
+
+            <li>
+                호이스팅 시 var와 let/const의 차이
+                정답: var는 선언이 호이스팅되어 undefined로 초기화되지만, let/const는 TDZ에 놓여 초기화 전 접근이 불가능하다.
+            </li>
+
+            <li>
+                왜 var보다 let/const를 권장하는가?
+                정답: var는 블록 스코프가 없어 의도치 않은 전역 변수 생성과 버그를 유발한다. let/const는 블록 스코프를 가지며 더 안전하다.
+            </li>
+
+            <li>
+            <pre><code>let a = 10;
+{
+    let a = 20;
+    console.log(a);
+}
+console.log(a);</code></pre>
+                정답: 20, 10
+                해설: 안쪽 블록에서는 새로운 지역 변수 a=20이 선언되어 출력되고, 바깥에서는 전역 a=10이 출력된다 (스코프 체인).
+            </li>
+        </ol>
+    </section>
+</body>
+</html>

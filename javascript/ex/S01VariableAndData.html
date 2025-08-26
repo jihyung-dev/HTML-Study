@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>자바스크립트의 변수와 기본형</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+    <h1>자바스크립트의 변수와 기본형</h1>
+    <section>
+        <h2>1. 자바스크립트의 변수 선언</h2>
+        <ul>
+            <li><code>let</code> : 재할당 가능한 변수</li>
+            <li><code>const</code> : 상수, 재할당 불가</li>
+            <li><code>var</code> : 옛날 방식, 함수 범위(function scope) → 권장하지 않음</li>
+            <li>자바스크립트는 **변수 선언 시 타입을 지정하지 않음** → 동적 타입 언어</li>
+            <pre><code>let a = 10;        // 숫자
+a = "문자열";      // 자료형 변경 가능
+    </code></pre>
+        </ul>
+    </section>
+    <section>
+        <h2>2. 자바스크립트의 기본형 (Primitive Types)</h2>
+        <ul>
+            <li><strong>Number</strong> : 정수/실수를 구분하지 않고 모두 하나의 숫자 타입
+                <pre><code>let x = 10;     // 정수
+let y = 3.14;   // 실수</code></pre>
+            </li>
+            <li><strong>String</strong> : 문자열, 작은따옴표('), 큰따옴표("), 백틱(`) 모두 사용 가능
+                <pre><code>let s1 = "Hello";
+let s2 = 'World';
+let s3 = `템플릿 리터럴 ${s1}`;</code></pre>
+            </li>
+            <li><strong>Boolean</strong> : 참/거짓
+                <pre><code>let isLogin = true;</code></pre>
+            </li>
+            <li><strong>Undefined</strong> : 값이 아직 할당되지 않은 상태
+                <pre><code>let data;
+console.log(data); // undefined</code></pre>
+            </li>
+            <li><strong>Null</strong> : 의도적으로 "값이 없음"을 지정
+                <pre><code>let value = null;</code></pre>
+            </li>
+            <li><strong>Symbol</strong> : 고유하고 유일한 값, 주로 객체 키로 사용
+                <pre><code>let id = Symbol("id");</code></pre>
+            </li>
+            <li><strong>BigInt</strong> : 아주 큰 정수 표현 가능
+                <pre><code>let big = 123456789012345678901234567890n;</code></pre>
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>3. 자바스크립트에서 문자열을 기본형으로 만든 이유</h2>
+        <ul>
+            <li>웹에서 문자열 처리가 압도적으로 많이 필요했음 (텍스트, 입력 값, HTML 등)</li>
+            <li>자바처럼 <code>char</code> + <code>String</code> 두 가지를 두면 복잡해짐</li>
+            <li>따라서 설계 단계에서 <strong>문자 1개도 문자열(String)으로 처리</strong>하도록 단순화</li>
+            <li>내부적으로는 기본형(String) + 임시 객체(Wrapper)를 혼합해 동작</li>
+            <li>예:
+                <pre><code>let s = "hello";
+console.log(s.length);  // 5
+// 기본형인데 .length, .toUpperCase() 같은 메서드 사용 가능
+// 실행 순간 자바스크립트 엔진이 임시 String 객체로 변환 후 처리</code></pre>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>3. typeof 연산자</h2>
+        <ul>
+            <li>변수의 자료형 확인 가능</li>
+            <pre><code>typeof 123        // "number"
+typeof "hi"       // "string"
+typeof true       // "boolean"
+typeof undefined  // "undefined"
+typeof null       // "object" (버그로 알려진 오래된 특징)
+typeof 123n       // "bigint"</code></pre>
+        </ul>
+    </section>
+
+</body>
+</html>

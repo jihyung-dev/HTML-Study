@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>자바스크립트의 연산자</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+    <h1>자바스크립트의 연산자</h1>
+    <h2>숫자와 연산 정리</h2>
+    <section>
+        <h3>산술 연산자</h3>
+        <ul>
+            <li>+, -, *, /, %, **(거듭제곱, Math.pow())</li>
+            <li>정수와 실수 구분 없이 모두 Number 타입으로 연산</li>
+            <li>예: 11 / 22 → 0.5 (자바는 0, JS는 부동소수점)</li>
+            <li>예: 2 ** 3 → 8</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>증감 연산자</h3>
+        <ul>
+            <li>++ (증가), -- (감소)</li>
+            <li>전위(++a): 값을 먼저 증가시키고 반환</li>
+            <li>후위(a++): 값을 반환한 뒤 증가</li>
+            <li>후위 연산은 "연산 순서를 양보"한다고 이해</li>
+            <li>복합 연산 시 기대값과 실제값의 차이가 발생할 수 있음</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>대입 연산자</h3>
+        <ul>
+            <li>=, +=, -=, *=, /=, %=, **=</li>
+            <li>a += 100 → a = a + 100</li>
+            <li>a %= 2 → 0이면 짝수, 1이면 홀수 판별에 활용 가능</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>특수한 상황 (Infinity, NaN)</h3>
+        <ul>
+            <li>0으로 나누면 Infinity (자바는 오류 발생)</li>
+            <li>양수/작은 수로 나눔: 무한대 출력</li>
+            <li>NaN (Not a Number): 수가 아닌데 수학 연산을 시도했을 때 발생</li>
+            <li>NaN도 typeof로 확인하면 number 타입</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>문자열과 연산</h3>
+        <ul>
+            <li>문자열 + 문자열 → 연결(concat)</li>
+            <li>문자열 + 숫자/불리언 → 모두 문자열로 변환 후 연결</li>
+            <li>문자열 + null/undefined → 문자열화되어 연결</li>
+            <li>문자열과 + 를 제외한 *, /, %, ** → 문자열을 숫자로 변환 시도</li>
+            <li>변환 불가능하면 NaN 발생</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>형 변환</h3>
+        <ul>
+            <li>Number("11") → 11 (문자열을 숫자로 변환)</li>
+            <li>Number("안녕") → NaN</li>
+            <li>"11" * 2 → 22 (자동 변환)</li>
+            <li>"11" + 2 → "112" (+는 문자열 우선)</li>
+            <li>*, /, %, ** 연산자는 문자열을 숫자로 변환하려 시도</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>자바와 자바스크립트 비교</h3>
+        <ul>
+            <li>자바: 엄격하고 규칙이 단단한 언어 (정적 타입, 컴파일 시 에러)</li>
+            <li>자바스크립트: 유연하고 동적 타입 (개발 속도 빠르지만 런타임 오류 발생 가능)</li>
+        </ul>
+    </section>
+    <h2>문제</h2>
+    <section>
+        <ul>
+            <li>
+                다음 코드의 출력 결과를 쓰시오.
+                <pre><code>let a = 11;
+let b = 22;
+console.log(a / b);</code></pre>
+            </li>
+
+            <li>
+                다음 코드의 출력 결과를 쓰시오.
+                <pre><code>console.log(2 ** 3);
+console.log(Math.pow(2, 3));</code></pre>
+            </li>
+
+            <li>
+                다음 코드의 출력 결과를 쓰시오.
+                <pre><code>let a = 5;
+console.log(++a);
+console.log(a++);
+console.log(a);</code></pre>
+            </li>
+
+            <li>
+                다음 코드의 출력 결과를 쓰시오.
+                <pre><code>let a = 11;
+let b = 22;
+let sum = (a--) + (b--);
+console.log(sum);
+console.log(a, b);</code></pre>
+            </li>
+
+            <li>
+                다음 코드의 출력 결과를 쓰시오.
+                <pre><code>let a = 10;
+a += 5;
+a %= 2;
+console.log(a);</code></pre>
+            </li>
+
+            <li>
+                다음 코드의 출력 결과를 쓰시오.
+                <pre><code>console.log(1 / 0);
+console.log(-1 / 0);</code></pre>
+            </li>
+
+            <li>
+                다음 코드의 출력 결과를 쓰시오.
+                <pre><code>let str = "안녕";
+console.log(str + 10);
+console.log(10 + str);</code></pre>
+            </li>
+
+            <li>
+                다음 코드의 출력 결과를 쓰시오.
+                <pre><code>let str = "hello";
+console.log(str * 2);
+console.log(str / 2);</code></pre>
+            </li>
+
+            <li>
+                다음 코드의 출력 결과를 쓰시오.
+                <pre><code>console.log("11" * 2);
+console.log("11" + 2);</code></pre>
+            </li>
+
+            <li>
+                다음 코드의 출력 결과를 쓰시오.
+                <pre><code>console.log(typeof 11.1);
+console.log(typeof NaN);</code></pre>
+            </li>
+        </ul>
+    </section>
+    <section>
+        <ul>
+            <li>
+    <pre><code>let a = 11;
+let b = 22;
+console.log(a / b);</code></pre>
+                정답: 0.5
+                해설: JS는 정수/실수 구분 없이 모두 부동소수점으로 계산한다.
+            </li>
+
+            <li>
+    <pre><code>console.log(2 ** 3);
+console.log(Math.pow(2, 3));</code></pre>
+                정답: 8, 8
+                해설: ** 연산자와 Math.pow()는 같은 거듭제곱 연산.
+            </li>
+
+            <li>
+    <pre><code>let a = 5;
+console.log(++a);
+console.log(a++);
+console.log(a);</code></pre>
+                정답: 6, 6, 7
+                해설: 전위 증가는 먼저 증가, 후위 증가는 출력 후 증가.
+            </li>
+
+            <li>
+    <pre><code>let a = 11;
+let b = 22;
+let sum = (a--) + (b--);
+console.log(sum);
+console.log(a, b);</code></pre>
+                정답: 33, 10 21
+                해설: 후위 감소이므로 연산에 11과 22가 사용되고, 이후 각각 10, 21로 감소.
+            </li>
+
+            <li>
+    <pre><code>let a = 10;
+a += 5;
+a %= 2;
+console.log(a);</code></pre>
+                정답: 1
+                해설: 10+5=15, 15%2=1.
+            </li>
+
+            <li>
+    <pre><code>console.log(1 / 0);
+console.log(-1 / 0);</code></pre>
+                정답: Infinity, -Infinity
+                해설: JS는 0으로 나누면 오류 대신 무한대 출력.
+            </li>
+
+            <li>
+    <pre><code>let str = "안녕";
+console.log(str + 10);
+console.log(10 + str);</code></pre>
+                정답: "안녕10", "10안녕"
+                해설: 문자열 + 숫자 = 문자열 연결.
+            </li>
+
+            <li>
+    <pre><code>let str = "hello";
+console.log(str * 2);
+console.log(str / 2);</code></pre>
+                정답: NaN, NaN
+                해설: 문자열 "hello"는 숫자로 변환 불가.
+            </li>
+
+            <li>
+    <pre><code>console.log("11" * 2);
+console.log("11" + 2);</code></pre>
+                정답: 22, "112"
+                해설: * 연산은 문자열을 숫자로 변환, + 연산은 문자열 연결.
+            </li>
+
+            <li>
+    <pre><code>console.log(typeof 11.1);
+console.log(typeof NaN);</code></pre>
+                정답: "number", "number"
+                해설: NaN도 숫자 타입으로 취급된다.
+            </li>
+        </ul>
+    </section>
+</body>
+</html>

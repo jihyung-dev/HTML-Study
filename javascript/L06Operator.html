@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>숫자와 연산</title>
+</head>
+<body>
+    <h1>숫자 number와 연산</h1>
+
+    <script>
+        //산술연산
+        //+,-,*,/,%,**(Math.pow())
+        let a=11;
+        let b=22;
+        console.log(a+b);
+        console.log(a-b);
+        console.log(a*b);
+        console.log(a/b); //java=0, js=>0.5
+        console.log(10%4);
+        console.log(a**b);
+        //증(증가)감(감소) 연산자
+        //++, --
+        console.log(a++);//      출력 :11, Next: 12
+        console.log(--a);// 12-- 출력 :11
+        //증감 연산자 후위 (연산의 순서를 양보)
+        console.log(a++);//      출력 :11, Next: 12
+        console.log(a); //       출력 :12
+        console.log(a--);//      출력 :12, Next: 11
+        console.log(a); //       출력 :11
+
+        let sum=(a--)+(b--);//   출력 : 33 next: 10+21
+        console.log(sum);//      출력 : 31
+        //11->10 + 22-> 21(기대) = 31
+        //11+22 11->10, 22->21(실제) = 33
+
+        //대입연산자
+        // =(+,-,*,/,%,**)
+        a+=100; //10+100
+        console.log(a);
+        a/=10; //a==110/10
+        console.log(a);//11
+        a%=2; //0=>짝수 1=>홀수
+        console.log(a);
+
+        console.log(1/0.0000000000001);
+        //0에 가까운 수를 나누면 무한대
+        //자바는 0으로 나누면 오류(런타임오류 ArithmeticException)
+        console.log(1/0); //Infinity
+        console.log(-1/0); //-Infinity
+
+        //문자열의 더하기 연산!!
+        let str="안녕";
+        let str2="잘가";
+        console.log(str+str2);
+        //배열의 결합 == concat
+        console.log(str.concat(str2));
+
+        //문자열은 무엇이든 + 연산하면 다 문자열로 만든다.
+
+        console.log(str+10); //"안녕10"
+        console.log(10+str); //"10안녕"
+
+        let flag=true; //참거짓
+        console.log(str+flag); //"안녕true"
+        let n=null; //비어있다는 명시적 데이터
+        console.log(str+n);
+        let d; //undefined 정의되지 않음
+        console.log(str+d) //undefined
+
+        //문자열과 +를 제외한 수학적 연산
+        //NaN => 수가 아닌데 수학적 연산을 함
+        //null,undefined,NaN(js 고유 상태!!)
+        //NaN : js가 동적타입이기 때문에,
+        console.log(str*1);
+        console.log(str/1);
+        console.log(str**2);
+        console.log(str+=2);
+
+        //문자열인데 수로된 문자열
+        console.log("11"*2); //NaN=>22
+        //NaN:문자열을 수로 형변환시 오류발생
+        //Number(문자열) -> 수로 형변환
+        console.log(Number("11")*2);
+        console.log(Number("안녕"));
+        console.log("11"+2); //13 or "112"
+        //+연산에 문자열이 있으면 수를 문자열로 형변환
+        //*, /, %, **에 문자열이 있으면 문자열을 수로 형변환
+        //자바 : 단단한, 규칙이 정확함
+    </script>
+
+</body>
+</html>

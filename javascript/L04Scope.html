@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>영역 scope</title>
+</head>
+<body>
+    <h1>영역 scope {}</h1>
+    <script>
+        let a=10; //전체영역 global scope
+        {
+            let a=20; //지역 local scope
+            // {}중괄호 내부에서만 사용
+        }
+        console.log(a)
+
+        /////////////////// java, js 공통 -> Ecma script
+        let b=20;
+        {
+            console.log(b) ///전역 변수는 지역에서 사용가능
+            let c=30;
+        }
+        {
+            //console.log(c) //undefined
+            //형제간의 변수는 공유될 수 없다.
+        }
+        {
+            {
+                {
+                    {
+                        //중첩스코프 사용 가능
+                        let a=100;
+                        //지역 변수는 전역변수와 같은 이름 선언 가능
+                        {
+                            console.log(a)
+                            //가장 가까운 영역(부모)의 a
+                        }
+                    }
+                }
+            }
+        }
+
+        function sum(){} //지역
+        function sum2(a,b){} //a,b 지역변수
+        if(a<20){ let a=30; }
+
+        let d=200;
+        //let d=200; //같은 이름의 변수를 같은 영역에서 여러번 선언 불가 =>오류
+
+        //변수의 특징
+        //같은 이름을 두번 선언 할 수 없음
+        //부모 영역을 자식 영역이 참조할 수 있음
+
+    </script>
+</body>
+</html>

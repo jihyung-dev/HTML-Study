@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>변하지 않는 상수</title>
+</head>
+<body>
+    <h1>변하지 않는 상수</h1>
+
+    <script>
+        var v; //변수 (더이상 사용되지 않음)
+        let a; //변수
+        console.log(a)
+        a=10;
+        a=20;
+        a="안녕";
+        //바뀔 수 있는 == 변수
+
+        //const c;  //정의되지 않는 상태를 허용하지 않음
+        const c=10;
+        //c=20; // Assignment to constant variable
+        console.log(c)
+        //대입연산
+        a=a+"!";
+        a+="~";//대입연산자
+        console.log(a)
+        //c+=1; //상수는 바꿀 수 없기 때문에 대입연산 불가능
+        //표기법
+        //NumSum : 파스칼표기법 (대명사, class명, type)
+        //numSum : 낙타표기법 (메소드,변수)
+        //NUM_SUM : 스네이크문법 (상수표기법)
+
+        //num_sum : 파일 폴더 이름
+        //num-sum : html 선택자이름 (js사용금지)
+        //let num-sum;
+
+        const SUM=10;
+        const PI=3.14;
+        //Math : type
+        //PI : Math 의 상수 필드(참조된 값)
+        console.log(Math.PI)
+        console.log(Math.pow(2,10))
+        console.log(Math.random())
+        //상수는 PI처럼 바뀌지 않는 정보를 정의하는 용도
+
+        //final int SUM=10; 자바문법
+        //상수지만 스네이크문법을(NUM_SUM) 사용하지 않는 경우가 존재
+        //정보가 아니지만 타입을 바꾸지 않기 위해 상수를 사용!!
+        //함수 이름 대신 상수를 사용하는 경우!!
+        </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

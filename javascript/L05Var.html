@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>오래된 변수(1995.5) var</title>
+</head>
+<body>
+    <h1>오래된 변수(1995.5) var</h1>
+    <ul>
+        <li>여러번 선언 가능</li>
+        <li>var로 선언된 변수는 전역에 미리 undefined로 생성</li>
+            =>호이스팅현상(hoist)
+        <li>var은 무조건 전역변수이기 때문에 지역구분이 없다.</li>
+    </ul>
+
+    <h2>
+        var에 대한 면접
+    </h2>
+
+    <ul>
+        <li>var을 사용하면 안되는 이유!</li>
+<!--        자바스크립트 : 실행 컨텍스트가 있어서 미리 undefined로 생성-->
+        <li>호이스팅 현상은 무엇인가요?</li>
+<!--        var로 선언된 변수가 실행컨텍스트에 의해 전역에 미리 undefined로 생성-->
+        <li>호이스팅 현상으로 겪는 문제 ?</li>
+<!--        지역구분이 없음.-->
+        <li>let과 const가 나온 배경?</li>
+    </ul>
+    <script>
+        //let, const : es6(2015)에 도입된 표준안 중 하나
+        //일반적인 개발자가 생각하는 변수와 상수의 동작원리와 같음
+
+        //var 이 유일한 변수(상수없음)
+        //var a;
+        //var b;
+        //실행컨텍스트 : script로 작성된 코드를 실행하기전에
+        //             실행에 필요한 코드를 미리 메모리에 저장
+        //실행컨텍스트가 var로 선언된 변수를 undefined로 생성
+
+        var a=10;
+        console.log(a)
+        var a=20;        //var은 여러번 선언가능
+        console.log(a)
+
+        let l=100;
+        //let l=200; //let은 한번만 선언 가능
+        //////////////
+        console.log(b) //b가 존재하는 것은 비정상
+        var b=30;
+        //console.log(m); //m이 없는 것이 정상
+        let m=200;
+        /////////////
+        {
+            var b=1000; //var은 지역변수가 없다.
+            let m=2000;
+        }
+        console.log(m); //200
+        console.log(b); //30 => 1000
+
+
+    </script>
+</body>
+</html>
