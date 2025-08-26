@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>자바스크립트</title>
+    <style>
+        body{
+            margin-top : calc(1vh * 1.5);
+        /* css가 너무 정적이라 도입도니 기술*/
+        }
+
+    </style>
+</head>
+<body>
+    <script>
+        //title이 랜더링 되기 전에 실행!
+        console.log(title) //undefined (정의되지 않음)
+        title.style.backgound="gray";
+        //undefined.style.background="gray";
+    </script>
+
+    <h1 id="title">자바스크립트 안녕!!</h1>
+    <p>웹 페이지를 동적으로 만드는 자바스크립트</p>
+    <p>정적 : 렌더링된 그대로 </p>
+    <p>동적 : 렌더링된 이후에 동작하는 것</p>
+
+    <br>
+    <h2>자바스크립트가 동작하는 예</h2>
+    <ul>
+        <li>무한 스크롤 페이지 (ajax) 비동기식 통신</li>
+        <li>자동 재생</li>
+        <li>네이버의 뉴스 페이지 (ajax) 비동기식 통신</li>
+        <li>장바구니 (ajax)</li>
+        <li>복잡한 이미지 슬라이더, 팝업, 콜랩스 (js)</li>
+        <li>양식 검증(js)</li>
+        <li>아이디 중복체크(ajax)</li>
+    </ul>
+    <script>
+        //주석!! : 실행되지 않는 코드
+        console.log("안녕!!")
+        //연산(+,-,*,/,%, == )을 할 수 있는 언어
+        console.log(11*11)
+        console.log(11.1*11.1)
+        console.log(11.1*11.1-100)
+        //실수가 연산시 발생하는 오류
+        //23.21
+        //23.209999999999994
+        console.log(title)
+        //title : id로 생성된 변수가 참조하는 노드개체
+        //id : 문서 전체에서 한개만 있는 이름 (선택자 : #)
+        //class : 여러개 지정가능한 이름 (선택자 : .)
+        //변수 : 재사용하기 위해 참조하는 것 (그릇)
+        //개체, 객체 : 프로그램에서 사용되는 [데이터]
+        //노드 : 트리의 구성요소                         [스타일정보]
+        //노드개체(요소, 태그) : 요소로 만들어진 데이터  x,y 값이 지정(결정)되어있음
+        //노드개체의 구성요소 : css정보, 속성(id, class, data-*...), 이벤트
+        //모든 노드개체는 이벤트를 정의할 수 있음
+        //(키보드 CLI, 마우스 GUI, 마이크, 손가락(터치) 등등)
+        title.style.color = "red"     //출력이 다 되고 이후에 바뀐 것
+        title.style.color = "#408240" //출력이 다 되고 이후에 바뀐 것
+        title.style.background="lightgray"
+        //코드는 위에서부터 아래로 실행
+        //같은 코드를 두번 실행하면 아래코드가 위에 코드를 덮는다.
+
+        //script: 노드개체가 모두 출력되고 나서 작성
+        //1.body의 자식인데 맨 아래 (권장)
+        //2.제어하려는 노드개체의 바로 아래 (비권장)
+        //3.외부스크립트일때 defer 옵션 사용 (노드개체가 모두 렌더링 된 후)
+
+        //on* : 이벤트속성 (함수 : 재사용할 동작을 정의)
+        //function(){}, ()=>{}  // 자바스크립트
+        //class A{              //자바
+        //      void sum(){}
+        //}
+        // :hover 자바스크립트처럼 동적으로 동작
+        title.onmouseover = function(){
+            // title.style.text-decoration
+            // -는 마이너스 연산
+            // 이름 중에 -가 있으면 낙타표기법으로 바뀜
+            title.style.textDecoration="underline";
+        }
+        title.onmouseleave=()=>{
+            title.style.textDecoration="none"
+        }
+
+    </script>
+</body>
+</html>
