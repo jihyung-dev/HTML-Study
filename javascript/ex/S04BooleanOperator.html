@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Boolean과 비교 연산 정리</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+    <h1>Boolean과 비교 연산 정리</h1>
+    <h2>Boolean 기초</h2>
+    <section>
+        <h3>Boolean 값과 생성</h3>
+        <ul>
+            <li>불리언 리터럴: <code>true</code>, <code>false</code></li>
+            <li>명시적 변환: <code>Boolean(value)</code></li>
+            <li>암묵적 변환: 조건문(<code>if</code>, <code>while</code>), 논리 연산(<code>||</code>, <code>&&</code>, <code>!</code>)에서 자동 적용</li>
+        </ul>
+    </section>
+    <section>
+        <h3>Truthy / Falsy : 참과 거짓으로 취급되는 데이터</h3>
+        <p>자바에서는 Truthy / Falsy 는 존재하지 않음</p>
+        <ul>
+            <li>Falsy:  <code>0</code>, <code>-0</code>, <code>0n</code>, <code>""</code>(빈 문자열), <code>null</code>, <code>undefined</code>, <code>NaN</code></li>
+            <li>Truthy: 위 8가지를 제외한 모든 값 (예: <code>"0"</code>, <code>"false"</code>, <code>[]</code>, <code>{}</code>, <code>function(){}</code>)</li>
+            <li>주의: 빈 배열 <code>[]</code>과 빈 객체 <code>{}</code>는 Truthy</li>
+        </ul>
+    </section>
+    <section>
+        <h3>논리 연산자의 평가 규칙</h3>
+        <ol>
+            <li><code>a || b</code>: 둘중 한개로도 ture 이면 true 반환</li>
+            <li><code>a || b || c </code>:true가 나올때 까지 실행 (Truthy 데이터 반환)</li>
+            <li><code>a && b</code>: 둘다 true이면 ture 반환</li>
+            <li><code>a && b && c</code>: false가 나올때 까지 실행(Falsy 데이터 반환)</li>
+            <li><code>!a</code>: 불리언으로 변환 후 반전</li>
+            <li>단락 평가(short-circuit): 2와 4처럼 필요 시점까지만 평가</li>
+        </ol>
+    </section>
+    <h2>비교 연산</h2>
+    <section>
+        <h3>동등/일치 비교</h3>
+        <ul>
+            <li>동등(<code>==</code>): 타입 강제 변환 후 값 비교 (추상 동등)</li>
+            <li>일치(<code>===</code>): 타입 변환 없이 타입과 값 모두 비교</li>
+            <li>권장: 예측 가능성을 위해 <code>===</code> / <code>!==</code> 사용</li>
+        </ul>
+    </section>
+    <section>
+        <h3>크기 비교 연산</h3>
+        <ul>
+            <li>연산자: <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code></li>
+            <li>문자열 비교는 유니코드 사전식 비교: <code>"Apple" &lt; "Banana"</code> → <code>true</code></li>
+            <li>서로 다른 타입 비교 시 숫자로 변환 후 비교되는 경우가 많음: <code>"10" &lt; 2</code> → <code>false</code></li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>동등 비교의 특이 케이스(암기용)</h3>
+        <ul>
+            <li><code>null == undefined</code> → <code>true</code></li>
+            <li><code>null</code>은 <code>0</code>과 같지 않음: <code>null == 0</code> → <code>false</code></li>
+            <li><code>"0" == 0</code> → <code>true</code> (문자열이 숫자로 변환)</li>
+            <li><code>0 == false</code> → <code>true</code>, <code>"0" == false</code> → <code>true</code></li>
+            <li><code>[] == ""</code> → <code>true</code>, <code>"" == 0</code> → <code>true</code>, 따라서 <code>[] == 0</code> → <code>true</code></li>
+            <li>권장: 위와 같은 함정 때문에 <code>==</code> 대신 <code>===</code> 사용</li>
+        </ul>
+    </section>
+    <section>
+        <h3>NaN과 비교</h3>
+        <ul>
+            <li><code>NaN === NaN</code> → <code>false</code> (자기 자신과도 같지 않음)</li>
+            <li>숫자인지 확인: <code>Number.isNaN(value)</code></li>
+            <li>산술 연산 실패/불가능 시 <code>NaN</code> 발생</li>
+        </ul>
+    </section>
+    <section>
+        <h3>객체 비교</h3>
+        <p>자바스크립트는 객체비교를 할 수 없다.(equals 존재하지 않음)</p>
+        <ul>
+            <li>객체/배열/함수는 참조 비교: 같은 내용이어도 다른 참조면 <code>false</code></li>
+            <li><code>{} === {}</code> → <code>false</code>, <code>arr1 === arr2</code> (서로 다른 배열) → <code>false</code></li>
+            <li>편법으로 객체를 문자열로 만들어서 비교가능 : JSON.stringify(obj1) === JSON.stringify(obj2)</li>
+        </ul>
+    </section>
+    <section>
+        <h3>부동소수점 비교 주의</h3>
+        <ul>
+            <li>이진 부동소수점 오차로 정확 비교가 실패할 수 있음: <code>0.1 + 0.2 === 0.3</code> → <code>false</code></li>
+            <li>해결: 허용 오차 사용
+                <ul>
+                    <li><code>Math.abs(a - b) &lt; Number.EPSILON</code> 같은 방식으로 근사 비교</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+    <h2>비교연산자 문제</h2>
+    <section>
+        <ul>
+            <li>
+                다음의 출력 결과를 쓰시오.
+                <pre><code>console.log(Boolean("0"));
+console.log(Boolean([]));
+console.log(Boolean(""));</code></pre>
+            </li>
+
+
+            <li>
+                다음의 출력 결과를 쓰시오.
+                <pre><code>console.log("Apple" &lt; "Banana");
+console.log("10" &lt; 2);</code></pre>
+            </li>
+
+
+            <li>
+                다음의 출력 결과를 쓰시오.
+                <pre><code>console.log(0 == false);
+console.log(0 === false);
+console.log("0" == false);</code></pre>
+            </li>
+
+
+            <li>
+                다음의 출력 결과를 쓰시오. (단락 평가 주의)
+                <pre><code>console.log("" || "fallback");
+console.log("hi" || 0);
+console.log(0 && "hello");
+console.log(1 && "hello");</code></pre>
+            </li>
+
+
+            <li>
+                다음의 출력 결과를 쓰시오. (동등/일치)
+                <pre><code>console.log(null == undefined);
+console.log(null === undefined);</code></pre>
+            </li>
+
+
+            <li>
+                다음의 출력 결과를 쓰시오. (NaN 비교 주의)
+                <pre><code>console.log(NaN === NaN);
+console.log(Number.isNaN(NaN));
+console.log(Number.isNaN("NaN"));</code></pre>
+            </li>
+
+
+            <li>
+                다음의 출력 결과를 쓰시오. (객체 비교)
+                <pre><code>const a = { x: 1 };
+const b = { x: 1 };
+const c = a;
+console.log(a === b);
+console.log(a === c);</code></pre>
+            </li>
+
+
+            <li>
+                다음의 출력 결과를 쓰시오. (배열도 객체)
+                <pre><code>console.log([1,2] === [1,2]);
+const arr = [1,2];
+console.log(arr === arr);</code></pre>
+            </li>
+
+
+            <li>
+                다음의 출력 결과를 쓰시오. (동등 비교 특이 케이스)
+                <pre><code>console.log([] == "");
+console.log("" == 0);
+console.log([] == 0);</code></pre>
+            </li>
+
+
+            <li>
+                다음의 출력 결과를 쓰시오. (부동소수점)
+                <pre><code>console.log(0.1 + 0.2 === 0.3);
+console.log(Math.abs((0.1 + 0.2) - 0.3) &lt; Number.EPSILON);</code></pre>
+            </li>
+
+
+            <li>
+                다음의 출력 결과를 쓰시오. (부정 연산자)
+                <pre><code>console.log(![]);
+console.log(!!"false");</code></pre>
+            </li>
+
+
+            <li>
+                다음의 출력 결과를 쓰시오. (논리 연산자는 피연산자 자체를 반환)
+                <pre><code>console.log("A" &amp;&amp; "B");
+console.log(null || 0 || "C");
+console.log(undefined &amp;&amp; "D");</code></pre>
+            </li>
+        </ul>
+    </section>
+   <h2>정답/해설</h2>
+    <section>
+
+        <ul>
+            <li>
+    <pre><code>true
+true
+false</code></pre>
+                해설: "0"과 []는 Truthy, 빈 문자열 ""은 Falsy.
+            </li>
+
+
+            <li>
+    <pre><code>true
+false</code></pre>
+                해설: 문자열 비교는 유니코드 사전식. "10" &lt; 2 비교는 숫자 변환 후 10 &lt; 2 → false.
+            </li>
+
+
+            <li>
+    <pre><code>true
+false
+true</code></pre>
+                해설: <code>==</code>는 타입 강제 변환을 수행(0 ↔ false). <code>===</code>는 타입까지 비교.
+            </li>
+
+
+            <li>
+    <pre><code>fallback
+hi
+0
+hello</code></pre>
+                해설: <code>||</code>는 첫 Truthy를, <code>&amp;&amp;</code>는 첫 Falsy(또는 마지막 Truthy)를 반환.
+            </li>
+
+
+            <li>
+    <pre><code>true
+false</code></pre>
+                해설: <code>null == undefined</code>만 특수 규칙으로 true, 일치 비교는 타입 달라 false.
+            </li>
+
+
+            <li>
+    <pre><code>false
+true
+false</code></pre>
+                해설: NaN은 자기 자신과도 같지 않다. <code>Number.isNaN</code>은 진짜 NaN만 true.
+            </li>
+
+
+            <li>
+    <pre><code>false
+true</code></pre>
+                해설: 객체 비교는 참조 비교. 같은 내용을 가진 다른 객체는 false, 같은 참조는 true.
+            </li>
+
+
+            <li>
+    <pre><code>false
+true</code></pre>
+                해설: 배열도 객체 → 서로 다른 배열은 false, 같은 변수 참조는 true.
+            </li>
+
+
+            <li>
+    <pre><code>true
+true
+true</code></pre>
+                해설: <code>[] == ""</code> → ToPrimitive([]) = "" 이므로 true, 이어서 "" == 0 → true, 따라서 [] == 0도 true.
+            </li>
+
+
+            <li>
+    <pre><code>false
+true</code></pre>
+                해설: 0.1+0.2는 부동소수점 오차로 0.30000000000000004. EPSILON 허용 오차 비교는 true.
+            </li>
+
+
+            <li>
+    <pre><code>false
+true</code></pre>
+                해설: []는 Truthy → ![]는 false. "false"(문자열)는 비어있지 않아 Truthy → !!"false"는 true.
+            </li>
+
+
+            <li>
+    <pre><code>B
+C
+undefined</code></pre>
+                해설: "A" &amp;&amp; "B" → 마지막 Truthy "B". null || 0 || "C" → 첫 Truthy "C". undefined &amp;&amp; "D" → 첫 Falsy undefined.
+            </li>
+        </ul>
+    </section>
+
+</body>
+</html>

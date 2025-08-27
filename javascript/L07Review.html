@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>자바스크립트에 대한 것부터 변수와 데이터까지</title>
+</head>
+<body>
+    <h1 id="title">자바스크립트에 대한 것부터 변수와 데이터까지</h1>
+    <script>
+        //title
+        let a =20; //a 이름 => 식별자
+        //let a : a라는 이름의 변수를 만들어라!!
+        //변수 a=20; : 변수 a가 20을 참조해라!
+        //a는 20이라는 데이터를 재사용??
+        //let a=30;
+        a="안녕!"; //js 변수는 참조하는 데이터 타입이 동적이다. (타입이 제한되지 않음)
+        console.log(title)
+
+        // title.style.color="darkred";
+        //css : html과 함께 렌더트리를 만들어서 출력
+        //js : 이미 출력된 이후에 변경
+        //function : 함수
+        title.onclick=function(){ //동작 == 함수
+            let color=title.style.color; //js의 값은 대부분 문자열
+            console.log(color); // == System.out.println()
+            if(color!="red"){
+                title.style.color="red";
+            } else {
+                title.style.color="blue";
+            }
+        }
+
+        //전역 global scope
+        let sum=20;
+        // let sum=40;
+
+        {   //local or scope, 지역, 영역
+            //독립된 공간
+            let sum=30;
+            {
+                let sum=40;
+                {
+                    let sum=50;
+                    console.log(sum)
+                    {
+                        console.log(sum);
+                    }
+                }
+            }
+        }
+        //var 기존상식과는 많이 다름
+        //1. 여러번 선언가능
+        //2. 내가 선언한 시점에 변수가 만들어지지 않고 맨위에 선언(undefined)됨
+        //=> 호이스팅!!(실행컨텍스트가 미리 만들어서)
+
+        //var mul;
+        //undefined : 변수는 만들었는데 정의하지 않음
+        console.log(mul); // undefined : 변수는 만들어졌지만 정의되지 않음
+        // console.log(mul2);
+
+        var mul=50;
+        var mul=50;
+        var mul="안녕";
+        console.log(mul);
+
+
+        //html css js
+        //html : 문서의 뼈대 (markup)
+        //css : 문서를 꾸며주는 역할, (+문서를 동적(이벤트에 의해 모양이 변한다)으로 바뀜)
+        //js : 문서의 동작 (동적으로 만들어주는 역할)
+
+        {
+            {
+                {
+                    {
+                        var mul="지역 mul";
+                    }
+                }
+            }
+        }
+        console.log(mul);
+
+        console.log("11"+2);
+        console.log(11+2);
+
+        console.log(NaN+2);
+    </script>
+</body>
+</html>

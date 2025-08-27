@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>참 거짓 데이터 boolean과 연산자</title>
+</head>
+<body>
+    <h1>참 거짓 데이터 boolean과 연산자</h1>
+    <script>
+        let a=true;//참
+        let b=false;//거짓
+        console.log(a,b);
+        //참거짓은 비교연산의 결과
+        // == != > >= < <=
+        a=10;
+        b=5;
+        console.log(a>b);
+        console.log(a<b);
+        console.log(a==10);
+        console.log(b!=5);
+
+        //보통 프로그래밍 언어는
+        //>, <, >=, >=는 수만 가능
+        //js는 문자도 가능
+        ///(문자를 수로 형변환)
+        console.log(a>"11");
+        console.log(a<"11");
+        console.log(a<Number("11"));
+
+        //문자열간 비교 (==비교 성립)
+        console.log("안녕"=="안녕");
+        //자바의 문자열은 객체기 때문에
+        //.equals를 사용을 권장
+        console.log("사과"=="바나나");
+        //js는 자료형간의 비교 불가
+        console.log([]==[]);
+        console.log([1,2,3]==[1,2,3]);
+        // == : 동등
+        // === : 일치 (js 문법)
+        console.log(11=="11")
+        console.log(11==="11")
+        a=11;
+        b="11";
+        console.log(a==b);
+        //두 데이터의 타입이 다르면 수로 형변환 후 비교 
+        //html의 대부분의 속성값이 문자열이기 때문에
+        //쉽게 수와 비교연산하기 위해 자동형변환
+        console.log(a===b);
+        //형변환 없이 일치하는지 확인     
+
+
+    </script>
+    <hr>
+    <p>
+        <input id="numInput" value="22" type="number">
+    </p>
+    <script>
+        //numInput 자료형 (.참조연산자로 필드를 접근)
+        console.log(numInput)
+        console.log(numInput.value)
+        console.log(numInput.id)
+        console.log(numInput.type)
+        // numInput.type="text";
+        // numInput.readOnly = true;
+        let num=numInput.value;
+        //num=Number(num);  //java에서는 형변환을 해주어야함
+        console.log(typeof num); //number(x)=>String
+        if(num<=30){ //if (true)면 실행 !!
+            console.log("청년")
+        }
+    </script>
+
+</body>
+</html>
