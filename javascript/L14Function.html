@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>연산을 재사용하는 함수 function</title>
+</head>
+<body>
+    <h1>연산을 재사용하는 함수 function</h1>
+    <script>
+        console.log("13.3");
+        console.log(Number("13.3"));//생성형함수(타입+생성자)
+        console.log(Number.parseFloat("13.3")); //함수
+        //호이스팅(실행컨텍스트:실행전에 미리 스캔 후 메모리에 저장)
+        //함수는 실행컨텍스트의 스캔대상으로 어디에 선언해도
+        //실행되기 전에 메모리에 저장됨
+
+        sum(10,21);
+        function sum(a,b){
+            // console.log("sum()입니다.!!")
+            console.log("a+b=",a+b)
+        } //함수정의
+        sum(100,111);
+
+        //코드는 작성한 순서대로 저장또는 실행
+        // console.log(a);
+        let a=10;
+        console.log(a);
+
+        //이름이 없는 함수(익명함수)는 호이스팅대상이 아님
+        //익명함수를 변수나 상수가 참조해서 호이스팅을 피함
+        //=>함수표현식
+        // mult();
+        const mult=function(a,b,c){
+            return a*b*c;
+        }
+        let m=mult(5,6,7);
+        console.log(m);
+        console.log(mult(11,12,13));
+
+        const aFunc=()=>{
+            console.log("a()함수 입니다.")
+            return "a";
+        }
+
+        aFunc()
+        console.log(aFunc())
+
+
+
+    </script>
+</body>
+</html>

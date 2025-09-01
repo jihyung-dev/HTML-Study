@@ -275,40 +275,40 @@
             </ul>
         </nav>
         <h2 class="mt-4 mb-3">구현 방법 정리</h2>
-        <ul>
-            <li>프로젝트 구조: index.html 하나에 네비게이션, 툴바, 카드 그리드, 페이지네이션 순서로 배치</li>
-            <li>메타와 CSS: <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code> 포함, Bootstrap 5 CSS CDN 사용</li>
-            <li>그리드 컨테이너: <code>&lt;main&gt;&lt;div class="container"&gt;&lt;/div&gt;&lt;/main&gt;</code> 구조, 내부는 <code>.row</code>로 시작</li>
-            <li>반응형 열 배치: 각 카드 래퍼에 <code>col-12 col-md-6 col-lg-3 d-flex</code> 클래스 사용
-                <ul>
-                    <li>모바일: col-12 → 1열</li>
-                    <li>태블릿: col-md-6 → 2열</li>
-                    <li>데스크톱: col-lg-3 → 4열</li>
-                </ul>
+        <ol>
+            <li> 프로젝트 구조: index.html 하나에 네비게이션, 툴바, 카드 그리드, 페이지네이션 순서로 배치</li>
+            <li> 메타와 CSS: <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code> 포함, Bootstrap 5 CSS CDN 사용</li>
+            <li> 그리드 컨테이너: <code>&lt;main&gt;&lt;div class="container"&gt;&lt;/div&gt;&lt;/main&gt;</code> 구조, 내부는 <code>.row</code>로 시작</li>
+            <li> 반응형 열 배치: 각 카드 래퍼에 <code>col-12 col-md-6 col-lg-3 d-flex</code> 클래스 사용
+                <ol>
+                    <li> 모바일: col-12 → 1열</li>
+                    <li> 태블릿: col-md-6 → 2열</li>
+                    <li> 데스크톱: col-lg-3 → 4열</li>
+                </ol>
             </li>
-            <li>카드 높이 균일화: 카드에 <code>card h-100 w-100</code>, 본문은 <code>card-body d-flex flex-column</code> 사용, 요약 텍스트에 <code>flex-grow-1</code> 적용</li>
-            <li>썸네일 비율 유지: <code>.ratio .ratio-16x9</code> 안에 <code>img</code> 넣고 <code>object-fit-cover</code> 적용</li>
-            <li>카드 메타 정보: 작성자, 날짜, 조회수는 <code>p.text-muted.small.d-flex.gap-3</code> 형태로 배치</li>
-            <li>카드 하단: 왼쪽은 <code>badge</code> 그룹, 오른쪽은 <code>btn.btn-sm.btn-primary</code> 배치</li>
-            <li>툴바: 검색은 <code>input-group</code>, 정렬/카테고리는 <code>select.form-select</code>, 카테고리 Pills는 <code>ul.nav.nav-pills</code></li>
-            <li>페이지네이션: <code>ul.pagination.justify-content-center</code> 구조 사용</li>
-            <li>브레이크포인트 요약
-                <ul>
-                    <li><code>col-*</code> : &lt;576px</li>
-                    <li><code>col-md-*</code> : ≥768px</li>
-                    <li><code>col-lg-*</code> : ≥992px</li>
-                </ul>
+            <li> 카드 높이 균일화: 카드에 <code>card h-100 w-100</code>, 본문은 <code>card-body d-flex flex-column</code> 사용, 요약 텍스트에 <code>flex-grow-1</code> 적용</li>
+            <li> 썸네일 비율 유지: <code>.ratio .ratio-16x9</code> 안에 <code>img</code> 넣고 <code>object-fit-cover</code> 적용</li>
+            <li> 카드 메타 정보: 작성자, 날짜, 조회수는 <code>p.text-muted.small.d-flex.gap-3</code> 형태로 배치</li>
+            <li> 카드 하단: 왼쪽은 <code>badge</code> 그룹, 오른쪽은 <code>btn.btn-sm.btn-primary</code> 배치</li>
+            <li> 툴바: 검색은 <code>input-group</code>, 정렬/카테고리는 <code>select.form-select</code>, 카테고리 Pills는 <code>ul.nav.nav-pills</code></li>
+            <li> 페이지네이션: <code>ul.pagination.justify-content-center</code> 구조 사용</li>
+            <li> 브레이크포인트 요약
+                <ol>
+                    <li><code> col-*</code> : &lt;576px</li>
+                    <li><code> col-md-*</code> : ≥768px</li>
+                    <li><code> col-lg-*</code> : ≥992px</li>
+                </ol>
             </li>
             <li>접근성: 모든 입력에 <code>&lt;label&gt;</code> 연결, 이미지에는 <code>alt</code> 속성 추가, 네비게이션에 <code>aria-label</code> 사용</li>
             <li>자주 생기는 문제 해결
-                <ul>
+                <ol>
                     <li>반응형이 안 바뀜 → viewport 메타 확인</li>
                     <li>카드 높이 들쑥날쑥 → <code>h-100</code> + <code>d-flex</code> + <code>flex-grow-1</code></li>
                     <li>이미지 찌그러짐 → <code>ratio</code> + <code>object-fit-cover</code></li>
                     <li>열이 4개 안 됨 → <code>.col-lg-3</code> 누락 여부 확인</li>
-                </ul>
+                </ol>
             </li>
-        </ul>
+        </ol>
     </div>
 </main>
 </body>

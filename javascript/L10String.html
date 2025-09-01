@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>문자열 데이터</title>
+</head>
+<body>
+    <h1>문자열 데이터</h1>
+    <p id="userName"></p>
+    <script>
+        let str="안녕";
+        console.log(str);
+        str='잘가';
+        console.log(str)
+        str=`자바스크립트`;
+        console.log(str)
+
+        // str="안녕
+        //     경민";
+        str=`안녕
+             경민` /*백틱만 가능*/
+        console.log(str);
+        let name="지형";
+        str=`<b>
+                ${name}
+            </b>`;
+        userName.innerHTML=str;
+        console.log("name=",name);
+        console.log("name.length=",name.length);
+        console.log("name[0]=",name[0]);
+        console.log("name[1]=",name[1]);
+        //문자열은 순서와 길이가 있는 데이터 [배열]
+        //문자열의 자동형변환
+        //+ 수학적 더하기연산
+        //+ 문자열 더하기연산(concat) : 숫자가 문자열로 형변환
+        console.log("#3")
+        console.log("1+1=",1+1)
+        console.log("1+1=","1"+1) //11
+        console.log("'1'+'1'=",'1'+'1')
+        console.log("11*11=",11*11)
+        //+를 제외한 수학적연산은 모두 숫자로 형변환
+        console.log('"11"*"11"=',"11"*"11");
+        console.log('"11"/"11"=',"11"/"11");
+        console.log('"11"%"11"=',"11"%"11");
+        console.log('"11"**"11"=',"11"**"11");
+        let a="11";
+        console.log("++a=",++a); //12
+        a="11"
+        console.log("--a=",--a); //10
+
+        console.log("\n");
+        //비교연산!!
+        console.log("비교연산")
+        console.log(11==11);//true
+        let b="11";
+        console.log(typeof b)
+        console.log(11==b); //문자열 11도 숫자로 형변환하고 비교 //true
+
+        console.log('11=="경민"=',11=="경민");
+        console.log('11>"10"',11>"10");
+        console.log('11<"20"=',11<"20")
+        console.log('"11"<"20"=',"11"<"20");
+
+        //문자열간의 비교연산!! =>수로형변환 (==제외!)
+        console.log('"11"<"20"=',"11"<"20")
+        //동등비교는 크기를 비교하는 것이 아니기 때문에 숫자로 형변환X
+        console.log('"11"=="20"=',"11"=="20")
+
+        //숫자로 형변환되지 않는 문자열간의 크기비교!! (양쪽다 문자열!)
+        console.log('"a"<"b"=',"a"<"b");
+        console.log('"azzz"<"bzzz"=',"azzz"<"bzzz");
+        //문자열에서 맨앞의 문자의 인코딩 번호를 비교
+        console.log(97<98);
+
+        //하나는 숫자이고 하나는 문자열인데 숫자로 형변환 되지 않는 것(NaN)
+        console.log('11<"20"=',11<"20")   //11<20
+        console.log('11<"안녕"=',11<"안녕")  //11<Number("안녕")
+
+        //NaN는 무엇과 비교해도 false 심지어 자신(NaN)조차도
+        console.log("NaN>0=",NaN>0);
+        console.log("NaN==NaN=",NaN==NaN);
+
+        //Number.isNaN(NaN) : 문자열을 형변환 후 NaN인지 확인
+        ///isNaN(NaN될 문자열) : 문자열이 숫자가 될 수 없는지 확인
+
+        console.log("isNaN(\"경민\")=",isNaN("경민")); //true 숫자로 변환할수 없는 문자열이므로 NaN => true
+        console.log("isNaN(\"11\")=",isNaN("11")); //false 숫자로 변환할 수 있는 문자열이므로 NaN => false
+        console.log("Number.isNaN(\"경민\")=",Number.isNaN("경민")); // 숫자가 될 수 없는 문자열
+        console.log("Number.isNaN(+\"경민\")=",Number.isNaN(+"경민")); // +을 통해 숫자로 형변환
+        console.log("Number.isNaN(NaN)=",Number.isNaN(NaN)); //NaN의 type은 Number
+        console.log("\n");
+
+        //문자열을 수로 형변환 하는 함수
+        console.log("문자열을 수로 형변환 하는 함수");
+        //Number
+        a="12.3" //parsing : 파싱=>강제형변환(형변환이 안될 수도 있는)
+        console.log("a=12.3");
+        console.log("Number(a)",Number(a)) //12.3
+        console.log("Number.parseInt(a)",Number.parseInt(a)); //12
+        console.log("Number.parseFloat(a)",Number.parseFloat(a)); //12.3
+        // console.log(a.parseInt())
+        //Math.truc(12.3) => 12
+        //Number.parseInt("12.3") =>12
+
+        a="a12.3"
+        console.log("a=a12.3");
+        console.log("Number(a)",Number(a)) //NaN
+        console.log("Number.parseInt(a)",Number.parseInt(a)); //NaN
+        console.log("Number.parseFloat(a)",Number.parseFloat(a)); //NaN
+
+        a="12.3rem" //단위와 함께 있을때 숫자만 출력하기
+        console.log("a=12.3rem");
+        console.log("Number(a)",Number(a))
+        console.log("Number.parseInt(a)",Number.parseInt(a));
+        console.log("Number.parseFloat(a)",Number.parseFloat(a));
+
+
+    </script>
+    <p>
+        <label for="userAge">나이</label>
+        <input type="text" id="userAge" value="25">
+    </p>
+    <p>유저는 <b id="agePrint"> </b>대 입니다. </p>
+    <script>
+        //input 입력하고 밖으로 빠져나옴 => blur
+        //input 입력 => input
+        //input 입력하다가 멈춤 => change
+
+        console.log("\n")
+        console.log("출력해보기");
+        userAge.onchange=function(){
+            console.log(isNaN(userAge.value));
+            console.log(Math.trunc(userAge.value/10));
+        }
+        if(userAge.value==NaN){
+            console.log("숫자를 입력해 주세요.")
+        } else {
+            console.log("유저는", (Math.trunc(userAge.value/10)*10),"대 입니다.");
+        }
+        //if문써서 **대입니다.
+
+
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>자바스크립트의 문자열</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+<h1>자바스크립트 문자열(String)</h1>
+<section>
+    <h2>배열(Array)이란?</h2>
+    <ul>
+        <li>배열은 여러 데이터를 하나의 변수에 순서대로 저장할 수 있는 자료 구조</li>
+        <li>하나의 이름으로 여러 값을 관리할 수 있음</li>
+        <li>인덱스(index, 위치 번호)를 사용해 각 요소에 접근 (0부터 시작)</li>
+        <li>서로 다른 자료형도 한 배열 안에 저장 가능 (자바스크립트의 특징)</li>
+        <li>반복문과 함께 자주 사용되며, 데이터를 모아 처리할 때 유용</li>
+    </ul>
+
+    <h3>예시</h3>
+    <ul>
+        <li><code>let fruits = ["사과", "배", "포도"];</code></li>
+        <li><code>console.log(fruits[0]); // "사과"</code></li>
+        <li><code>console.log(fruits[2]); // "포도"</code></li>
+    </ul>
+</section>
+<section>
+    <h2>문자열의 특징</h2>
+    <ul>
+        <li>문자열은 문자로된 배열 ['안','녕','하','세','요','.']로 순서와 길이가 있는 데이터</li>
+        <li>"" ,'',`` 로 문자열 데이터를 생성가능</li>
+        <li>문자열은 기본형 데이터 타입</li>
+        <li>문자열은 불변(immutable)하여 한 번 생성되면 수정 불가</li>
+        <li>문자열 수정 시 항상 새로운 문자열을 반환</li>
+        <li>메서드를 사용할 때 자동으로 String 객체(자료형)로 변환</li>
+    </ul>
+    <h3>문자열이 기본형인 이유</h3>
+    <ul>
+        <li>문자열은 숫자, 불린과 함께 가장 기초적인 데이터 타입</li>
+        <li>가볍게 다루고 자주 쓰기 때문에 <strong>값 자체로만 존재</strong>해야 함 (복잡한 객체 X)</li>
+        <li>불변성(immutable)을 유지하기 위해 기본형으로 설계됨
+            → 한 번 생성된 문자열은 바뀌지 않고, 수정 시 새 문자열이 생성됨</li>
+        <li>성능상 이점: 문자열을 값 그대로 저장하고 비교하는 것이 객체보다 훨씬 빠름</li>
+    </ul>
+
+    <h3>기본형 문자열인데 메서드를 쓸 수 있는 이유</h3>
+    <ul>
+        <li>자바스크립트 엔진이 문자열을 사용할 때 <strong>자동으로 String 객체로 래핑</strong>해줌</li>
+        <li>예: <code>"hello".toUpperCase()</code> 실행 시
+            <ul>
+                <li>내부에서 <code>new String("hello")</code> 객체가 잠깐 만들어짐</li>
+                <li>그 객체의 메서드 <code>toUpperCase()</code> 실행</li>
+                <li>실행이 끝나면 객체는 사라지고 결과 문자열만 남음</li>
+            </ul>
+        </li>
+        <li>즉, 문자열은 기본형이지만 필요할 때만 객체처럼 동작하도록 만든 것</li>
+    </ul>
+</section>
+<section>
+    <h2>문자열 작성법과 템플릿 리터럴</h2>
+    <ul>
+        <li>작은따옴표('')
+            <br>예시: <code>'Hello'</code>
+            <br>예시: <code>'경민이 "Hello"라 말했다'</code>
+        </li>
+        <li>큰따옴표("")
+            <br>예시: <code>"Hello"</code>
+            <br>예시: <code>"경민이 'Hello'라 생각했다."</code>
+        </li>
+        <li>백틱(``) : 템플릿 리터럴
+            <ul>
+                <li>변수를 쉽게 삽입 가능 → <code>`안녕, ${name}`</code></li>
+                <li>여러 줄 문자열 작성 가능</li>
+            </ul>
+            <br>예시:
+            <code>
+                let name = "경민";
+                console.log(`안녕하세요, ${name}님`);
+                /* 출력: 안녕하세요, 경민님 */
+            </code>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>이스케이프 문자</h2>
+    <ul>
+        <li>이스케이프 문자란?
+            <br>문자열 안에서 특별한 의미를 가지는 문자. <code>\</code>(역슬래시)와 함께 사용.
+        </li>
+        <li>자주 사용하는 이스케이프 문자들</li>
+        <ul>
+            <li><code>\n</code> : 줄바꿈 (new line)
+                <br>예시: <code>"안녕\n하세요"</code>
+            </li>
+            <li><code>\t</code> : 탭(tab) 간격
+                <br>예시: <code>"A\tB"</code>
+            </li>
+            <li><code>\"</code> : 큰따옴표 출력
+                <br>예시: <code>"그는 말했다: \"안녕\""</code>
+            </li>
+            <li><code>\'</code> : 작은따옴표 출력
+                <br>예시: <code>'It\'s OK'</code>
+            </li>
+            <li><code>\\</code> : 역슬래시 출력
+                <br>예시: <code>"C:\\Users\\경민"</code>
+            </li>
+        </ul>
+    </ul>
+    <h3>HTML에서 사용하는 이스케이프 문자(엔티티)</h3>
+    <p>자바스크립트의 \n, \" 같은 이스케이프 문자와는 달리, HTML에서는 <, >, & 등을 직접 쓰면 태그로 인식되기 때문에 엔티티 코드</p>
+    <ul>
+        <li><code>&amp;lt;</code> → 출력: &lt; (less than, 작다 기호)</li>
+        <li><code>&amp;gt;</code> → 출력: &gt; (greater than, 크다 기호)</li>
+        <li><code>&amp;amp;</code> → 출력: &amp; (ampersand, 앰퍼샌드)</li>
+        <li><code>&amp;quot;</code> → 출력: &quot; (큰따옴표)</li>
+        <li><code>&amp;apos;</code> → 출력: &apos; (작은따옴표)</li>
+        <li><code>&amp;nbsp;</code> → 출력: &nbsp; (공백, non-breaking space)</li>
+    </ul>
+</section>
+
+<section>
+    <h2>문자열 간의 비교</h2>
+    <ul>
+        <li>자바스크립트 문자열 비교는 **유니코드 코드값(사전식)** 기준으로 비교한다.</li>
+        <li><code>&lt;</code>, <code>&gt;</code> 연산자를 사용하면 문자열의 각 문자를 왼쪽부터 하나씩 비교한다.</li>
+        <li>대소문자는 다른 코드값을 가지므로 "A" &lt; "a" 이다.</li>
+        <li>한글도 유니코드 순서에 따라 비교된다. ("가" &lt; "나")</li>
+    </ul>
+
+    <h3>사용 예시</h3>
+    <ul>
+        <li><code>"apple" &lt; "banana"</code> → true (사전식으로 a(97)가 b(98)보다 앞)</li>
+        <li><code>"a" &lt; "b"</code> → true </li>
+        <li><code>"Zoo" &lt; "apple"</code> → true ("Z"의 코드값이 "a"보다 작음)</li>
+        <li><code>"가" &lt; "나"</code> → true (유니코드 순서: 가 → 나 → 다 ...)</li>
+        <li><code>"안녕" == "안녕"</code> → true (내용이 같으면 true)</li>
+        <li><code>"사과" == "바나나"</code> → false</li>
+    </ul>
+</section>
+<section>
+    <h2>문자열과 숫자 비교</h2>
+
+        <h3>숫자로 변환 가능한 문자열</h3>
+        <ul>
+            <li>문자열이 숫자 형태라면 자동으로 숫자로 변환되어 비교가 가능하다.</li>
+            <li>예시:
+                <br><code>10 > "5"   // true (문자열 "5" → 숫자 5)</code>
+                <br><code>10 < "11"  // true (문자열 "11" → 숫자 11)</code>
+                <br><code>11 == "11" // true (동등 비교에서 "11" → 숫자 11)</code>
+            </li>
+        </ul>
+
+        <h3>숫자로 변환 불가능한 문자열</h3>
+        <ul>
+            <li>문자열이 숫자로 바뀔 수 없으면 <code>NaN</code> 이 되어 비교가 불가능하다.</li>
+            <li><code>NaN</code>과의 모든 비교 결과는 항상 false이다.</li>
+            <li>예시:
+                <br><code>10 > "안녕"  // false ("안녕" → NaN)</code>
+                <br><code>10 < "안녕"  // false</code>
+                <br><code>10 == "안녕" // false</code>
+            </li>
+        </ul>
+</section>
+<section>
+    <h2>문자열의 숫자 변환</h2>
+    <ul>
+        <li>문자열을 숫자로 변환하는 방법은 여러 가지가 있다.</li>
+        <li>문자열이 숫자로 변환 불가능하면 NaN(Not a Number)이 된다.</li>
+    </ul>
+
+    <h3>Number() 함수</h3>
+    <ul>
+        <li>문자열 전체를 숫자로 변환</li>
+        <li><code>Number("123") // 123</code></li>
+        <li><code>Number("12.34") // 12.34</code></li>
+        <li><code>Number("안녕") // NaN</code></li>
+    </ul>
+
+    <h3>parseInt()</h3>
+    <ul>
+        <li>정수 부분만 변환 (소수점 이하 버림), 뒤쪽 문자열 제거</li>
+        <li><code>parseInt("123px") // 123</code> (문자 섞여 있어도 앞부분 숫자는 변환)</li>
+        <li><code>parseInt("12.34") // 12</code></li>
+    </ul>
+
+    <h3>parseFloat()</h3>
+    <ul>
+        <li>실수 변환 (소수점 유지), 뒤쪽 문자열 제거</li>
+        <li><code>parseFloat("12.34") // 12.34</code></li>
+        <li><code>parseFloat("123px") // 123</code></li>
+    </ul>
+
+    <h3>단항 연산자 +</h3>
+    <ul>
+        <li>+수를 양의 수로 변경하는 연산자로 간단하게 문자열을 숫자로 바꾸는 연산자</li>
+        <li><code>+"123" // 123</code></li>
+        <li><code>+"-123" // -123</code></li>
+        <li><code>+"12.34" // 12.34</code></li>
+        <li><code>+"안녕" // NaN</code></li>
+    </ul>
+</section>
+<section>
+    <h2>문자열의 자주 사용하는 함수들</h2>
+        <h3>길이와 문자 접근</h3>
+        <ul>
+            <li>length : 문자열 길이 확인
+                <br>예시: <code>"안녕하세요".length // 5</code>
+            </li>
+            <li>charAt(index) : 특정 위치의 문자 반환
+                <br>예시: <code>"Java".charAt(0) // "J"</code>
+            </li>
+            <li>[index] : 특정 문자에 접근
+                <br>예시: <code>"Java"[1] // "a"</code>
+            </li>
+        </ul>
+        <h3>대소문자 변환</h3>
+        <ul>
+            <li>toUpperCase() : 대문자로 변환
+                <br>예시: <code>"hello".toUpperCase() // "HELLO"</code>
+            </li>
+            <li>toLowerCase() : 소문자로 변환
+                <br>예시: <code>"WORLD".toLowerCase() // "world"</code>
+            </li>
+        </ul>
+        <h3>문자열 검색</h3>
+        <ul>
+            <li>indexOf("문자") : 위치 반환
+                <br>예시: <code>"apple banana".indexOf("banana") // 6</code>
+            </li>
+            <li>includes("문자") : 포함 여부 확인
+                <br>예시: <code>"apple".includes("app") // true</code>
+            </li>
+            <li>startsWith("문자") : 시작 여부 확인
+                <br>예시: <code>"JavaScript".startsWith("Java") // true</code>
+            </li>
+            <li>endsWith("문자") : 끝나는지 확인
+                <br>예시: <code>"JavaScript".endsWith("Script") // true</code>
+            </li>
+        </ul>
+        <h3>문자열 추출</h3>
+        <ul>
+            <li>substring(start, end) : 구간 반환
+                <br>예시: <code>"JavaScript".substring(0,4) // "Java"</code>
+            </li>
+            <li>slice(start, end) : 구간 반환 (음수 인덱스 가능)
+                <br>예시: <code>"JavaScript".slice(-6) // "Script"</code>
+            </li>
+            <li>substr(start, length) : 특정 길이만큼 반환 (옛 문법)
+                <br>예시: <code>"JavaScript".substr(4,6) // "Script"</code>
+            </li>
+        </ul>
+        <h3>문자열 분리와 결합</h3>
+        <ul>
+            <li>split("구분자") : 배열로 분리
+                <br>예시: <code>"사과,배,포도".split(",") // ["사과","배","포도"]</code>
+            </li>
+            <li>join("구분자") : 배열을 문자열로 결합
+                <br>예시: <code>["Hello","World"].join(" ") // "Hello World"</code>
+            </li>
+        </ul>
+        <h3>문자열 다듬기</h3>
+        <ul>
+            <li>trim() : 앞뒤 공백 제거
+                <br>예시: <code>"  hi  ".trim() // "hi"</code>
+            </li>
+            <li>trimStart() : 앞 공백 제거
+                <br>예시: <code>"  hi".trimStart() // "hi"</code>
+            </li>
+            <li>trimEnd() : 뒤 공백 제거
+                <br>예시: <code>"hi  ".trimEnd() // "hi"</code>
+            </li>
+        </ul>
+        <h3>문자열 치환과 반복</h3>
+        <ul>
+            <li>replace("찾을문자","바꿀문자") : 문자열 치환
+                <br>예시: <code>"오늘은 월요일".replace("월요일","화요일") // "오늘은 화요일"</code>
+            </li>
+            <li>repeat(n) : 문자열 반복
+                <br>예시: <code>"ha".repeat(3) // "hahaha"</code>
+            </li>
+        </ul>
+</section>
+<h1>문자열 연습 문제</h1>
+
+<section>
+    <h2>객관식 / 실습형 문제</h2>
+    <ul>
+        <li>문자열 "JavaScript"의 길이를 구하시오.</li>
+        <li>문자열 "Hello"의 첫 번째 문자를 구하시오.</li>
+        <li>문자열 "Hello World"를 모두 대문자로 바꾸시오.</li>
+        <li>문자열 "Hello World"에 "World"가 포함되어 있는지 확인하시오.</li>
+        <li>문자열 "Hello World"가 "Hello"로 시작하는지 확인하시오.</li>
+        <li>문자열 "Hello World"가 "ld"로 끝나는지 확인하시오.</li>
+        <li>문자열 "JavaScript"에서 앞 4글자를 잘라내시오.</li>
+        <li>문자열 "JavaScript"에서 마지막 6글자를 잘라내시오.</li>
+        <li>문자열 "사과,배,포도"를 배열로 분리하시오.</li>
+        <li>배열 ["사과","배","포도"]를 하나의 문자열로 합치되, "-"로 구분하시오.</li>
+        <li>문자열 "   hello   "의 앞뒤 공백을 제거하시오.</li>
+        <li>문자열 "오늘은 월요일입니다."에서 "월요일"을 "화요일"로 바꾸시오.</li>
+        <li>문자열 "ha"를 3번 반복하여 출력하시오.</li>
+        <li>문자열 "Hello World"에서 "World"의 시작 인덱스를 구하시오.</li>
+        <li>문자열 "123.45px"에서 숫자 부분만 정수로 변환하시오.</li>
+        <li>문자열 "123.45px"에서 숫자 부분을 소수까지 변환하시오.</li>
+        <li>문자열 "123"을 숫자로 변환하는 2가지 방법을 쓰시오.</li>
+        <li>문자열 "apple"과 "banana"를 비교했을 때 결과를 예측하시오. ("apple" < "banana")</li>
+        <li>문자열 "Zoo"와 "apple"을 비교했을 때 결과를 예측하시오. ("Zoo" < "apple")</li>
+        <li>문자열 "가"와 "나"를 비교했을 때 결과를 예측하시오. ("가" < "나")</li>
+    </ul>
+</section>
+
+<section>
+    <h2>서술형 문제</h2>
+    <ul>
+        <li>문자열이 기본형(primitive type)임에도 불구하고 메서드를 사용할 수 있는 이유를 설명하시오.</li>
+        <li>문자열이 불변(immutable)하다는 의미를 예시와 함께 설명하시오.</li>
+        <li>자바스크립트에서 문자열 비교가 “사전식 순서”가 아니라 “문자 코드값” 기준이라는 것을 예시로 설명하시오.</li>
+        <li>문자열을 숫자로 변환하는 방법을 3가지 이상 서술하고, 각각의 차이를 간단히 설명하시오.</li>
+        <li>HTML에서 <, >, & 같은 문자를 문자열로 출력하기 위해 왜 엔티티(escape 문자)를 사용해야 하는지 설명하시오.</li>
+    </ul>
+</section>
+<h1>문자열 연습 문제 - 정답 및 해설</h1>
+
+<section>
+    <h2>객관식 / 실습형 문제 정답</h2>
+    <ul>
+        <li>"JavaScript".length → 10
+            <br>문자열의 길이를 반환한다.</li>
+        <li>"Hello".charAt(0) 또는 "Hello"[0] → "H"
+            <br>인덱스는 0부터 시작한다.</li>
+        <li>"Hello World".toUpperCase() → "HELLO WORLD"
+            <br>모든 문자를 대문자로 변환.</li>
+        <li>"Hello World".includes("World") → true
+            <br>포함 여부 확인.</li>
+        <li>"Hello World".startsWith("Hello") → true
+            <br>지정한 문자열로 시작하는지 확인.</li>
+        <li>"Hello World".endsWith("ld") → true
+            <br>지정한 문자열로 끝나는지 확인.</li>
+        <li>"JavaScript".substring(0,4) → "Java"
+            <br>0번부터 3번 인덱스까지 추출.</li>
+        <li>"JavaScript".slice(-6) → "Script"
+            <br>뒤에서 6글자를 추출.</li>
+        <li>"사과,배,포도".split(",") → ["사과","배","포도"]
+            <br>구분자를 기준으로 문자열을 배열로 변환.</li>
+        <li>["사과","배","포도"].join("-") → "사과-배-포도"
+            <br>배열 요소를 "-"로 연결.</li>
+        <li>"   hello   ".trim() → "hello"
+            <br>앞뒤 공백 제거.</li>
+        <li>"오늘은 월요일입니다.".replace("월요일","화요일") → "오늘은 화요일입니다."
+            <br>문자열 치환.</li>
+        <li>"ha".repeat(3) → "hahaha"
+            <br>문자열을 3번 반복.</li>
+        <li>"Hello World".indexOf("World") → 6
+            <br>"World"가 시작되는 위치.</li>
+        <li>parseInt("123.45px") → 123
+            <br>정수 부분만 추출.</li>
+        <li>parseFloat("123.45px") → 123.45
+            <br>소수까지 추출.</li>
+        <li>Number("123") 또는 +"123" → 123
+            <br>문자열을 숫자로 변환하는 대표적인 방법 두 가지.</li>
+        <li>"apple" < "banana" → true
+            <br>'a'(97)이 'b'(98)보다 코드값이 작음.</li>
+        <li>"Zoo" < "apple" → true
+            <br>'Z'(90)이 'a'(97)보다 코드값이 작음.</li>
+        <li>"가" < "나" → true
+            <br>유니코드 순서: "가"(44032) < "나"(45208).</li>
+    </ul>
+</section>
+
+<section>
+    <h2>서술형 문제 정답</h2>
+    <ul>
+        <li>
+            문자열이 기본형인데도 메서드를 쓸 수 있는 이유:
+            <br>자바스크립트 엔진이 문자열을 사용할 때 자동으로 <code>String</code> 객체(래퍼 클래스)로 변환해주기 때문이다.
+            <br>메서드 실행 후 다시 기본형으로 돌아간다.
+        </li>
+        <li>
+            문자열의 불변성:
+            <br>문자열은 수정할 수 없고, 변경하려 하면 새로운 문자열이 생성된다.
+            <br>예: <code>let s="hi"; s[0]="H"; // 여전히 "hi"</code>
+        </li>
+        <li>
+            문자열 비교는 코드값 기준:
+            <br>"apple" < "banana"가 true인 이유는 'a'(97)와 'b'(98)의 유니코드 값 비교 때문이다.
+            <br>즉, 사전식처럼 보이지만 실제는 숫자 값 비교.
+        </li>
+        <li>
+            문자열 → 숫자 변환 방법:
+            <br><code>Number("123")</code> → 전체를 숫자로, 변환 불가 시 NaN.
+            <br><code>parseInt("123px")</code> → 정수만 추출.
+            <br><code>parseFloat("12.34px")</code> → 실수 추출.
+            <br><code>+"123"</code> → 단항 연산자로 변환.
+        </li>
+        <li>
+            HTML에서 특수문자를 엔티티로 표현하는 이유:
+            <br><, >, & 같은 문자를 그대로 쓰면 태그나 구문으로 해석되기 때문에 안전하게 출력하려면
+            <code>&amp;lt;</code>, <code>&amp;gt;</code>, <code>&amp;amp;</code> 와 같은 엔티티를 사용해야 한다.
+        </li>
+    </ul>
+</section>
+</body>
+</html>

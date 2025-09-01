@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>문자열의 유용한 메서드</title>
+</head>
+<body>
+    <h1>문자열의 유용한 메서드</h1>
+    <script>
+        //검색 메소드
+        console.log("검색#1 [], charAt, charCodeAt")
+        let str="경민 안녕!"
+        console.log("let str=\"경민 안녕!\"")
+        console.log("str[0],str[1],str[2]=",str[0],str[1],str[2]); //경 민 //특정 위치를 보기
+        console.log("str.charAt(1)=",str.charAt(1));               //민
+        console.log("str.charCodeAt(1)=",str.charCodeAt(1));       //utf-16에서 '민'의 코드 번호
+        //48124 utf-16에서 '민'의 코드
+        console.log("\"A\".charCodeAt(0)=","A".charCodeAt(0));
+        console.log("\"a\".charCodeAt(0)=","a".charCodeAt(0));
+
+        console.log("\n")
+        console.log("검색#2 indexOf, lastIndexOf, includes")
+        str="abfcdefg"
+        console.log("str=\"abfcdefg\"")
+        console.log("str.indexOf(\"bc\")=",str.indexOf("bc")); //-1 //indexOf (앞에서부터) 문자 찾기
+        console.log("str.indexOf(\"f\"))=",str.indexOf("f")); //2
+        console.log("str.indexOf(\"h\")=",str.indexOf("h")); //-1 없을때 반환값
+        console.log("str.indexOf(\"c\",1)=",str.indexOf("c",1)); //3 //검색 시작점 설정
+        console.log("str.includes(\"cd\")=",str.includes("cd")) //true //있음
+        console.log("str.includes(\"dc\")=",str.includes("dc")) //false //없음
+        console.log("str.includes(\"c\",1)=",str.includes("c",1)) //true //있음
+        console.log("str.includes(\"c\",3)=",str.includes("c",3)) //false //없음
+        //***암기 X -> 찾아서 사용
+        console.log("str.lastIndexOf(\"f\")=",str.lastIndexOf("f")) //뒤에서부터 찾음
+
+        //match//matchAll : 정규표현식 배우고
+
+        //추출
+        //substring,slice,substr()_사용낮음
+        console.log("\n")
+        console.log("추출: substring,slice,substr")
+        console.log("slice는 -로 뒤에서부터 잘라내기 가능")
+        console.log("str=\"abfcdefg\"")
+        console.log("str.substring(3,5)=",str.substring(3,5)) //잘라내는 시작점과 끝점(미포함)
+        console.log("str.substring(3)=",str.substring(3))
+        console.log("str.slice(3,5)=",str.slice(3,5))
+        console.log("str.slice(3)=",str.slice(3))
+        console.log("str.slice(-3)=",str.slice(-3))
+        console.log("str.slice(-3,-1)=",str.slice(-3,-1))
+        //slice는 뒤에서부터 자를 수 있음
+
+        //변환!! => 바꾼 데이터를 반환
+        console.log("\n")
+        console.log("변환 : 바꾼 데이터를 반환")
+        console.log("toUpperCase, toLowerCase, trim, padStart, padEnd")
+        console.log("str=\"abfcdefg\"")
+        console.log("str.toUpperCase()=",str.toUpperCase());
+        console.log("str=",str); //문자열은 불변(기본형)이라 변형불가
+        str="HIJKL"
+        console.log("str.toLowerCase()=",str.toLowerCase())
+        str="  경민    ";
+        console.log("str=\"  경민    \";")
+        console.log("str.toUpperCase()=",str.toUpperCase()) // 한글은 적용불가
+        console.log("str.trim()=",str.trim()) //여백 제거
+
+        str="경민"; //6자리 0000경민
+        console.log("str='경민'")
+        console.log("str.padStart(6, '0')=",str.padStart(6, '0'))
+        console.log("str.padEnd(6, '0')=",str.padEnd(6, '0'))
+
+        //결합,분할,반복
+        console.log("\n")
+        console.log("결합, 분할, 반복 : concat, split, repeat")
+        console.log(str+"+"+"안녕!");
+        console.log(`${str}님 안녕하세요~`)
+        console.log(str.concat(" ", "안녕", "!"))
+
+        str="010-1234-5678";
+        console.log(str.split("-"))
+        console.log(str.split(""))
+
+        str="JS";
+        console.log(str.repeat(10));
+
+        //교체 replace, replaceAll
+        console.log("\n")
+        console.log("교체 : replace, replaceAll")
+        str="책상 의자 모니터 의자";
+        //의자를 키보드로 바꾸기
+        console.log(str.replace("의자", "키보드")); // 책상 키보드 모니터 의자
+        console.log(str.replaceAll("의자", "키보드")); // 책상 키보드 모니터 키보드
+
+
+    </script>
+
+</body>
+</html>
