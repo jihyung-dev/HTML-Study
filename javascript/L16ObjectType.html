@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Object의 타입 생성</title>
+</head>
+<body>
+    <h1>Object의 타입 생성(사용자 정의 설계)</h1>
+    <script>
+        let obj={};
+        obj= new Object();
+        //객체의 타입 Object
+        //타입 : 객체의 설계도
+        console.log(obj) ///[[Prototype]]:object
+        //객체지향언어(자바) : 객체 생성시 타입(class)을 기반으로 생성
+
+        //js는 프로토타입(미리 만들어 놓는 것) 언어
+        //프로토타입언어 : 객체를 프로토타입(시제품)으로 미리 만들어 놓고 참조해서 사용
+        //핸드폰 vs 프로토타입 핸드폰(시제품: 기능이 제외된)
+        let user={name:"가은",age:19}
+        let user2={name:"다희",age:20}
+        let user3={name:"지혜",age:21}
+        let user4={name:"혜지",age:22}
+        //유저를 만들건데 모든 유저는 이름과 나이가 있을 때
+        //매번 새롭게 정의하느 이유는 타입이 없기 때문
+        //타입 : 생성을 재사용
+
+        //이름 파스칼+this : 타입
+        function User(n,a){
+            this.name=n;
+            this.age=a;
+            //return x
+        } //타입
+
+        //이름 낙타표기법+return : 함수
+        function a(){
+            //this를 절대 사용하지않음
+            //return
+        } //함수
+
+        console.log(User) //정의한 타입(생성자함수)
+        console.log(a)
+        console.log(User.prototype) //시제품
+        user=new User("지형",30);
+        console.log(user)
+        console.log(new User("범준",24))
+
+        //많은 개발자는 객체지향언어에 익숙
+        //함수가 => type(이상한언어)
+        //js=>class 문법 도입(문법적 설탕_(문법만 존재))
+
+        class Customer{
+            name="";num=0;phone="000-111-2222"; //필드 (생략가능)
+            //let a; 클래스 문법에서 허용 X
+            //this.b; 클래스 문법에서 허용 X
+            constructor(a,b,c) {
+                //name=a; (x)
+                this.name=a;
+                this.num=b;
+                this.phone=c;
+                this.isMarried=false; //없는 필드 호출 시 생성
+                //js는 전역에 필드를 정의하지 않고 생성자로
+            }
+        }
+        //new 생성자
+        console.log(new Customer())
+        console.log(new Customer("현태",707,"010-7777-7777"))
+        console.log(Customer)
+
+
+
+    </script>
+</body>
