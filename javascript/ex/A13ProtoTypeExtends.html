@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>프로토타입 문제풀이</title>
+</head>
+<body>
+    <h1>프로토타입 문제풀이</h1>
+    <script>
+        // 1.생성자 함수를 정의하면 자동으로 만들어지는 객체의 이름은?
+        // A: Prototype
+
+        // 2.new User()로 인스턴스를 만들면, 새 객체의 __proto__는 보통 어디를 참조하는가?
+        // A: Object - X  -> new User로 만들었으므로 User.prototype
+
+        // 3.User.prototype.constructor는 무엇을 가리키는가?
+        // A: 유저의 프로토타입의 생성자 : 유저객체의 프로토타입? X -> User
+
+        // 4. 아래 코드의 출력결과는?
+        /*
+        function User(name) {
+            this.name = name;
+        }
+        const u1 = new User("철수");
+        console.log(u1.__proto__ === User.prototype);
+        */
+        // A: true
+
+        // 5.프로토타입 체인의 최상단(root)바로 전 단계 객체는 보통 무엇인가?
+        // A: Object전단계를 어떻게 알지 - X Object.prototype 그위는 null  흠.?
+
+        // 6. 인스턴스에서 속성/메서드를 찾는 탐색 순서를 채우시오.
+        // ① 인스턴스 자신 → ② ??? → ③ Object.prototype → ④ null
+        // A: 상속하는 객체 -X, 인스턴스의 __proto__(생성자의 prototype)
+
+        // 7. 아래 코드에서 u1은 sayHi를 호출할 수 있는가?(가능/불가능+이유)
+        /*
+        function User(name) {
+            this.name = name;
+        }
+        const u1 = new User("철수");
+        // (나중에) 프로토타입에 메서드 추가
+        User.prototype.sayHi = function() {
+            console.log("안녕,", this.name);
+        };
+        u1.sayHi();
+        */
+        // A: 가능, user가 sayhi를 prototype으로 상속받았으므로
+        // 실행하고있는 함수가 화살표 함수가아니므로, 실행하고 있는 함수의 this를 가져옴,
+        // u1이고, 이는 User이고 "철수"를 가지고있으므로,
+
+
+        // 8. 아래 코드의 출력 값은?
+        /*
+        const parent = { kind: "base" };
+        const child  = { name: "A" };
+
+        child.__proto__ = parent;
+
+        console.log(child.kind);
+        */
+        // 1) A: child가 parent를 상속받았으므로 base
+        // 2) child의 prototype이 parent로 정의되어있으므로 base
+
+        // 9. 아래 코드의 출력 값은?
+        const parent = { x: 1 };
+        const child  = {};
+
+        child.__proto__ = parent;
+        parent.y = 2;
+
+        console.log(child.y);
+        // A: 2
+
+        // 10. 아래 결과는? (에러/값 명시)
+        const lone = {};
+
+        lone.__proto__ = null;
+
+        console.log(lone.toString);
+        //A : null - X  -> undefined // Object.prototype연결이 끊겨 기본 메서드 없음
+        // ****생각해볼 필요 있는 문제***
+        // null이 object의 상위에있는 거여서 그런가 ?
+
+        // 11. 빈 생성자/인스턴스에서 다음 동치식의 참/거짓?
+        function Foo() {}
+
+        const f = new Foo();
+
+        console.log(f.__proto__ === Foo.prototype);
+        console.log(Foo.prototype.__proto__ === Object.prototype);
+        // A: 둘다 true
+
+        // 12. 아래에서 d.eat()은 실제 어디에서 찾아지는가?
+        class Animal {
+            eat() {
+                console.log("먹는다");
+            }
+        }
+        class Dog extends Animal {
+            bark() {
+                console.log("멍멍");
+            }
+        }
+        const d2 = new Dog();
+        d2.eat();
+        // A: dog->animal(V) -> Animal.prototype
+
+        // 13. Dog extends Animal일 때, 동치식의 참/거짓?
+        Dog.prototype.__proto__ === Animal.prototype
+        // A: true
+
+        // 14. 아래 두 비교 결과?
+        class A {}
+
+        class B extends A {}
+
+        const b = new B();
+
+        console.log(b.__proto__ === B.prototype);
+        console.log(B.prototype.__proto__ === A.prototype);
+        // A: proto없이도 같은걸같은데 false,true 아니군요 // true,true
+
+        // 15.빈칸 채우기
+        //    인스턴스가 가진 프로토타입 링크(      )
+        //    생성자 함수가 가진 원형 객체(      )
+        // A:  __proto__ /프로토타입 객체  // __proto__ / prototype
+
+        // 16. (new Date()).__proto__ === Date.prototype의 결과와 이유?
+        const d = new Date();
+
+        console.log(d.__proto__ === Date.prototype);
+        // A: true, d는 새로운 Date()객체를 참 하므로 d의 프로토는 Date.prototype과 같음
+
+        // 17. Object.create(proto)는 어떤 역할?
+        // A: Object의 특징을 모두 가진 프로토타입을 생성
+        //    -> 지정한 proto를 프로토타입으로 갖는 새 객체를 만든다. +@
+
+        // 18. Object.getPrototypeOf(obj)와 __proto__의 관계를 설명.
+        // A: 같은관계?
+        //     -> Object.getPrototypeOf(obj)는 obj.__proto__를 반환하는 표준 메서드
+
+        // 19. Object.setPrototypeOf(obj, proto)는 어떤 동작을 하나?
+        // A: obj의 프로토타입을 proto를 상속시킨다?
+        //     -> obj의 프로토타입을 proto로 교체한다 (즉, obj.__proto__= proto)와 동일
+
+        // 20. 아래 코드의 출력 값과 마지막 비교가 성립하는 이유?
+        const base = { ok: true };
+
+        const sub1 = Object.create(base);
+
+        const sub2 = {};
+        Object.setPrototypeOf(sub2, base);
+
+        console.log(sub1.ok, sub2.ok);
+
+        console.log(
+            Object.getPrototypeOf(sub1) === base &&
+            sub2.__proto__ === base
+        );
+        // A: true, true
+        //    === base 이게 되남 되네 흐음;
+
+        // sub1, sub2는 둘다 base를 상속중
+        //
+
+        // && 는  * 곱하기
+
+        //회사 : 프론트 -> 프로토타입 보기
+        //       백엔드 -> 프로토타입 안봐도됨
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

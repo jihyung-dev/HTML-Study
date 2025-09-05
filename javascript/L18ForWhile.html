@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>반복문으로 반복 분기 생성</title>
+</head>
+<body>
+    <h1>반복문으로 반복 분기 생성</h1>
+    <script>
+        // while (true) {
+        //     //1초 쉬고 Thread.sleep(1000); //자바
+        //     console.log("안녕")
+        // }
+        // 스레드간 비동기코드
+        // let i=0;
+        // setInterval(() => {
+        //     console.log("안녕")
+        // },1000);
+
+        let arr=[11,22,33,101,222];
+                //0, 1, 2,  3,  4
+
+        //arr 모든 데이터를 검사
+
+        let i=0; //index ->1
+        console.log("while 반복문")
+        while(i<arr.length){
+            console.log(arr[i],(arr[i]%2==0?"짝수":"홀수"));
+            i++;
+        }
+
+        console.log("for 반복문 시작")
+        for(let n=0; n<arr.length; n++){
+            console.log(arr[n]);
+        }
+
+        //배열의 인덱스 탐색은 느림, <<< iterator
+        console.log("이터레이터 반복문")
+        for(let item of arr){
+            console.log(item);
+        }
+
+
+        let it=arr[Symbol.iterator](); //
+        console.log(it.next());
+        console.log(it.next());
+        console.log(it.next());
+        console.log(it.next());
+        console.log(it.next());
+        console.log(it.next());
+        console.log(it.next());
+
+
+        //for of 를 직접 구현한 코드!!
+        it=arr[Symbol.iterator]();
+        let result=it.next();
+        while(!result.done){
+            console.log(result.value);
+            result=it.next();
+        }
+
+        //Array가 아니 배열도 사용 가능
+        for(let c of "가나다라마바사"){
+            console.log(c)
+        }
+
+
+
+
+    </script>
+</body>
+</html>

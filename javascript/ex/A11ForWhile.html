@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>반복문 for while 문제풀이</title>
+</head>
+<body>
+    <h1>반복문 for while 문제풀이</h1>
+    <script>
+        //기본 문제
+        //for문을 이용하여 1부터 10까지 숫자를 출력하시오.
+        let i=1;
+        for(i=1;i <= 10;i++){
+            console.log(i);
+        }
+
+        //while문을 사용하여 5부터 1까지 역순으로 출력하시오.
+        console.log("\n")
+        let j=5;
+        while(j>0){
+            console.log(j)
+            j--;
+        }
+
+        //do~while문을 이용하여 0부터 2까지 숫자를 출력하시오.
+        console.log("\n")
+        let k=0;
+        do {
+            console.log(k)
+            k++;
+        } while (k<3);
+
+        //배열과 반복문
+        //for...of문을 이용하여 배열 ["서울", "부산", "대구"]의 모든 값을 출력하시오.
+        console.log("\n")
+        arr=["서울","부산","대구"]
+        //for - i 로 한것
+        //console.log(arr)
+        // for(i=0;i<arr.length;i++){
+        //     console.log(arr[i])
+        // }
+
+        //for ... of 로 한 것
+        for (let item of ["서울", "부산", "대구"])
+            console.log(item);
+
+
+        //for...in문을 사용하여 객체 { title: "책", price: 15000 }의 모든 속성과 값을 출력하시오.
+        console.log("\n")
+        obj ={title:"책", price: 15000}
+        for( let key in obj){
+            console.log(obj[key])
+        }
+        //모든 속성이면 title도 내보내야하는건가?
+
+        //해설
+        for (let key in {title: "책", price: 15000} )
+        {console.log(key,obj[key])}
+        console.log("\n")
+
+        //조건과 제어
+        // for문을 사용하여 1부터 10까지 출력하되, 짝수만 출력하시오.
+        for(let i=1; i<11; i++){
+            if(i%2===0){
+                console.log(i)}
+        }
+        console.log("\n")
+
+        // for문에서 continue를 사용하여 1부터 5까지 중 3만 건너뛰고 출력하시오.
+        for (let i=1; i<6; i++){
+            if(i===3){continue;
+            } else{
+                console.log(i);
+            }
+        }
+        console.log("\n")
+
+        // for문에서 break를 사용하여 1부터 10까지 출력하다가 6에서 멈추게 하시오.
+        for (let i=1; i<11; i++){
+            if(i===6){break;
+            } else{
+                console.log(i);
+            }
+        }
+        console.log("\n")
+
+        //응용문제
+        // for문을 이용하여 1부터 100까지의 합을 구하는 코드를 작성
+        let sum=0; for (let i=1; i<=100; i++){
+            sum=sum+i;
+        }
+        console.log(sum)
+        console.log("\n")
+
+        // while문을 사용하여 1부터 시자갛여 누적합이 50이상이 되는 순간의 숫자를 출력
+        sum=0; for(leti=1; i<=100; i++){
+            sum=sum+i;
+                if(sum>=50){
+                    console.log(sum); break;
+                }
+        }
+        console.log("\n")
+
+        // for...of문을 사용하여 문자열 "Hello"의 각 문자를 한 줄씩 출력하시오
+        for(let item of "Hello"){console.log(item)}
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>함수에서 호출하는 this를 찾아보자</title>
+</head>
+<body>
+    <h1>함수(function_생성자함수)에서 호출하는 this를 찾아보자(this binding)</h1> <h5>어디에 바인딩되어있는지</h5>
+    <p id="pElement">this 는 함수 function을 호출하는 객체입니다.</p>
+    <hr>
+    <p id="clockEx"></p>
+    <script>
+        //1.script 실행하는 객체 : 브라우저(window)
+        function a(){
+            console.log("나는 함수 a 입니다.",this)
+        }
+        a(); //window.a();
+        //이때 this는 a를 실행하고있는 window를 가리킴, a()의 전역 = window
+        //console.log(pElement)
+        pElement.onclick=a;
+        //pElement에 마우스를 클릭하면 a()가 실행됨
+        //이벤트인 onclick을 a함수로 재 정의했다. (콜백함수)
+
+
+        //function ()=>{} (X), 다르게 동작함
+        //function 함수가 this를 어떻게 binding 하는가에 대한 수업
+        function User(name,age){
+            this.name=name;
+            this.age=age;
+            this.info=function(){
+                console.log(`나는 ${this.name}(${this.age})입니다.`);
+            }
+        }
+        let user=new User("범준",25);
+        console.log(user);
+        user.info();
+
+        //js는 함수형언어이기 때문에 함수만 따로 떼어서 (독립시켜서) 참조 가능
+        let userInfo=user.info;
+        userInfo();      //실행하는 주체 : window ,  따라서 this -> window
+
+        user={name:"정호",age:19,info:userInfo};
+        user.info();
+
+        //비동기함수(멀티스레드로 동작)
+        //javax.swing.Timer
+        //window.setInterval(function(){},milliseconds)
+        //setInterval : 콜백함수를 밀리초 주기로 반복실행
+
+        //window.setTimeout(function(){},milliseconds)
+        //setTimeout : 콜백함수를 밀리초 뒤에 실행 like delay
+
+        //alert : 경고
+        // setTimeout(function(){
+        //     alert("경고!!")
+        //
+        // },2000)
+        setInterval(function(){
+            // console.log(Date.now()); //unix 시간 : 1970년 1월~ 부터의 시간**
+            // console.log(new Date()); //unix 시간 : 1970년 1월~ 부터의 시간**
+            clockEx.innerText=new Date();
+        },1000)
+
+        //객체 ver
+        let obj={
+            a:10,
+            b:20,
+            increment: function (){
+                // this.a++;
+                window.setTimeout(function(){
+                    this.a++; //this == window
+                    console.log(this.a);
+                },2000);
+            }
+        }
+        obj.increment();
+        console.log(obj)
+
+        //Function.bind(객체), call(객체)
+        //this를 객체로 고정
+        //bind : this를 객체로하는 새로운 함수로 반환한다(만든다).
+        //call : 함수가 실행될 때, this를 객체로 바꾼다. (콜백함수에 부적합)
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

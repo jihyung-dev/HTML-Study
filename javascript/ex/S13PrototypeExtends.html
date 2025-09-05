@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>프로토타입에 대한 이해와 상속</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+    <h1>프로토타입에 대한 이해와 상속</h1>
+    <section>
+        <h2>프로토타입(Prototype)이란?</h2>
+        <ul>
+            <li>생성자 함수를 선언하면 자바스크립트는 자동으로 <code>prototype</code> 객체를 만든다.</li>
+            <li>프로토타입은 객체의 <strong>시제품(원형)</strong> 역할을 한다.</li>
+            <li>객체가 공통으로 사용할 메서드를 미리 정의해 둘 수 있다.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>객체와 프로토타입의 연결</h2>
+        <ul>
+            <li>생성자 함수로 만든 객체는 내부적으로 <code>__proto__</code>라는 숨은 링크를 가진다.</li>
+            <li><code>__proto__</code>는 생성자 함수의 <code>prototype</code> 객체를 참조한다.</li>
+            <li>모든 객체는 최종적으로 <code>Object.prototype</code>을 상속한다.</li>
+        </ul>
+        <pre>
+function User(name) {
+  this.name = name;
+}
+
+User.prototype.sayHi = function() {
+  console.log("안녕,", this.name);
+};
+
+const u1 = new User("철수");
+const u2 = new User("영희");
+
+u1.sayHi(); // 안녕, 철수
+u2.sayHi(); // 안녕, 영희
+
+console.log(u1.__proto__ === User.prototype); // true
+console.log(User.prototype.__proto__ === Object.prototype); // true
+  </pre>
+    </section>
+
+    <section>
+        <h2>__proto__를 이용한 객체 상속</h2>
+        <ul>
+            <li>자바스크립트는 <strong>타입 상속</strong>이 아니라 <strong>객체 상속</strong>을 한다.</li>
+            <li>객체는 필요할 때 다른 객체를 기반(__proto__)으로 연결하여 속성을 상속받는다.</li>
+            <li>이는 브라우저 환경에서 메모리를 절약하는 데 유리하다.</li>
+        </ul>
+        <pre>
+const animal = {
+  eat: function() {
+    console.log("먹는다");
+  }
+};
+
+const dog = {
+  bark: function() {
+    console.log("멍멍");
+  }
+};
+
+dog.__proto__ = animal;
+
+dog.bark(); // "멍멍"
+dog.eat();  // "먹는다"
+  </pre>
+    </section>
+
+    <section>
+        <h2>class 문법 상속</h2>
+        <ul>
+            <li>ES6에서 도입된 class 문법은 실제로는 프로토타입 상속을 편하게 쓰는 문법이다.</li>
+            <li><code>extends</code>로 부모 클래스를 상속하고, <code>super</code>로 부모 생성자/메서드를 호출한다.</li>
+        </ul>
+        <pre>
+class Animal {
+  eat() {
+    console.log("먹는다");
+  }
+}
+
+class Dog extends Animal {
+  bark() {
+    console.log("멍멍");
+  }
+}
+
+const d = new Dog();
+d.eat();  // "먹는다"
+d.bark(); // "멍멍"
+
+console.log(d.__proto__ === Dog.prototype);           // true
+console.log(Dog.prototype.__proto__ === Animal.prototype); // true
+  </pre>
+    </section>
+
+    <section>
+        <h2>프로토타입을 다루는 표준 메서드</h2>
+        <ul>
+            <li><code>__proto__</code>는 이해용으로만 쓰고, 표준 메서드를 사용하는 것이 권장된다.</li>
+            <li><code>Object.create(proto)</code>: 지정한 객체를 프로토타입으로 하는 새 객체 생성</li>
+            <li><code>Object.getPrototypeOf(obj)</code>: 객체의 프로토타입 반환</li>
+            <li><code>Object.setPrototypeOf(obj, proto)</code>: 객체의 프로토타입 변경</li>
+        </ul>
+        <pre>
+const animal = { eats: true };
+
+// create: animal을 프로토타입으로 하는 rabbit 생성
+const rabbit = Object.create(animal);
+console.log(rabbit.eats); // true
+
+// getPrototypeOf
+console.log(Object.getPrototypeOf(rabbit) === animal); // true
+
+// setPrototypeOf
+const dog = {};
+Object.setPrototypeOf(dog, animal);
+console.log(dog.eats); // true
+  </pre>
+    </section>
+    <section>
+            <h2>프로토타입을 다루는 표준 메서드</h2>
+            <ul>
+                <li><code>__proto__</code>는 이해용으로만 쓰고, 표준 메서드를 사용하는 것이 권장된다.</li>
+                <li><code>Object.create(proto)</code>: 지정한 객체를 프로토타입으로 하는 새 객체 생성</li>
+                <li><code>Object.getPrototypeOf(obj)</code>: 객체의 프로토타입 반환</li>
+                <li><code>Object.setPrototypeOf(obj, proto)</code>: 객체의 프로토타입 변경</li>
+            </ul>
+
+            <h3>1) Object.create vs __proto__ 직접 연결</h3>
+            <pre>
+        const animal = { eats: true };
+
+        // 표준 방식
+        const rabbit = Object.create(animal);
+        console.log(Object.getPrototypeOf(rabbit) === animal); // true
+
+        // __proto__ 직접 연결
+        const rabbit2 = {};
+        rabbit2.__proto__ = animal;
+        console.log(rabbit2.eats); // true
+        console.log(rabbit2.__proto__ === animal); // true
+        </pre>
+
+            <h3>2) Object.getPrototypeOf vs __proto__ 확인</h3>
+            <pre>
+        console.log(Object.getPrototypeOf(rabbit) === animal); // true
+        console.log(rabbit.__proto__ === animal);              // true
+        </pre>
+
+            <h3>3) Object.setPrototypeOf vs __proto__ 대입</h3>
+            <pre>
+        const dog = {};
+        // 표준 방식
+        Object.setPrototypeOf(dog, animal);
+
+        // __proto__ 방식
+        // dog.__proto__ = animal;
+
+        console.log(dog.eats); // true
+        </pre>
+    </section><section>
+        <h2>프로토타입 이해 중심 문제 (부트스트랩 콜랩스)</h2>
+
+        <div class="accordion" id="protoQA">
+
+            <!-- 1 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q1h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a1" aria-expanded="false" aria-controls="a1">
+                        1) 생성자 함수를 정의하면 자동으로 만들어지는 객체의 이름은 무엇인가?
+                    </button>
+                </h2>
+                <div id="a1" class="accordion-collapse collapse" aria-labelledby="q1h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>prototype 객체</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q2h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a2" aria-expanded="false" aria-controls="a2">
+                        2) new User()로 인스턴스를 만들면, 새 객체의 __proto__는 보통 어디를 참조하는가?
+                    </button>
+                </h2>
+                <div id="a2" class="accordion-collapse collapse" aria-labelledby="q2h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <code>User.prototype</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q3h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a3" aria-expanded="false" aria-controls="a3">
+                        3) User.prototype.constructor는 무엇을 가리키는가?
+                    </button>
+                </h2>
+                <div id="a3" class="accordion-collapse collapse" aria-labelledby="q3h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: 원래의 생성자 함수 <code>User</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q4h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a4" aria-expanded="false" aria-controls="a4">
+                        4) 아래 코드의 출력 결과는?
+                    </button>
+                </h2>
+                <div class="px-3">
+        <pre><code>
+function User(name) {
+  this.name = name;
+}
+
+const u1 = new User("철수");
+
+console.log(u1.__proto__ === User.prototype);
+        </code></pre>
+                </div>
+                <div id="a4" class="accordion-collapse collapse" aria-labelledby="q4h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>true</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q5h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a5" aria-expanded="false" aria-controls="a5">
+                        5) 프로토타입 체인의 최상단(root) 바로 전 단계 객체는 보통 무엇인가?
+                    </button>
+                </h2>
+                <div id="a5" class="accordion-collapse collapse" aria-labelledby="q5h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>Object.prototype</strong> (그 위는 <code>null</code>)
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q6h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a6" aria-expanded="false" aria-controls="a6">
+                        6) 인스턴스에서 속성/메서드를 찾는 탐색 순서를 채우시오.
+                    </button>
+                </h2>
+                <div>
+                    ① 인스턴스 자신 →
+                    ② ??? →
+                    ③ <strong>Object.prototype</strong> →
+                    ④ <strong>null</strong>
+                </div>
+
+                <div id="a6" class="accordion-collapse collapse" aria-labelledby="q6h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답:
+                        ① 인스턴스 자신 →
+                        ② <strong>인스턴스의 __proto__ (생성자의 prototype)</strong> →
+                        ③ <strong>Object.prototype</strong> →
+                        ④ <strong>null</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q7h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a7" aria-expanded="false" aria-controls="a7">
+                        7) 아래 코드에서 u1은 sayHi를 호출할 수 있는가? (가능/불가능 + 이유)
+                    </button>
+                </h2>
+                <div class="px-3">
+        <pre><code>
+function User(name) {
+  this.name = name;
+}
+
+const u1 = new User("철수");
+
+// (나중에) 프로토타입에 메서드 추가
+User.prototype.sayHi = function() {
+  console.log("안녕,", this.name);
+};
+
+u1.sayHi();
+        </code></pre>
+                </div>
+                <div id="a7" class="accordion-collapse collapse" aria-labelledby="q7h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>가능</strong>. 인스턴스는 자신의 <code>__proto__</code>를 통해 나중에 추가된 <code>User.prototype.sayHi</code>에도 접근한다.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q8h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a8" aria-expanded="false" aria-controls="a8">
+                        8) 아래 코드의 출력 값은?
+                    </button>
+                </h2>
+                <div class="px-3">
+        <pre><code>
+const parent = { kind: "base" };
+const child  = { name: "A" };
+
+child.__proto__ = parent;
+
+console.log(child.kind);
+        </code></pre>
+                </div>
+                <div id="a8" class="accordion-collapse collapse" aria-labelledby="q8h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>"base"</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q9h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a9" aria-expanded="false" aria-controls="a9">
+                        9) 아래 코드의 출력 값은?
+                    </button>
+                </h2>
+                <div class="px-3">
+        <pre><code>
+const parent = { x: 1 };
+const child  = {};
+
+child.__proto__ = parent;
+parent.y = 2;
+
+console.log(child.y);
+        </code></pre>
+                </div>
+                <div id="a9" class="accordion-collapse collapse" aria-labelledby="q9h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>2</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q10h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a10" aria-expanded="false" aria-controls="a10">
+                        10) 아래 결과는? (에러/값 명시)
+                    </button>
+                </h2>
+                <div class="px-3">
+        <pre><code>
+const lone = {};
+
+lone.__proto__ = null;
+
+console.log(lone.toString);
+        </code></pre>
+                </div>
+                <div id="a10" class="accordion-collapse collapse" aria-labelledby="q10h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>undefined</strong> — <code>Object.prototype</code> 연결이 끊겨 기본 메서드 없음.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 계속 11~20도 같은 방식으로 정리 가능 -->
+            <!-- 11 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q11h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a11" aria-expanded="false" aria-controls="a11">
+                        11) 빈 생성자/인스턴스에서 다음 동치식의 참/거짓?
+                    </button>
+                </h2>
+                <div class="px-3">
+    <pre><code>
+function Foo() {}
+
+const f = new Foo();
+
+console.log(f.__proto__ === Foo.prototype);
+console.log(Foo.prototype.__proto__ === Object.prototype);
+    </code></pre>
+                </div>
+                <div id="a11" class="accordion-collapse collapse" aria-labelledby="q11h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>true / true</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 12 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q12h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a12" aria-expanded="false" aria-controls="a12">
+                        12) 아래에서 d.eat()은 실제 어디에서 찾아지는가?
+                    </button>
+                </h2>
+                <div class="px-3">
+    <pre><code>
+class Animal {
+  eat() {
+    console.log("먹는다");
+  }
+}
+
+class Dog extends Animal {
+  bark() {
+    console.log("멍멍");
+  }
+}
+
+const d = new Dog();
+d.eat();
+    </code></pre>
+                </div>
+                <div id="a12" class="accordion-collapse collapse" aria-labelledby="q12h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>Animal.prototype</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 13 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q13h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a13" aria-expanded="false" aria-controls="a13">
+                        13) Dog extends Animal일 때, 동치식의 참/거짓?
+                    </button>
+                </h2>
+                <div class="px-3">
+    <pre><code>
+Dog.prototype.__proto__ === Animal.prototype
+    </code></pre>
+                </div>
+                <div id="a13" class="accordion-collapse collapse" aria-labelledby="q13h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>true</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 14 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q14h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a14" aria-expanded="false" aria-controls="a14">
+                        14) 아래 두 비교 결과?
+                    </button>
+                </h2>
+                <div class="px-3">
+    <pre><code>
+class A {}
+
+class B extends A {}
+
+const b = new B();
+
+console.log(b.__proto__ === B.prototype);
+console.log(B.prototype.__proto__ === A.prototype);
+    </code></pre>
+                </div>
+                <div id="a14" class="accordion-collapse collapse" aria-labelledby="q14h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>true</strong>, <strong>true</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 15 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q15h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a15" aria-expanded="false" aria-controls="a15">
+                        15) 빈칸 채우기: 인스턴스가 가진 프로토타입 링크(_____), 생성자 함수가 가진 원형 객체(_____).
+                    </button>
+                </h2>
+                <div id="a15" class="accordion-collapse collapse" aria-labelledby="q15h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>__proto__</strong>, <strong>prototype</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 16 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q16h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a16" aria-expanded="false" aria-controls="a16">
+                        16) (new Date()).__proto__ === Date.prototype 의 결과와 이유?
+                    </button>
+                </h2>
+                <div class="px-3">
+    <pre><code>
+const d = new Date();
+
+console.log(d.__proto__ === Date.prototype);
+    </code></pre>
+                </div>
+                <div id="a16" class="accordion-collapse collapse" aria-labelledby="q16h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>true</strong> — <code>new Date()</code> 인스턴스의 <code>__proto__</code>는 <code>Date.prototype</code>.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 17 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q17h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a17" aria-expanded="false" aria-controls="a17">
+                        17) Object.create(proto)는 어떤 역할?
+                    </button>
+                </h2>
+                <div id="a17" class="accordion-collapse collapse" aria-labelledby="q17h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: 지정한 <code>proto</code>를 <strong>프로토타입으로 갖는 새 객체</strong>를 만든다.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 18 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q18h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a18" aria-expanded="false" aria-controls="a18">
+                        18) Object.getPrototypeOf(obj)와 __proto__의 관계를 설명.
+                    </button>
+                </h2>
+                <div id="a18" class="accordion-collapse collapse" aria-labelledby="q18h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <code>Object.getPrototypeOf(obj)</code>는 <strong>obj.__proto__</strong>를 반환하는 표준 메서드.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 19 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q19h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a19" aria-expanded="false" aria-controls="a19">
+                        19) Object.setPrototypeOf(obj, proto)는 어떤 동작을 하나?
+                    </button>
+                </h2>
+                <div id="a19" class="accordion-collapse collapse" aria-labelledby="q19h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>obj의 프로토타입을 proto로 교체</strong>한다. (즉, <code>obj.__proto__ = proto</code>와 동일한 효과)
+                    </div>
+                </div>
+            </div>
+
+            <!-- 20 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="q20h">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a20" aria-expanded="false" aria-controls="a20">
+                        20) 아래 코드의 출력 값과 마지막 비교가 성립하는 이유?
+                    </button>
+                </h2>
+                <div class="px-3">
+    <pre><code>
+const base = { ok: true };
+
+const sub1 = Object.create(base);
+
+const sub2 = {};
+Object.setPrototypeOf(sub2, base);
+
+console.log(sub1.ok, sub2.ok);
+
+console.log(
+  Object.getPrototypeOf(sub1) === base &&
+  sub2.__proto__ === base
+);
+    </code></pre>
+                </div>
+                <div id="a20" class="accordion-collapse collapse" aria-labelledby="q20h" data-bs-parent="#protoQA">
+                    <div class="accordion-body">
+                        정답: <strong>true true</strong> / <strong>true</strong> — 두 객체 모두 <code>base</code>를 프로토타입으로 가지므로 같은 속성을 상속받는다.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</body>
+</html>

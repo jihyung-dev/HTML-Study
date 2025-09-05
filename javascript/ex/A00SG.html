@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas Shooting Game</title>
+    <style>
+        body { margin:0; background:black; overflow:hidden; font-family:Arial,sans-serif; }
+        canvas { display:block; }
+        #score { position:absolute; top:10px; left:20px; color:white; font-size:24px; font-weight:bold; text-shadow:0 0 10px #00ffea; }
+    </style>
+</head>
+<body>
+<div id="score">Score: 0</div>
+<canvas id="gameCanvas"></canvas>
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+
+    let score = 0;
+    const scoreEl = document.getElementById("score");
+
+    const player = { x: canvas.width/2, y: canvas.height/2, radius: 15, color: "white", speed: 5 };
+    let lastDirection = {x:0, y:-1};
+
+    const projectiles = [];
+    const enemies = [];
+    const particles = [];
+
+    const keys = { ArrowUp:false, ArrowDown:false, ArrowLeft:false, ArrowRight:false };
+    let canShoot = true;
+
+    addEventListener("keydown", e=>{
+        if(keys.hasOwnProperty(e.key)) keys[e.key] = true;
+
+        if(e.code==="Space" && canShoot){
+            if(lastDirection.x!==0 || lastDirection.y!==0){
+                projectiles.push(new Projectile(player.x, player.y, 5, "white", {x:lastDirection.x*8, y:lastDirection.y*8}));
+                canShoot = false;
+                setTimeout(()=>{ canShoot=true; }, 300);
+            }
+        }
+    });
+    addEventListener("keyup", e=>{
+        if(keys.hasOwnProperty(e.key)) keys[e.key] = false;
+    });
+
+    class Projectile {
+        constructor(x,y,radius,color,velocity){ this.x=x; this.y=y; this.radius=radius; this.color=color; this.velocity=velocity; }
+        draw(){ ctx.beginPath(); ctx.arc(this.x,this.y,this.radius,0,Math.PI*2); ctx.fillStyle=this.color; ctx.fill(); }
+        update(){ this.x+=this.velocity.x; this.y+=this.velocity.y; this.draw(); }
+    }
+
+    class Enemy {
+        constructor(x,y,radius,color){ this.x=x; this.y=y; this.radius=radius; this.color=color; this.speed=2; }
+        update(){
+            const angle = Math.atan2(player.y - this.y, player.x - this.x);
+            this.x += Math.cos(angle)*this.speed;
+            this.y += Math.sin(angle)*this.speed;
+            this.draw();
+        }
+        draw(){ ctx.beginPath(); ctx.arc(this.x,this.y,this.radius,0,Math.PI*2); ctx.fillStyle=this.color; ctx.fill(); }
+    }
+
+    class Particle {
+        constructor(x,y,radius,color,velocity){ this.x=x; this.y=y; this.radius=radius; this.color=color; this.velocity=velocity; this.alpha=1; }
+        draw(){ ctx.save(); ctx.globalAlpha=this.alpha; ctx.beginPath(); ctx.arc(this.x,this.y,this.radius,0,Math.PI*2); ctx.fillStyle=this.color; ctx.fill(); ctx.restore(); }
+        update(){ this.x+=this.velocity.x; this.y+=this.velocity.y; this.alpha-=0.02; this.draw(); }
+    }
+
+    function movePlayer(){
+        if(keys.ArrowUp && player.y - player.radius > 0){ player.y-=player.speed; lastDirection={x:0,y:-1}; }
+        if(keys.ArrowDown && player.y + player.radius < canvas.height){ player.y+=player.speed; lastDirection={x:0,y:1}; }
+        if(keys.ArrowLeft && player.x - player.radius > 0){ player.x-=player.speed; lastDirection={x:-1,y:0}; }
+        if(keys.ArrowRight && player.x + player.radius < canvas.width){ player.x+=player.speed; lastDirection={x:1,y:0}; }
+    }
+
+    function drawPlayer(){ ctx.beginPath(); ctx.arc(player.x,player.y,player.radius,0,Math.PI*2); ctx.fillStyle=player.color; ctx.fill(); }
+
+    function spawnEnemies(){
+        setInterval(()=>{
+            const radius = Math.random()*20+10;
+            let x, y;
+            if(Math.random()<0.5){ x = Math.random()<0.5 ? 0-radius : canvas.width+radius; y = Math.random()*canvas.height; }
+            else { x = Math.random()*canvas.width; y = Math.random()<0.5 ? 0-radius : canvas.height+radius; }
+            const color = `hsl(${Math.random()*360},50%,50%)`;
+            enemies.push(new Enemy(x,y,radius,color));
+        },1000);
+    }
+
+    let animationId;
+    function animate(){
+        animationId = requestAnimationFrame(animate);
+        ctx.fillStyle="rgba(0,0,0,0.2)";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        movePlayer();
+        drawPlayer();
+
+        particles.forEach((p,i)=>{ if(p.alpha<=0) particles.splice(i,1); else p.update(); });
+
+        projectiles.forEach((p,i)=>{
+            p.update();
+            if(p.x<0||p.x>canvas.width||p.y<0||p.y>canvas.height) projectiles.splice(i,1);
+        });
+
+        enemies.forEach((enemy,eIndex)=>{
+            enemy.update();
+
+            projectiles.forEach((proj,pIndex)=>{
+                const dist = Math.hypot(proj.x-enemy.x, proj.y-enemy.y);
+                if(dist-enemy.radius-proj.radius<1){
+                    for(let i=0;i<enemy.radius*2;i++){
+                        particles.push(new Particle(proj.x,proj.y,Math.random()*2,enemy.color,{x:(Math.random()-0.5)*6,y:(Math.random()-0.5)*6}));
+                    }
+                    score+=100;
+                    scoreEl.innerHTML="Score: "+score;
+                    enemies.splice(eIndex,1);
+                    projectiles.splice(pIndex,1);
+                }
+            });
+
+            const distPlayer = Math.hypot(player.x-enemy.x, player.y-enemy.y);
+            if(distPlayer-enemy.radius-player.radius<1){
+                cancelAnimationFrame(animationId);
+                alert("Game Over! Score: "+score);
+                document.location.reload();
+            }
+        });
+    }
+
+    animationId = requestAnimationFrame(animate);
+    spawnEnemies();
+</script>
+</body>
+</html>

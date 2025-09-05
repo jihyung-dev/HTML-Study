@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Object의 유용한 메서드</title>
+</head>
+<body>
+    <h1>Object의 유용한 메서드</h1>
+    <script>
+        let obj = {a:10,b:20,c:30,777:"행운"}
+        // console.log(obj.keys)
+        console.log(Object.keys(obj));
+        //필드를 수로 작성해도 문자열 취급
+        //자바의 객체는 필드만 볼 수 없다.
+
+        /*
+        * class user{
+        *   string name="";
+        *   int age=39;
+        * }
+        * User u=new User();
+        * =={name:"",age:39}
+        * //name만, age만 모아서 볼 수 있는 방법을 제공하지않음
+        * Map map = new HashMap();
+        * map.put("name","경민");
+        * map.put("age",39);
+        * {name:"경민","age":39}
+        * map.key(); // {name, age}
+        *
+        * */
+        //js의 Object는 java의 Map과 비슷하다.
+
+        console.log(Object.values(obj));
+        //Entry [[key,value], [key,value], [key,value]]
+        console.log(Object.entries(obj))
+
+        console.log(obj.d)
+        console.log(Object.hasOwn(obj, "a"));
+        console.log(Object.hasOwn(obj, "b"));
+        console.log(Object.hasOwn(obj, 777));
+        console.log(Object.hasOwn(obj, "d"));
+
+        //in 연산자 (hasOwn 보다 더 선호하는 편)
+        console.log("a" in obj);
+        console.log("B" in obj);
+        delete obj["777"];
+        //seal(봉인) : 추가 삭제        //내용물(참조)은 바꿀수있음
+        Object.seal(obj);
+        obj.a=100;           //변경
+        console.log(obj)
+        obj.d=40;            //추가
+        delete obj["c"];                //삭제 불가
+        console.log(obj)
+
+        //freeze : 동결 seal+수정불가
+
+
+        //assign : 객체병합 (스프레드문법 ... 사용)
+        let a={a:1}
+        let b={b:2}
+        // Object.assign(a,b)
+        // console.log(a)
+        let c=Object.assign({},a,b);
+        console.log(c);
+        console.log(a)
+        c={...a,...b}
+        console.log(c);
+
+        //create : 프로토타입 배우고
+
+
+
+
+    </script>
+</body>
+</html>

@@ -33,22 +33,36 @@
         //                 2)메모리 효율성 : 이를 통한 메모리 절약
         //                 3)상속 구현 : __proto__로 표기된 속성은 상속받는 프로토타입 객체
 
-
-
         //        #4 java 에서 key:value쌍으로 저장하는 데이터 가 뭐였더라?
 
+        /////////////////////////////////////////////////////////////////
+        ////////////////////////////문제풀이//////////////////////////////
+        /////////////////////////////////////////////////////////////////
 
         // 1. 자바스크립트 자료형을 큰 범주로 구분하라. 각 범주의 특징을 한 줄씩 요약하라.
+        // 자바스크립트의 자료형이 데이터로 뭐다?
         // 자료형 배열 : 순서와 이름이 있는 값
         //       String : 글자의 나열 (기본형으로도 사용됨)
         //       NodeList : Dom tree의 구성요소인 Node의 집합
 
+        //대부분의 프로그램 (except 파이썬)
+        //Data - 1) 기본형
+        //           - 원시형 데이터(101010), 불변(바뀌지 않음)
+        //       2) 자료형
+        //           - 데이터(자료형, 끝엔결국 기본형)를 참조
+        //               데이터를 참조할때 주소표현 : @1FA29
+        //       3) 배열
+        //           - 배열이지만 Array가 아닌것(유사배열) : 문자열, HTML, ...
+        //
+
         // 2. 기본형(Primitive)이 “불변”이라는 말의 의미를 문자열 예시 하나로 설명하라.
-         str="안녕?"
-        //console.log(str.add("하세요"));
-        //console.log(str.pop());
+         examp="안녕?"
+        console.log(examp)
+         examp[0]="가";                               //안바뀜
+        // console.log(examp.add("하세요"));           //불가
+        // console.log(examp.pop());                  //불가
         // add()와 pop() 데이터를 변화시키는 것이 불가능함
-        console.log(str)
+        console.log(examp)
 
         // 3. 객체(Object)가 “가변”이라는 말의 의미를 간단한 코드로 설명하라. 프로퍼티 추가·수정 예시를 포함하라.
         let user = new Object();
@@ -62,11 +76,23 @@
         console.log(user);
         // age를 수정할수 있고, 속성을 추가하여 폰이라는 키와 000-111-2222 밸류를 할당가능
 
+        //객체
+        let obj5={};
+        obj5.a=10;
+        console.log(obj5); //  {a: 10}
+
         // 4. null, undefined, symbol, bigint를 각각 한 줄로 정의하고, 사용 예를 1개씩 드시오.
-        // null : 의도된 '없음' 일부로 비워둠
-        // undefined : 선언은 했는데 초기화되지 않음, 할당되지 않은 '없음'
-        // symbol : ??? 기억이 나지 않습니다 슨생님
-        // bigint : Integer를 큰 수로 표현할때 사용 뒤에 n을 붙여서 표현
+        // null : 의도된 '없음' 일부로 비워둠 0에 가까움  [데이터 용어]
+        // undefined : 선언은 했는데 초기화되지 않음, 할당되지 않은 '없음' [프로그래밍용어]
+        // symbol : ??? 기억이 나지 않습니다 슨생님 안해주셨꾸만! _ 고유값 _
+        // bigint : Integer를 큰 수로 표현할때 사용 뒤에 n을 붙여서 표현, 정수 연산을 하기위해
+
+        let s=Symbol("경민");
+        console.log(s)
+        let s2=Symbol("경민");
+        console.log(s2)
+        console.log(s==s2) //false  이름이 같아도 각각 고유한 데이터를 유지시키고 싶을 때
+
 
         // 5. 객체 리터럴과 Object 생성자 방식의 차이를 설명하고, 동일한 구조의 객체를 두 방식으로 각각 작성하라.
 
@@ -82,9 +108,30 @@
         let computer2 = { harddisk:"6T", cpu:"Ryzen78003XD"};
         console.log(computer2);
 
+        //Type의 이름에 ()가 있으면 생성자   중요도x100!!!!
+
+        //js에서는
+        // function A() {           <<이 자체가  생성자 함수
+        //      this.name="경민"
+        //      this.name=name
+        // }
+
+
+
+
         // 6. 기본형과 객체의 “저장 방식” 차이를 스택/힙 용어를 사용해 3문장 이내로 설명하라.
         // 기본형은 그 형태 그대로 저장되어 힙 메모리에 저장되고
         /// 객체의 실제값은 스택 메모리에 저장되고, 그 저장된값을 참조하는 형태
+
+        //기본형 데이터 저장방식 2가지
+        // 1) 정적 메모리 [힙]
+        //      : java의 method영역     vs    동적(G.C_garbage collection)
+        //          동적보다 상대적으로          안쓸땐 지움 : 인스턴스
+        //           정적, 삭제 되지 않음
+        // 2) 스택 메모리
+        //      : 지역 _ 메서드 내에서만 사용되고 휘발됨
+        //        연산을 위해 cpu에 메모리에 저장하여 쓰임
+
 
 
         // 7. 아래 코드의 콘솔 출력 결과를 쓰고, 그 이유를 “값 비교 vs 참조 비교” 관점에서 설명하라.
@@ -92,6 +139,7 @@
         const b = { x: 1 };
         console.log(a === b);
         //콘솔 출력결과 : false;  값비교는 1로 같지만, 참조비교는 a의 저장위치와 b의 저장위치가 다름
+
 
         // 8. 다음 코드에서 c와 d의 비교 결과를 예측하고, 결과가 다른 이유를 설명하라.
         let c = 10;
@@ -105,14 +153,123 @@
         // 9. Object.keys, Object.values, Object.entries의 반환 형태 차이를 한 줄씩 설명하고,
         //     같은 객체를 대상으로 세 메서드의 결과를 각각 쓰시오.
 
-        //오브젝트의 키, 밸류, 쌍을 반환함
-        let obj = {candy:"Ricola"};
-        console.log(Object.keys(obj)); // ['candy']
-        console.log(Object.values(obj)); // ['Ricola']
-        console.log(Object.entries(obj)); // [Array(2)]
+        //오브젝트의 키, 벨류, 쌍(키-벨류)을 반환함
+        let obj9 = {candy:"Ricola"};
+        console.log(Object.keys(obj9)); // ['candy']
+        console.log(Object.values(obj9)); // ['Ricola']
+        console.log(Object.entries(obj9)); // [Array(2)]
 
         // 10. Object.hasOwn(obj, key)의 목적을 설명하고, 프로토타입 체인에
         //     같은 이름의 프로퍼티가 있을 때 동작을 확인하는 코드를 작성하라.
+
+        //목적 : 키가 객체에 직접 존재하는지 확인하기위해서
+        // console.log(Object.hasOwn(computer,cpu)) //오류뜨는데욥
+
+        // 11. 배열과 객체의 “키 형태”와 “length 관리” 관점 차이를 3문장 이내로 설명하라.
+        // 배열은 키가 index? length는 존재 (index+1)
+        // 객체는 키가 String형태로 존재, length는 정해지지않음 (추가될 수 있음)
+
+        //배열 : index(데이터의 순서) → key가 됨 java : 문자 only
+        //                                   js : 문자 , 숫자 가능
+
+
+
+
+        // 12. 아래 코드 실행 후 length 값과 실제 채워진 인덱스를 설명하라.
+        const arr = [];
+        arr[3] = "A";
+        console.log(arr.length);
+
+        // arr[] = { empty, empty, empty, "A"} , length값은 4, 채워진 인덱스는 3
+
+        // 13. 배열로 순서가 중요한 데이터를, 객체로 키-값 매핑이 중요한 데이터를
+        //     각각 예시로 1개씩 제시하고 이유를 설명하라.
+        //     Array는 순서와 값이 있는 데이터, finish = { 1등, 2등, 3등}
+        //     객체는 키-값 이 있는 데이터 ex) user = { name:지형, age:36}
+
+        //객체 : 이름, 나이, 결혼여부 : 순서 중요치 않음
+        //배열 : 돈을 많이 사용한 사람순으로 : 배열로 적합 VVIP
+
+
+
+        // 14. 아래 user 객체를 배열로 바꾸는 것이 더
+        //     적합한 경우를 가정하고, 그 기준(판단 근거)을 2가지 제시하라.
+        //const user = { 0: "Kim", 1: "39", 2: "Seoul" };
+
+        // data화해서 table에 넘기기위해서? detail은 모르겠다요
+
+        // 15. 생성자 함수와 클래스 문법이 “문법적 설탕” 관계라는 말을,
+        //     프로토타입 관점에서 3문장 이내로 설명하라.
+        //     클래스 문법은 존재하지않았지만, 개발자들이 더 작성하기 쉽고, 알아보기 좋게
+        //     만든 문법적 설탕
+
+        //***
+        // 프로토타입 : java에서는 class를 상속할때 부모객체를 내부에 가지고있음,
+        //            프로토타입은 시제품(객체)를 만들어서 A를 만듬, B를 상속받고싶다면, 참조만 함.
+
+
+
+        // 16. 생성자 함수 User와 ES6 클래스 User를 각각 작성하고, 인스턴스가 동일한
+        //     프로토타입 메서드 greet를 공유함을 보여주는 코드를 작성하라.
+        //      모르겠데이..
+
+        /*Uzer.prototype.greet = function () {
+            console.log(`안녕하세요! 제 이름은 ${this.name}입니다.`);
+        }
+        class Uzer {
+            constructor(name) {
+                this.name = name;
+                greet();
+            }
+        }
+        //생성자 함수 User
+        const uzer1 = new Uzer("김김김");
+            this.name = name;
+        // function User(name) {
+        //     this.name = name;
+        //     greet();
+        // }
+
+
+        uzer1.greet();
+        uzer.greet();
+        */
+
+        // 17. new 없이 생성자 함수를 호출했을 때 발생할 수 있는 문제를 설명하고,
+        //     이를 방지하는 수단(예: 내부 검사)을 코드로 시연하라.
+        //     new 없이 생성자 함수 호출하면 : 생성이 안되나?
+
+        // this 쓰는것이 생성자, 대문자로 표기하는것이 생성자
+
+
+        // 18.다음 코드의 출력 결과를 모두 쓰고, 각 줄의 이유를 간단히 설명하라.
+        const obj = { a: 1 };
+        const ref = obj;
+        ref.a = 2;
+        console.log(obj.a);          // 1
+        console.log(ref === obj);    // false , ref 의 a는 2
+
+        //obj.a가 2이고, ref === obj true라고?
+        //같은 주소를 참조하고 있으므로 ref.a = 2; 가 obj의 a:1을 2로 바꿈.
+        // 그러므로 obj.a => 2가 되고, ref === obj 는 true가 됨
+
+
+        // 19. 아래 코드에서 주석의 의도를 만족하도록 한 줄만 수정하라.
+        //     수정 전·후 동작 차이를 설명하라.
+        //     의도: user2 변경이 user1에 영향을 주지 않아야 한다.
+        const user1 = { name: "GM", info: { city: "Seoul" } };
+        const user2 = user1; // <-- 이 줄만 수정
+        user2.name = "KM";
+        console.log(user1.name); // "GM"이 출력되어야 함
+
+        // 모 르 겠 다 요
+
+        // 20. 객체 리터럴을 사용하여 학생(student) 객체를 만들고,
+        //     이름(name)과 나이(age)를 속성으로 저장한 뒤 콘솔에 출력하라.
+        let student = { name: "김지형", age: 36 };
+        console.log(student.name)
+        console.log(student.age)
+
 
 
 

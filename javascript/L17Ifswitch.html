@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>조건문으로 실행을 분기하자</title>
+</head>
+<body>
+    <h1>조건문으로 실행을 분기하자</h1>
+    <p>
+        <input id="numInput" type="text" value="22">
+    </p>
+    <p id="printEx1"></p>
+
+    <script>
+        const numInputHandler=()=>{
+            //콜백함수를 재정의 : 이벤트가 발생될때만 호출
+            let value=numInput.value;
+            console.log(value);
+            let str;
+                if(value%2==0){
+                    str="짝수";
+                } else{
+                    str="홀수";
+                }
+                printEx1.innerText=`입력한 수 ${value}는 ${str}입니다.`;
+            numInput.onchange=numInputHandler;
+        }
+      let n=17;
+        let str="홀수"; // 개발자가 더 선호
+
+        //1%2 ==
+        //2%2 ==0
+        //1122221%2 == 1
+        //112222212312310%2 == 0
+        if(n%2===0){
+            str="짝수";
+        }
+        console.log(`${n}은 ${str}입니다.`)
+
+
+        //else if
+        //성적 1--~0- A
+        //90~80 B
+
+        let grade;
+        let score=89;
+        //잘못된 문법 //if(90<=score<=100){grade="A";}
+        //Boolean && ||
+        if(100>=score && 90<=score){
+            grade ="A";
+        }else if(score>=80){
+            grade="B";
+        }else if(score>=70){
+            grade="C";
+        } else {
+            grade="F";
+        }
+        console.log( `당신의 ${score}의 성적은 ${grade}입니다.`)
+
+        // === 분기 switch
+        // 0~6 요일 (일~토)
+        let dayNum=2; //
+        let dayStr;
+        switch (dayNum){
+            case 0: dayStr="일요일";   break;
+            case 1: dayStr="월요일";   break;
+            case 2: dayStr="화요일";   break;
+            case 3: dayStr="수요일";   break;
+            case 4: dayStr="목요일";   break;
+            case 5: dayStr="금요일";   break;
+            case 6: dayStr="토요일";   break;
+            default: dayStr="입력이 잘못됨(0~6)";
+        }
+        console.log(`오늘은 ${dayStr} 입니다.`);
+
+        //** 객체 리터럴을 switch 대신 사용 !!
+
+        //과일 한글 문자=>영어
+
+        let fruit="사과";
+
+        switch(fruit){
+            case "사과": fruit="apple"; break;
+            case "바나나" : fruit="banana"; break;
+        }
+        console.log(fruit)
+
+        //Object 리터럴 표기법을 switch 대신 사용하는 문법
+        //default(else)작성이 불가능
+        //switch 보다 코드가 간결, => switch보다 동작이 빠름
+        let fruitKey="바나나";
+
+        const fruitObj={
+            "사과":"apple",
+            "바나나":"banana",
+        }
+        console.log(fruitObj[fruitKey]);
+        console.log(fruitObj["사과"]);
+
+
+
+    </script>
+</body>
+</html>

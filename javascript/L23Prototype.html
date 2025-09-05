@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="kpo">
+<head>
+    <meta charset="UTF-8">
+    <title>프로토타입 언어 자바스크립트</title>
+</head>
+<body>
+    <h1>프로토타입 언어 자바스크립트</h1>
+    <script>
+        const obj={a:10};
+        //Object 타입으로 생성 { }                       : 객체지향문법
+        //js Object.prototype을 상속(__proto__)으로 생성  : 프로토타입문법
+
+        console.log(obj)
+        console.log(obj.__proto__) //Object.prototype
+
+        //타입을 명시하면 자동으로 프로토타입이 생성
+        function User(){
+            this.a=20;
+            this.b=30;
+        }
+
+        console.log("\n")
+        console.log("타입을 명시하면 프로토타입이 생성")
+        console.log(User.prototype); //타입을 명시하면 프로토타입이 생성 증명
+
+        const user=new User();
+        console.log(user);
+
+        console.log("\n")
+        console.log("user 객체의 부모는 누구?")
+        console.log(user.__proto__); // : user 객체의 부모는 누구?, (상속받고있니)
+        console.log("내가 상속받는게 타입의 프로토타입인가?")
+        console.log(user.__proto__===User.prototype); // 내가 상속받는게 타입의 프로토타입인가?(같은가?)
+
+        //=> true : 객체는 프로토타입 상속으로 생성
+
+        console.log("\n")
+
+        //객체 상속 : __proto__
+        const a={
+            name:"경민",
+            info:()=>{console.log("info")},
+            a:10
+        };
+        const b={
+            age:39,
+            call:()=>{console.log("call")},
+            a:1000
+        };
+        a.__proto__=b; //a의 부모가 b다
+        console.log(a.age)
+        a.info();
+        a.call();
+        console.log("a참조시 우선순위 : 자식(10)>부모(1000)")
+        console.log(a.a); //자식>부모 우선순위를 갖는다.
+        console.log(a)
+
+        //js의 class 상속 : 문법적 설탕 (프로토타입 상속)
+        //class 상속=>부모객체를 자식이 생성 후 포함
+        console.log("\n")
+        console.log("js의 class 상속")
+        class Animal {
+            name="Animal";
+        }
+        class Cat extends Animal{
+            tail="꼬리";
+        }
+        const cat = new Cat();
+        console.log(cat)
+
+        console.log(cat.__proto__) //cat은 new Animal();을 상속
+
+
+
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>this 바인딩 복습</title>
+</head>
+<body>
+     <h1>this 바인딩 복습</h1>
+     <script>
+         function sum(a,b){
+             return a+b;
+         }
+         let a=sum(10,20);
+         console.log(a)
+
+         //함수 (타입 내부)
+         //
+         //1) 생성자함수(== type) (이 안에 1)필드 2)함수 를 쓸 수 있음)
+         function Calc(a,b){
+             //필드를 this로 정의
+             this.a=a;
+             this.b=b;
+
+             //sum을 호출했을 때 무엇이 this인가(무엇을 가리키는가)
+             // => this 바인딩 (바뀔 수 있음)
+             // 1) 자바 : 함수가 있는 위치가 this
+             //          ( new Calc()==this )
+             // 2) js : 함수(function)를 실행하는 객체가 this  //함수형 언어
+             //         (new User().sum() 의 this => new User())
+
+             this.sum=function(){ //바인딩
+                 console.log(this.a+this.b);
+
+             //화살표함수 == java처럼 동작 (선언된 위치의 this가 this 절대고정(capture)
+             this.arrowSum=()=>{ //캡쳐
+                 console.log(this.a+this.b);
+             }
+
+
+             }
+         }
+        let calc=new Calc(100,200);
+         console.log(calc);
+         calc.sum(); //300
+         calc=new Calc(1000,2000);
+         console.log(calc);
+         calc.sum(); //3000
+
+         //window 영역에서 실행
+         // window.a=88;
+         // window.b=99;
+         // var a=55; => window.a=55
+         // var b=77; => window.b=77
+         let windowSum=calc.sum;
+         windowSum(); //NaN, this가 없음 (undefined+undefined => NaN)
+
+         let windowArrowSum=calc.arrowSum;
+         //let windowArrowSum=calc.arrowSum(); 로 작성하면 실행한 결과가옴
+         //                                ()를 제거해야 오버라이드
+         windowArrowSum();
+
+
+     </script>
+</body>
+</html>
