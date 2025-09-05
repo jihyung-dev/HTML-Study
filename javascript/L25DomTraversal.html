@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>자바스크립트로 화면을 동적으로 만들기 위해 돔 탐색을 하자!</title>
+</head>
+<body>
+    <h1>자바스크립트로 화면을 동적으로 만들기 위해 돔 탐색을 하자!</h1>
+    <script>//console.log(ex1)</script>
+    <!-- div#ex1>h2{돔탐색 예제}+ul>li{$$}*6 -->
+    <div id="ex1">
+        <h2>돔탐색 예제</h2>
+        <ul>
+            <li>01</li>
+            <li class="bg-blue">02</li>
+            <li id="ex1Li3">03</li>
+            <li class="bg-blue">04</li>
+            <li>05</li>
+            <li>06</li>
+        </ul>
+    </div>
+
+
+
+
+    <script>
+        //돔 탐색할 개체보다 아래에 있어야 생성 후 찾을 수 있음
+        console.log(ex1)
+        let node=document.getElementById('ex1'); //많이 사용되는 것
+        console.log(node, node===ex1)
+        const ex1Li3 = document.getElementById('ex1Li3');
+        console.log(ex1Li3);
+        ex1Li3.style.color = "red";
+
+        //liList.style.color = "blue"; //안됨
+        // -> 배열에 스타일을 바로준것
+
+        //복수 요소 찾기
+        const liList=document.getElementsByTagName("li");
+        console.log(liList);
+
+        // 배열 내부에 스타일 주기
+        for(let li of liList){
+            li.style.textDecoration = "underline";
+        }
+
+        // class로 스타일 주기
+        const bgBlueLis = document.getElementsByClassName("bg-blue");
+        console.log(bgBlueLis);
+        for (let li of bgBlueLis){
+            li.style.backgroundColor = "#AAAAFF";
+        }
+
+        //querySelector : 한개
+        //querySelectorAll : 복수 NodeList
+        //getElementsByname : 복수 NodeList
+        // # . > ' ' + ~ : nth-child(n)    : 의사요소들
+
+        console.log(document.querySelectorAll("#ex1 li.bg-blue"))  //많이 사용되는 것
+        console.log(document.querySelectorAll("#ex1 li:nth-child(2n)")) //짝수
+        console.log(document.querySelectorAll("#ex1 li:nth-child(2n-1)")) //홀수
+        console.log(document.querySelector("li")); //가장 처음 찾는것만 반환
+
+
+        //모든 element 요소는 돔 탐색 가능
+        console.log(ex1.querySelectorAll("li"));
+
+        console.log(ex1Li3.previousSibling);                     //#text,  \n=>"", <ul>\n<li>
+        console.log(ex1Li3.previousElementSibling.innerText);    //02
+        console.log(ex1Li3.nextElementSibling.innerText);        //04
+
+        console.log(ex1Li3.parentElement);                       //ul //부모는 무조건 요소
+        console.log(ex1Li3.parentElement.children[4].innerText); //05
+        console.log(ex1Li3.closest("#ex1"));                     //div
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+</body>
+</html>
