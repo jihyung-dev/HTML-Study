@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>js event</title>
+    <style>
+        .box{
+            width: 5em;
+            height: 5em;
+            border: 1px solid #000;
+            background: lightblue;
+            transition: all 1s ease-in-out;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>자바스크립트 이벤트로 요소에서 발생하는 이벤트를 재정의 하자</h1>
+
+<!-- div#ex1>div.box -->
+    <div id="ex1">
+        <div class="box"></div>
+    </div>
+    <script>
+        let box= document.querySelector("#ex1>.box");
+        console.log(box)
+        // box를 클릭했을때 click 이 나타나도록
+        box.onclick = function(){
+            // console.log(this); // 이때 this는 box // click 이 잘 되는지 확인
+                this.innerText="click";
+                this.style.backgroundColor="red";
+        }
+        //click에 동작 추가
+        box.onclick=function(){
+            this.style.borderWidth="1em";
+        }
+    </script>
+    <hr>
+        <div id="ex2">
+            <div class="box"></div>
+        </div>
+        <script>
+            //addEventListener
+            box=document.querySelector("#ex2>.box");
+
+            //간접적 이벤트 재정의 _ 여러개의 함수르 실행할 수 있음
+            //box.onclick=function(){
+            //      a();
+            //      b();
+            // }
+            box.addEventListener("click", function(){  //a
+                this.innerText+="클릭";
+                this.style.backgroundColor="purple";
+            });
+            box.addEventListener("click", function(){  //b
+                this.style.borderWidth="1em";
+            });
+            //기존의 이벤트를 모두 1개로 바꾸는 경우가 아니면
+            //addEventListener 사용을 권장합니다!!
+    </script>
+    <hr>
+    <!-- div#ex3>div.box*3 -->
+    <div id="ex3" style="display: flex">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+    </div>
+    <script>
+        // let ex3=document.querySelector("#ex3");
+        // console.log(ex3.children)
+        let boxs=document.querySelectorAll("#ex3>.box");
+        //console.log(boxs)
+
+        //NodeList [.box .box .box]
+        //NodeList[index]
+        //NodeList.length
+        //NodeList.foreach()
+        // . : 필드접근자는 자신의 필드만 접근 가능
+        //NodeList.click=()=>{}
+        //안됨!! : 배열의 모든 노드를(index) 찾아서 onclick 정의
+        //jQuery 는 자동으로 반복자로 모든 아이템의 click을 재정의해줌
+        //jQuery : 비개발자(배열을 모르는 사람)을 위한 언어
+
+
+        boxs[0].onclick=function(){
+            alert("안녕");
+        }
+        boxs[1].onclick=function(){
+            alert("안녕");
+        }
+        boxs[2].onclick=function(){
+            alert("안녕");
+        }
+
+
+        const boxsClickHandler=function(){ //화살표로 선언하면 현재 type은 윈도우
+            this.style.borderColor="red";
+            this.style.borderWidth="1em";
+            return 0;
+        }
+        // boxs.onclick=function(){} //안됨, 배열인 상태임
+        for(let b of boxs){
+            b.addEventListener("click", boxsClickHandler);
+                                        //boxsClickHandler()을 넣으면 결과값을 넘기는 것
+        }
+    </script>
+    <hr>
+<!--    div[style="display:flex"]#ex4>div.box*3-->
+    <div style="display:flex" id="ex4">
+        <div class="box" style="border-width: 1px;"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+    </div>
+    <script>
+        // <element style=" ">; => 요소에 style을 직접 기입하는것 : 인라인 스타일
+        // => js로 찾을 수 있음
+
+        // <style> element를 찾고 { } => 요소를 찾고 style를 넣는것 : inter style
+        // => js로 찾을 수 없음,  요소 1점, 클래스 10점, id 100점,  각 구역을 띄어넘을 순 없음
+
+        // js 요소에 최종적으로 적용된 스타일 찾기
+        //    : window.getComputedStyle(요소)[style.property]
+
+
+        boxs=ex4.children;
+        for(let b of boxs){
+            b.addEventListener("click", function(){
+                ///let borderWidth = this.style.borderWidth;
+                let borderWidth = window.getComputedStyle(this).borderWidth;
+                console.log(borderWidth);
+                //1px => null
+                //this.style : 요소(인라인)스타일
+                // this.style.borderWidth="1em";
+                if(borderWidth === "1px"){
+                    this.style.borderWidth="1em";
+                } else {
+                    this.style.borderWidth="1px";
+                }
+            })
+        }
+        // 확대/축소에 의해서 border의 px단위가 변동이 됨;;;;;; 뭐지
+        // 1px가 논리적 단위라고 합니다
+
+    </script>
+    <style>
+        /*   .box :10점,  .box.selected : 20점  */
+        .box.selected{
+            border-width: 1em;
+            border-color: blue;
+
+        }
+
+    </style>
+    <hr>
+    <div style="display:flex" id="ex5">
+        <div class="box"></div>
+        <div class="box selected"></div>
+        <div class="box"></div>
+    </div>
+    <script>
+        //class를 스타일의 변수처럼 사용 : 부트스트랩, 프론트엔드 프레임워크
+        boxs=ex5.children;
+        const selectedHandler = function(){
+            this.classList.toggle("selected"); //selected가 없으면 추가, 있으면 삭제
+        }
+
+        for(let b of boxs){
+            b.addEventListener("click",selectedHandler);
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
