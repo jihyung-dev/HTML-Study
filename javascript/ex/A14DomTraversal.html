@@ -210,28 +210,70 @@ g<!DOCTYPE html>
         <div id="box7">
             <h4 class="title7">공지</h4>
             <h4>일반</h4>
+            <h4 class="title7">산불조심</h4>
+            <h4>일반</h4>
+            <h4 class="title7">물조심</h4>
+            <h4>일반</h4>
+            <h4>일반</h4>
+            <h4>일반</h4>
         </div>
     </section>
     <!-- 문제7 풀이 -->
     <script>
-        const q7 = document.querySelector("#q7");
-        const title7 = q7.querySelector("#box7").firstElementChild;
-        if (title7.matches(".title7")){
-            title7.classList.add("highlight");
+        // const q7 = document.querySelector("#q7");
+        // const title7 = q7.querySelector("#box7").firstElementChild;
+        // if (title7.matches(".title7")){
+        //     title7.classList.add("highlight");
+        // }
+    <!-- 문제7 풀이 [T]-->
+        // console.log(box7.children)
+        for (let h4 of box7.children){
+            if(h4.classList.contains("title7")){
+                h4.classList.add("highlight");
+            }
         }
     </script>
 
-
+    <style>
+        .on::after{
+            content: " on";
+        }
+    </style>
     <h3>문제 8. classList 토글</h3>
     지시: 아래 #notice 내부 .desc의 클래스 on을 토글하라.
+         + 버튼을 만들고 버튼을 누르면 on을 toggle하기
     <section id="q8">
+        <button id="onToggleBtn">on toggle</button>
+        <br><br>
         <div id="notice8">
-            <p class="desc"></p>
+            <p class="desc8 on">보이는 설명</p>
+            <p class="desc8">보이는 설명</p>
+            <p class="desc8 on">보이는 설명</p>
+            <p class="desc8 on">보이는 설명</p>
+            <p class="desc8">보이는 설명</p>
+            <p class="desc8 on">보이는 설명</p>
+            <p>???</p>
         </div>
     </section>
     <!-- 문제8 풀이   -->
     <script>
-        q8.querySelector(".desc").classList.toggle('on');
+        // q8.querySelector(".desc").classList.toggle('on');
+    <!-- 문제8 풀이 [T]  -->
+        const notice=document.querySelector("#notice8");
+        const descList=notice.querySelectorAll(".desc")
+        const onToggleBtn=document.querySelector("#onToggleBtn")
+
+        const onToggleHandler=()=>{
+            for(let desc of notice.querySelectorAll(".desc8")){
+                desc.classList.toggle("on");
+            }
+        }
+        // onToggleBtn.onclick=onToggleHandler; //직접정의 : 하나의 함수만 정의가능
+        onToggleBtn.addEventListener("click", onToggleHandler); //간접정의
+        // 사용하는 이유
+        // 복수의 콜백함수를 정의할 수 있음
+
+
     </script>
     <!-- 어떤때는 const를 선언하고 어떤때는 선언안하고하고 무슨차이지 ' ' -->
 
@@ -248,56 +290,106 @@ g<!DOCTYPE html>
             <ul class="list">
                 <li class="item9">1</li>
                 <li class="item9">2</li>
+                <li class="item9">3</li>
             </ul>
         </section>
     </section>
-    <!-- 문제9 풀이   -->
+    <!-- 문제9 풀이 -->
     <script>
          // const q9 = document.querySelector("#q9"); //없어두 작동이되네 신기하네
         // const section9 = document.querySelector(".section9");
         // const item9 = document.querySelector(".item9");
         // section9.contains.classList.add("selected");
         //정답
-        q9.querySelector(".list").firstElementChild.classList.add("selected");
+        // q9.querySelector(".list").firstElementChild.classList.add("selected");
+    <!-- 문제9 풀이 [T] -->
+
+         const selectBtn=q9.querySelector("#q9>.section9>.toolbar9>.btn9");
+         // const items=q9.querySelectorAll(".list>.item9");
+         const q9List=q9.querySelector(".list")
+         console.log(q9List);
+         selectBtn.addEventListener("click", ()=>{
+            q9List.children[0].classList.toggle("selected");
+        });
     </script>
 
 
     <h3>문제 10. 텍스트 노드 건너뛰기</h3>
     지시: 요소 전용 형제 이동을 사용하여
          두 번째 span 의 텍스트 뒤에 “!”를 추가하라. (nextElementSibling 사용)
-    section#q10>div.wrap10>span*2
+<!--    section#q10>div.wrap10>span*2-->
     <section id="q10">
-        <div class="wrap10">
+        <div id="wrap10">
             <span>X</span>
+            <!-- 주석 -->
             <span>Y</span>
         </div>
     </section>
 <!-- 문제10 풀이   -->
     <script>
-    q10.querySelector(".wrap10").firstElementChild.nextElementSibling.textContent += "!";
+    // q10.querySelector(".wrap10").firstElementChild.nextElementSibling.textContent += "!";
+<!-- 문제10 풀이 [T]  -->
+    console.log(wrap10.children[0].nextSibling); //주석을 찾아버림
+    console.log(wrap10.children[0].nextElementSibling); //주석을 건너띄고 노드 찾기
+    wrap10.children[0].nextElementSibling.innerText+="!";
+
     </script>
 
     <section id="q11">
         <h3>문제 11. 부모로 올라가 타이틀 수정</h3>
         지시: .more에서 부모(.body)를 거쳐 카드 루트(.card)로 올라간 후,
         그 안의 .title에 클래스 open을 추가하라.
+        <br><br>
         <div class="card11">
-            <h3 class="title11">제목</h3>
+            <h3 class="title11">제목1</h3>
+            <div class="body11">
+                <button class="more11">더보기</button>
+            </div>
+        </div>
+        <div class="card11">
+            <h3 class="title11">제목2</h3>
+            <div class="body11">
+                <button class="more11">더보기</button>
+            </div>
+        </div>
+        <div class="card11">
+            <h3 class="title11">제목3</h3>
             <div class="body11">
                 <button class="more11">더보기</button>
             </div>
         </div>
     </section>
-<!-- 문제11 풀이   -->
+<!-- 문제11 풀이 -->
     <script>
-        const more11 = q11.querySelector(".more11")
-        more11.closest(".card11").querySelector(".title11").classList.add("open");
+        // const more11 = q11.querySelector(".more11")
+        // more11.closest(".card11").querySelector(".title11").classList.add("open");
+<!-- 문제11 풀이 [T] -->
+        const moreBtns=q11.querySelectorAll(".card11 .more11") //사이띄게 : 자손 찾기
+        console.log(moreBtns);
+        for(let btn of moreBtns){
+            btn.addEventListener("click", (e)=>{
+                // event object : 이벤트에 대한 발생정보
+                // e.target : 이벤트가 발생한 타겟
+                // e.currentTarget : 이벤트를 정의한 타겟??
+                // this (X)
+                // console.log(e.target);
+                // console.log(e.currentTarget);
+                //자식에게 이벤트를 줬을땐 괜찮은데
+                //부모한테 이벤트를 줄때에는 잘 구분해야함
+                let card=e.currentTarget.closest(".card11");;
+                // console.log(card)
+                card.querySelector(".title11").classList.toggle("open");
+            })
+        }
+
     </script>
 
 
     <section id="q12">
         <h3>문제 12. 특정 인덱스 자식 교체</h3>
         지시: 아래 #steps의 두 번째 항목(children[1]) 텍스트를 “검토”로 바꿔라.
+        <br>
+        <br>
         <ol id="steps12">
             <li>시작</li>
             <li>중간</li>
@@ -306,27 +398,57 @@ g<!DOCTYPE html>
     </section>
 <!-- 문제12 풀이   -->
     <script>
-        q12.querySelector("#steps12").children[1].textContent = "검토";
+        // q12.querySelector("#steps12").children[1].textContent = "검토";
+<!-- 문제12 풀이 [T] -->
+        steps12.children[1].innerText="검토";
     </script>
 
 
     <section id="q13">
         <h3>문제 13. data-* 읽고 쓰기</h3>
         지시: #product의 data-stock 값을 읽어 0이면 “(품절)”, 아니면 “(재고: n)”을 .name 뒤에 추가하라.
-        <div id="product" data-id="A-100" data-stock="7"><br>
+        <br>
+        <br>
+        <p>
+            <button id="stockBtn">재고확인</button>
+        </p>
+        <div class="product" data-id="A-100" data-stock="7"><br>
             <span class="name">키보드</span>
         </div>
+        <div class="product" data-id="A-177" data-stock="0"><br>
+            <span class="name">모니터</span>
+        </div>
+        <div class="product" data-id="A-179" data-stock="20"><br>
+            <span class="name">마우스</span>
+        </div>
+
     </section>
 <!-- 문제13 풀이   -->
     <script>
-        const product = document.querySelector("#product");
-        const stock = product.dataset.stock;
-        const name = product.querySelector(".name");
-        if (stock==="0") {
-            name.textContent += "(품절)"
-        } else {
-            name.textContent += ` (재고: ${stock})`;
+        // const product = document.querySelector("#product");
+        // const stock = product.dataset.stock;
+        // const name = product.querySelector(".name");
+        // if (stock==="0") {
+        //     name.textContent += "(품절)"
+        // } else {
+        //     name.textContent += ` (재고: ${stock})`;
+        // }
+<!-- 문제13 풀이 [T] -->
+        const products = document.querySelectorAll("#q13 .product")
+        console.log(products);
+        const stockHandler=()=>{
+            for(let p of products){
+                let stock=p.dataset.stock; //7 or 0 or 20 => 문자열
+                let nameNode=p.querySelector(".name");
+                if (stock>0){
+                    nameNode.innerText+=` (재고: ${stock})`;
+                } else {
+                    nameNode.innerText+=` (품절)`;
+                }
+            }
         }
+        stockBtn.addEventListener("click", stockHandler);
+        //이걸 토글식으로 하려면 ?
     </script>
 
 
@@ -334,15 +456,33 @@ g<!DOCTYPE html>
         <h3>문제 14. style 수정</h3>
         지시: .panel 내부 .msg의 글자색을 red, 글자 크기를 20px로 바꿔라.
         <div class="panel"><br>
+            <p class="">알림</p>
+            <p class="">알림</p>
+            <p class="msg">알림</p>
+            <p class="">알림</p>
             <p class="msg">알림</p>
         </div>
     </section>
 <!-- 문제14 풀이   -->
     <script>
-        const panel = document.querySelector(".panel");
-        const msg = panel.querySelector(".msg");
-        msg.style.color = "red";
-        msg.style.fontSize = "20px";
+        // const panel = document.querySelector(".panel");
+        // const msg = panel.querySelector(".msg");
+        // msg.style.color = "red";
+        // msg.style.fontSize = "20px";
+<!-- 문제14 풀이 [T] -->
+        let msgs=document.querySelectorAll("#q14 .msg");
+        console.log(msgs)
+        for (let msg of msgs){
+
+            // msg.style.color="red";
+            // msg.style.fontSize="20px";
+            //Object.assign(객체,필드[})
+            let styleObj={
+                color:"blue",
+                fontSize:"30px",
+            }
+            Object.assign(msg.style,styleObj)
+        }
     </script>
 
 
@@ -379,11 +519,20 @@ g<!DOCTYPE html>
             // }
 
             //forEach
+            /*
             const lists = document.querySelectorAll(".posts li")
             lists.forEach((li, index) => {
                 li.textContent = `${index + 1}. ${li.textContent}`
             });
+            */
             //foreach li를 순회 하면서 index 추가
+            <!-- 문제16 풀이 [T]  -->
+            const q16Posts=q16.querySelector(".posts");
+            console.log(q16Posts);
+            let n=0;
+            for(let li of q16Posts.children){
+                li.innerText=`${++n}. ${li.innerText}`;
+            }
         </script>
 
 
@@ -402,9 +551,19 @@ g<!DOCTYPE html>
     </section>
 <!-- 문제17 풀이   -->
     <script>
-        const input = document.querySelectorAll("input");
-        const email = input[1];
-        email.closest(".row").innerHTML += "(필수)";
+        // const input = document.querySelectorAll("input");
+        // const email = input[1];
+        // email.closest(".row").innerHTML += "(필수)";
+<!-- 문제17 풀이 [T] -->
+        const emailInput=document.querySelector("[type='email']")
+        emailInput.previousSibling.textContent+="(필수)";
+        console.log(emailInput)
+        // const rows = q17.querySelectorAll(".row");
+        // console.log(rows)
+        // console.log(rows[1].children)
+        // console.log(rows[1].firstChild)
+        //textNode
+        // rows[1].firstChild.textContent+="(필수)";
     </script>
 
 
@@ -426,23 +585,25 @@ g<!DOCTYPE html>
     </section>
 <!-- 문제18 풀이   -->
     <script>
+        /*
         const rightboard = document.querySelector(".board .right");
         console.log(rightboard)
-        let cell = rightboard.firstElementChild;
-        console.log(cell)
 
         for (let li of rightboard.children) {
             li.textContent += " (R)";
         }
-
+        */
         // const cells = board.querySelectorAll(".row");
         // board.querySelector(".right>li").textContent += ("(R)"); //하나만 적용가능
         // 반복문 사용
         // for(i=0; i<3; i++){
         //     board.li.textContent += `(R)`;
         // }
-
-
+<!-- 문제18 풀이 [T] -->
+        const rightUl=q18.querySelector(".right");
+        for(let li of rightUl.children){
+            li.innerText+=`(R)`
+        }
     </script>
 
 
@@ -450,12 +611,57 @@ g<!DOCTYPE html>
         <h3>문제 19. 캐러셀 인디케이터 이동</h3>
         지시: 현재 .active를 다음 형제 .dot으로 이동시켜라.
         (마지막이면 이동하지 않아도 됨)
+        ++ 버튼으로 이동하도록
+<!--        p>btn#nextDotBtn{다음 닷}-->
+        <br><br>
+        <p>
+            <button id="nextDotBtn">다음 닷</button>
+        </p>
         <ol class="dots">
             <li class="dot active">•</li>
             <li class="dot">•</li>
             <li class="dot">•</li>
         </ol>
     </section>
+    <!-- 문제19 풀이   -->
+    <script>
+        // const dots = document.querySelector(".dots")
+        // console.log(dots)
+        // dots.children
+    <!-- 문제19 풀이 [T] --> // 어웅 어렵다리
+        const nextDotBtn=document.querySelector("#nextDotBtn");
+        const dotsUl=document.querySelector("#q19 .dots");
+        const nextDotBtnHandler=()=>{
+            let activeIndex=0;
+            for(let i=0; i<dotsUl.children.length;i++){
+                let li=dotsUl.children[i];
+                if(li.classList.contains("active")){
+                    activeIndex=i;
+                    li.classList.remove("active");
+                    break;
+                }
+            }
+            if(activeIndex!==dotsUl.children.length-1){
+            dotsUl.children[activeIndex+1].classList.add("active");
+            } else {
+                dotsUl.children[0].classList.add("active");
+            }
+        }
+        //이렇게 안해도 된다 !
+        const nextDotBtnHandler2=()=>{
+          let activeNode=dotsUl.querySelector(".active");
+          activeNode.classList.remove("active");
+          if(activeNode.nextElementSibling){
+            activeNode.nextElementSibling.classList.add("active");
+          } else {
+              dotsUl.children[0].classList.add("active");
+          }
+        }
+        nextDotBtn.addEventListener("click",nextDotBtnHandler2);
+
+
+    </script>
+
 
     <section id="q20">
         <h3>문제 20. parent→children 체인으로 타이틀 교체</h3>
@@ -466,6 +672,10 @@ g<!DOCTYPE html>
             <div class="grid">...</div>
         </section>
     </section>
+<!-- 문제19 풀이 [T] -->
+    <script>
+        gallery.children[0].children[0].innerText="사진 모음"
+    </script>
 
 
 </body>

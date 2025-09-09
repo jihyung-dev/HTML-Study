@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>노드를 수정 삭제</title>
+</head>
+<body>
+    <h1>노드를 수정 삭제 이동</h1>
+
+    <li id="moveLi">무브</li>
+    <ul id="parent">
+        <li>01</li>
+        <li id="target">02</li>
+        <li>03</li>
+    </ul>
+<!-- 목표 : li를 target으로 이동  -->
+    <p>
+        <button id="appendBtn">parent.append(moveLi)</button>
+        <button id="prependBtn">parent.prependBtn(moveLi)</button>
+    </p>
+
+    <p>
+        <button id="afterBtn">target.after(moveLi)</button>
+        <button id="beforeBtn">target.before(moveLi)</button>
+    </p>
+
+    <script>
+        // append와 prepend는 부모를 기준으로 자식의 맨앞/뒤로 이동
+        const parent=document.querySelector('#parent');
+        appendBtn.addEventListener('click', (e)=>{
+            parent.append(moveLi)
+        })
+        prependBtn.addEventListener('click', (e)=>{
+            parent.prepend(moveLi)
+        })
+
+        // after와 before는 나를 기준으로 (형제의) 앞/뒤로 이동
+        afterBtn.addEventListener('click', (e)=>{
+            target.after(moveLi)
+        })
+        beforeBtn.addEventListener('click', (e)=>{
+            target.before(moveLi)
+        })
+
+    </script>
+
+</body>
+</html>

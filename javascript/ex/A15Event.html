@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="js">
+<head>
+    <meta charset="UTF-8">
+    <title>자바스크립트의 이벤트</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+<hr>
+<h1>이벤트로 스타일 변경 문제</h1>
+<section>
+    <h2>공통 스타일 & 안내</h2>
+    <ul>
+        <li>.box는 클릭/호버 테스트용 요소입니다.</li>
+        <li>각 문제의 JS에는 복수 이벤트(예: click + mouseenter) 또는 동일 이벤트의 다중 핸들러가 미리 연결되어 있습니다.</li>
+        <li>TODO 부분을 학생이 채워 넣어 동작을 완성하세요.</li>
+    </ul>
+    <style>
+        .wrap { display:flex; gap:1em; margin:1em 0; }
+        .box  { width:5em; height:5em; border:1px solid #333; background:#e8f4ff; transition:all 1s ease-in-out; display:flex; align-items:center; justify-content:center; user-select:none;}
+
+        .selected { border-width:1em; border-color:steelblue; }
+        .shadowed { box-shadow:0 8px 16px rgba(0,0,0,.2); }
+        .round { border-radius:1em; }
+        .styled { width:10em; height:10em; border: 3px; }
+    </style>
+</section>
+
+<section id="p1">
+    <h3>문제 1. 클릭 시 배경색 변경, 호버 시 테두리 두께 변경</h3>
+    <p>구현 팁: <code>click</code>, <code>mouseenter</code>, <code>mouseleave</code> 이벤트를 활용하세요.</p>
+    <div class="box">P1</div>
+</section>
+    <!--문제.1 풀이-->
+    <script>
+        const box1 = p1.querySelector(".box");
+        box1.onclick = function(){
+            box1.style.backgroundColor="red";
+        }
+        box1.addEventListener("mouseenter",function(){
+            box1.style.borderWidth="5px";
+        });
+        box1.addEventListener("mouseleave",function(){
+            box1.style.borderWidth="1px";
+        })
+    </script>
+
+
+<section id="p2">
+    <h3>문제 2. 더블클릭 시 스타일 토글, 우클릭 시 글자색 변경</h3>
+    <p>구현 팁: <code>dblclick</code>, <code>contextmenu</code> 이벤트를 활용하세요.</p>
+    <div class="box">P2</div>
+</section>
+    <!--문제.2 풀이-->
+    <script>
+        const box2 = p2.querySelector(".box");
+        box2.addEventListener("dblclick", function(){
+            box2.style.borderWidth="4px";
+            box2.style.borderColor="skyblue";
+        })
+        box2.addEventListener("contextmenu",function(){
+            box2.style.color="red";
+        })
+    </script>
+
+
+<section id="p3">
+    <h3>문제 3. 마우스를 누르고 있는 동안 크기 확대, 떼면 원래 크기</h3>
+    <p>구현 팁: <code>mousedown</code>, <code>mouseup</code> 이벤트를 활용하세요.</p>
+    <div class="box">P3</div>
+</section>
+    <!--문제.3 풀이-->
+    <script>
+        const box3 = p3.querySelector(".box");
+        box3.addEventListener("mousedown",function(){
+            box3.style.width = "10em";
+            box3.style.height = "10em";
+        })
+        box3.addEventListener("mouseup",function(){
+            box3.style.width = "5em";
+            box3.style.height = "5em";
+        })
+    </script>
+
+
+<section id="p4">
+    <h3>문제 4. 마우스 올리면 그림자 추가, 벗어나면 그림자 제거</h3>
+    <p>구현 팁: <code>mouseenter</code>, <code>mouseleave</code>로 클래스를 추가/제거하세요.</p>
+    <div class="box">P4</div>
+</section>
+    <!--문제.4 풀이-->
+    <script>
+        const box4 = p4.querySelector(".box");
+        box4.addEventListener("mouseenter",function(){
+            box4.classList.add("shadowed");
+        })
+        box4.addEventListener("mouseleave",function(){
+            box4.classList.remove("shadowed");
+        })
+    </script>
+
+
+<section id="p5">
+    <h3>문제 5. 클릭 시 배경 노랑, 더블클릭 시 배경 초록</h3>
+    <p>구현 팁: 같은 요소에 <code>click</code>과 <code>dblclick</code>을 각각 등록하세요.</p>
+    <div class="box">P5</div>
+</section>
+    <!--문제.5 풀이-->
+    <script>
+        const box5 = p5.querySelector(".box");
+        box5.addEventListener("click",function(){
+            box5.style.backgroundColor="yellow";
+        })
+        box5.addEventListener("dblclick",function(){
+            box5.style.backgroundColor="green";
+        })
+    </script>
+
+
+<section id="p6">
+    <h3>문제 6. 여러 박스를 클릭하면 각각 선택 상태 토글</h3>
+    <p>구현 팁: 반복문으로 모든 .box에 이벤트를 등록하세요.</p>
+    <div class="box">A</div>
+    <div class="box">B</div>
+    <div class="box">C</div>
+</section>
+    <!--문제.6 풀이-->
+    <script>
+        const box6 = p6.querySelectorAll(".box");
+        for(const box of box6){
+            box.addEventListener("click",function(){
+                this.classList.toggle("selected");
+            })
+        }
+    </script>
+
+
+<section id="p7">
+    <h3>문제 7. 부모 영역 하나에 이벤트를 달아 자식 박스 클릭 처리</h3>
+    <p>구현 팁: <code>event.target</code>을 사용해 실제 클릭된 요소를 판별하세요.</p>
+    <div class="wrap">
+        <div class="box">1</div>
+        <div class="box">2</div>
+        <div class="box">3</div>
+    </div>
+</section>
+    <!--문제.7 풀이-->
+    <script>
+        //event.target을 사용?
+
+        // const wrap = p7.querySelector(".wrap");
+        // wrap.addEventListener("click",function(){
+        //     this.classList.toggle("selected");
+        // })
+        // 이렇게 하면 div에만 달리는디용
+
+        const wrap = document.getElementById("p7");
+        wrap.addEventListener("click", (e) => {      // wrap요소에 click이벤트 리스너 등록 e:이벤트객체(Event object)
+            const target = e.target.closest(".box"); //e.target : 클릭이 실제로 발생한 가장 안쪽의 요소 => box
+            if (target) {                            //closest(".box") : e.target에서 출발하여 부모 방향 탐색,
+                target.classList.toggle("selected"); //                  가장 가까운 .box클래스 찾기
+            }                                        //  1) .box 자체 클릭 : e.target = .box, closest() = 자기자신
+        });                                          //  2) .box 내부 요소 클릭 : e.target = 그 내부요소, closest() 요소 부모 .box
+    </script>
+
+
+<section id="p8">
+    <h3>문제 8. 현재 테두리 두께를 확인해 1px이면 1em, 아니면 1px로 전환</h3>
+    <p>구현 팁: <code>getComputedStyle</code>을 사용하세요.</p>
+    <div class="box">P8</div>
+    <!-- 확인용   <div class="box" style="border-width: 2px">P8</div>-->
+</section>
+    <!--문제.8 풀이-->
+<script>
+    const box8 = p8.querySelector(".box");
+    if ((window.getComputedStyle(box8).borderWidth)==="1px"){
+        box8.style.borderWidth="1em";
+    } else {
+        box8.style.borderWidth="1px";
+    }
+</script>
+
+
+<section id="p9">
+    <h3>문제 9. 클릭 시 두 가지 동작 모두 실행</h3>
+    <p>구현 팁: 같은 요소에 <code>addEventListener</code>를 두 번 써보세요.</p>
+    <div class="box">P9</div>
+</section>
+    <!--문제.9 풀이-->
+<script>
+    const box9 = p9.querySelector(".box");
+    box9.addEventListener("click", function(){
+        box9.style.backgroundColor="yellow";
+    })
+    box9.addEventListener("click", function(){
+        box9.style.borderWidth="15px";
+    })
+</script>
+
+
+<section id="p10">
+    <h3>문제 10. 마우스를 올리면 테두리 색 빨강, 벗어나면 검정으로</h3>
+    <p>구현 팁: <code>mouseover</code>, <code>mouseout</code>을 활용하세요.</p>
+    <div class="box">P10</div>
+</section>
+    <!--문제.10 풀이-->
+<script>
+    const box10 = p10.querySelector(".box");
+    box10.addEventListener("mouseover",function(){
+        box10.style.borderColor="red";
+    })
+    box10.addEventListener("mouseout",function(){
+        box10.style.borderColor="black";
+    })
+</script>
+
+
+<section id="p11">
+    <h3>문제 11. 클릭할 때마다 글자 크기를 점점 키우기</h3>
+    <p>구현 팁: 클릭 횟수를 세어서 <code>fontSize</code>를 늘려 보세요.</p>
+    <div class="box">P11</div>
+</section>
+    <!--문제.11 풀이-->
+    <script>
+        const box11 = p11.querySelector(".box");
+        let fontSize = 16;
+        box11.addEventListener("click",function(){
+            fontSize += 2;
+            box11.style.fontSize= `${fontSize}px`;
+        })
+    </script>
+
+
+<section id="p12">
+    <h3>문제 12. 마우스 올리면 박스 모서리 둥글게, 벗어나면 원래대로</h3>
+    <p>구현 팁: <code>mouseenter</code>, <code>mouseleave</code>로 <code>borderRadius</code>를 조절하세요.</p>
+    <div class="box">P12</div>
+</section>
+    <!--문제.12 풀이-->
+    <script>
+        const box12 = p12.querySelector(".box");
+        box12.addEventListener("mouseover",function(){
+            box12.style.borderRadius="50%";
+        })
+        box12.addEventListener("mouseout",function(){
+            box12.style.borderRadius="0%";
+        })
+    </script>
+
+
+<section id="p13">
+    <h3>문제 13. hover 중에는 배경색을 금색으로, 벗어나면 원래대로</h3>
+    <p>구현 팁: <code>mouseenter</code>, <code>mouseleave</code>에서 <code>backgroundColor</code>를 변경하세요.</p>
+    <div class="box">P13</div>
+</section>
+    <!--문제.13 풀이-->
+    <script>
+        const box13 = p13.querySelector(".box");
+        box13.addEventListener("mouseover",function(){
+            box13.style.backgroundColor="gold";
+        })
+        box13.addEventListener("mouseout",function(){
+            box13.style.backgroundColor="#e8f4ff";
+        })
+    </script>
+
+
+<section id="p14">
+    <h3>문제 14. 부모 영역에 마우스를 올리면 모든 자식 둥글게, 클릭 시 개별 토글</h3>
+    <p>구현 팁: 부모에 <code>mouseenter</code>/<code>mouseleave</code>로 자식 전체에
+        스타일 적용, <code>click</code>으로 개별 토글하세요.</p>
+    <div class="wrap">
+        <div class="box">X</div>
+        <div class="box">Y</div>
+        <div class="box">Z</div>
+    </div>
+</section>
+    <!--문제.14 풀이-->
+<script>
+    const wrap = p14.querySelector(".wrap");
+    wrap.addEventListener("mouseenter", function(){
+
+    })
+</script>
+
+
+<section id="p15">
+    <h3>문제 15. 클릭 시 현재 스타일을 콘솔에 출력하고, 선택/둥글기/그림자 중 하나를 토글</h3>
+    <p>구현 팁: <code>getComputedStyle</code>로 현재 스타일을 확인한 뒤, <code>classList.toggle</code>을 사용하세요.</p>
+    <div class="box">P15</div>
+</section>
+<section id="event-loop-theory">
+    <h2>이벤트 루프 이론 문제 (5)</h2>
+    <ul>
+        <li>문제 16. 자바스크립트 엔진이 “싱글 스레드”라는 말의 의미를 간단히 설명하라.</li>
+        <li>문제 17. 이벤트가 발생했을 때 핸들러 콜백이 곧바로 실행되지 않고 “큐”를 거치는 이유를 설명하라.</li>
+        <li>문제 18. Call Stack이 비지 않으면 큐에 쌓인 이벤트 콜백은 언제 실행되는가? 간단히 설명하라.</li>
+        <li>문제 19. 동기 코드와 이벤트 콜백(비동기 처리)의 실행 순서가 결정되는 원리를 한 문장으로 요약하라.</li>
+        <li>문제 20. “렌더링 기회(그리기 과정)”와 이벤트 처리의 관계를 간단히 서술하라. (타이밍 함수 언급 없이 개념만)</li>
+    </ul>
+</section>
+<h1>문제 정답</h1>
+<section>
+    <h3>문제 1. 클릭 시 배경색 변경, 호버 시 테두리 두께 변경</h3>
+    <pre><code>// 클릭 시 배경 빨강
+el.addEventListener("click", () => {
+  el.style.backgroundColor = "red";
+});
+// 마우스 진입 시 테두리 두껍게
+el.addEventListener("mouseenter", () => {
+  el.style.borderWidth = "1em";
+});
+// 마우스 이탈 시 원래 두께
+el.addEventListener("mouseleave", () => {
+  el.style.borderWidth = "1px";
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 2. 더블클릭 시 스타일 토글, 우클릭 시 글자색 변경</h3>
+    <pre><code>// 더블클릭 시 selected 토글
+el.addEventListener("dblclick", () => {
+  el.classList.toggle("selected");
+});
+// 우클릭 시 글자 보라색
+el.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+  el.style.color = "purple";
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 3. 마우스를 누르고 있는 동안 크기 확대, 떼면 원래 크기</h3>
+    <pre><code>// 마우스 누를 때 확대
+el.addEventListener("mousedown", () => {
+  el.style.transform = "scale(1.4)";
+});
+// 마우스 뗄 때 원래 크기
+el.addEventListener("mouseup", () => {
+  el.style.transform = "scale(1)";
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 4. 마우스 올리면 그림자 추가, 벗어나면 그림자 제거</h3>
+    <pre><code>el.addEventListener("mouseenter", () => {
+  el.classList.add("shadowed");
+});
+el.addEventListener("mouseleave", () => {
+  el.classList.remove("shadowed");
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 5. 클릭 시 배경 노랑, 더블클릭 시 배경 초록</h3>
+    <pre><code>el.addEventListener("click", () => {
+  el.style.backgroundColor = "yellow";
+});
+el.addEventListener("dblclick", () => {
+  el.style.backgroundColor = "green";
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 6. 여러 박스를 클릭하면 각각 선택 상태 토글</h3>
+    <pre><code>const boxes = document.querySelectorAll("#p6 .box");
+boxes.forEach(b => {
+  b.addEventListener("click", () => {
+    b.classList.toggle("selected");
+  });
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 7. 부모에 이벤트를 달아 자식 박스 클릭 처리</h3>
+    <pre><code>const wrap = document.getElementById("p7");
+wrap.addEventListener("click", (e) => {
+  const target = e.target.closest(".box");
+  if (target) {
+    target.classList.toggle("selected");
+  }
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 8. 현재 테두리 두께를 확인해 1px이면 1em, 아니면 1px</h3>
+    <pre><code>el.addEventListener("click", () => {
+  const bw = getComputedStyle(el).borderWidth;
+  if (bw === "1px") {
+    el.style.borderWidth = "1em";
+  } else {
+    el.style.borderWidth = "1px";
+  }
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 9. 클릭 시 두 가지 동작 모두 실행</h3>
+    <pre><code>el.addEventListener("click", () => {
+  el.style.backgroundColor = "purple";
+});
+el.addEventListener("click", () => {
+  el.style.fontWeight = "bold";
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 10. 마우스를 올리면 테두리 빨강, 벗어나면 검정</h3>
+    <pre><code>el.addEventListener("mouseover", () => {
+  el.style.borderColor = "red";
+});
+el.addEventListener("mouseout", () => {
+  el.style.borderColor = "#333";
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 11. 클릭할 때마다 글자 크기를 점점 키우기</h3>
+    <pre><code>let count = 0;
+el.addEventListener("click", () => {
+  count++;
+  el.style.fontSize = (16 + count) + "px";
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 12. 마우스 올리면 모서리 둥글게, 벗어나면 원래대로</h3>
+    <pre><code>el.addEventListener("mouseenter", () => {
+  el.style.borderRadius = "1em";
+});
+el.addEventListener("mouseleave", () => {
+  el.style.borderRadius = "0";
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 13. hover 중 배경색 금색, 벗어나면 원래대로</h3>
+    <pre><code>el.addEventListener("mouseenter", () => {
+  el.style.backgroundColor = "gold";
+});
+el.addEventListener("mouseleave", () => {
+  el.style.backgroundColor = "";
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 14. 부모 영역 hover 시 자식 모두 둥글게, 클릭 시 개별 토글</h3>
+    <pre><code>const wrap = document.getElementById("p14");
+const children = wrap.querySelectorAll(".box");
+
+wrap.addEventListener("mouseenter", () => {
+  children.forEach(c => c.classList.add("round"));
+});
+wrap.addEventListener("mouseleave", () => {
+  children.forEach(c => c.classList.remove("round"));
+});
+wrap.addEventListener("click", (e) => {
+  const target = e.target.closest(".box");
+  if (target) {
+    target.classList.toggle("selected");
+  }
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 15. 클릭 시 현재 스타일 출력 후 상태 토글</h3>
+    <pre><code>el.addEventListener("click", () => {
+  const cs = getComputedStyle(el);
+  console.log("배경:", cs.backgroundColor, "테두리:", cs.borderWidth);
+  el.classList.toggle("selected");
+});
+
+el.addEventListener("mouseenter", () => {
+  el.classList.add("shadowed");
+});
+el.addEventListener("mouseleave", () => {
+  el.classList.remove("shadowed");
+});</code></pre>
+</section>
+
+<section>
+    <h3>문제 16. 자바스크립트 엔진이 “싱글 스레드”라는 의미</h3>
+    <pre><code>한 번에 하나의 작업만 Call Stack에서 실행할 수 있다는 뜻</code></pre>
+</section>
+
+<section>
+    <h3>문제 17. 이벤트가 큐를 거치는 이유</h3>
+    <pre><code>동기 코드 실행을 방해하지 않고, 실행 순서를 제어하기 위해 이벤트 콜백은 큐에 들어갔다가 실행된다.</code></pre>
+</section>
+
+<section>
+    <h3>문제 18. Call Stack이 비지 않으면 콜백은 언제 실행?</h3>
+    <pre><code>현재 실행 중인 코드가 모두 끝나 Stack이 비워진 후, 이벤트 루프가 큐에서 꺼내 실행한다.</code></pre>
+</section>
+
+<section>
+    <h3>문제 19. 동기 코드와 비동기 콜백의 실행 순서 원리</h3>
+    <pre><code>동기 코드는 즉시 실행되고, 비동기 콜백은 큐에 들어가며, Stack이 비면 이벤트 루프가 실행한다.</code></pre>
+</section>
+
+<section>
+    <h3>문제 20. 렌더링 기회와 이벤트 처리 관계 — 상세 해설</h3>
+    <ul>
+        <li>한 틱(루프)의 큰 흐름
+            <ul>
+                <li>① 하나의 작업(Task: 사용자 이벤트 등)을 실행한다.</li>
+                <li>② 그 작업 중 예약된 모든 <strong>Microtask</strong>(예: Promise 후속 작업)를 <strong>전부</strong> 비울 때까지 실행한다.</li>
+                <li>③ 화면에 바뀐 점이 있고 시간 여유가 있으면 브라우저가 <strong>렌더링 단계</strong>를 수행한다.</li>
+            </ul>
+        </li>
+        <li>렌더링 단계(있을 때)
+            <ul>
+                <li><strong>Style Recalc</strong>: 바뀐 클래스/인라인 스타일/상속 등을 반영해 최종 스타일을 다시 계산한다.</li>
+                <li><strong>Layout(Reflow)</strong>: 요소의 크기·위치 등 기하(geometry)를 다시 계산한다. (width/height/margin 등 레이아웃에 영향 주는 변경이 있을 때)</li>
+                <li><strong>Paint</strong>: 색/배경/테두리/텍스트/그림자 등 픽셀을 다시 그린다.</li>
+                <li><strong>Composite</strong>: 레이어를 합성해 화면에 표시한다. (transform/opacity처럼 합성만으로 끝나는 변경도 있음)</li>
+            </ul>
+        </li>
+        <li>렌더링이 <strong>지연·생략</strong>될 수 있는 경우
+            <ul>
+                <li>현재 틱에서 시각적 변화가 없을 때(계산 결과 동일).</li>
+                <li>탭이 백그라운드/비활성인 경우(빈도 크게 낮아지거나 일시 정지될 수 있음).</li>
+                <li>자바스크립트 실행(특히 Microtask)이 길어 <strong>프레임 예산</strong>을 초과하면 그리기가 다음 틱으로 밀린다.</li>
+            </ul>
+        </li>
+        <li>실무적으로 중요한 점
+            <ul>
+                <li><strong>Microtask가 모두 끝나야</strong> 렌더링 기회가 온다. Microtask를 과도하게 쌓으면 그리는 시점이 지연된다.</li>
+                <li>DOM 읽기(예: <code>getComputedStyle</code>, <code>offsetWidth</code>)와 쓰기(스타일/클래스 변경)를 <strong>섞어 반복</strong>하면 동기 레이아웃이 강제되어 느려질 수 있다. 읽기들을 먼저 모아서 하고, 그다음 쓰기를 모아서 하라.</li>
+                <li>변경 성질에 따라 비용이 다르다:
+                    <ul>
+                        <li><strong>Layout 발생 가능</strong>: width/height/top/left/margin/padding/font-size, DOM 추가/삭제 등</li>
+                        <li><strong>Paint 중심</strong>: color/background/border/box-shadow 등</li>
+                        <li><strong>Composite 중심</strong>(상대적으로 가벼움): transform, opacity (브라우저/상황에 따라 다를 수 있음)</li>
+                    </ul>
+                </li>
+                <li>스타일 변경은 가능하면 <strong>클래스 토글</strong>로 배치해 전환을 한 번에 일으키고, 인라인 스타일 난발을 피하라(특이성·유지보수·성능 측면).</li>
+            </ul>
+        </li>
+        <li>요약 한 문장
+            <ul>
+                <li><strong>이벤트 콜백(Task) 실행 → 모든 Microtask 소진 → 필요 시 스타일·레이아웃·페인트·합성으로 그리기</strong> 순서이며, Microtask가 길거나 시각 변화가 없으면 그리기는 지연되거나 생략된다.</li>
+            </ul>
+        </li>
+    </ul>
+</section>
+<section>
+    <h2>이벤트 객체(Event Object)</h2>
+    <ul>
+        <li>이벤트가 발생하면 브라우저는 자동으로 <code>Event 객체</code>를 생성하여 핸들러 함수의 첫 번째 인자로 전달한다.</li>
+        <li>이 객체에는 이벤트에 대한 다양한 정보와 속성이 들어 있다.</li>
+        <li>공통 속성:
+            <ul>
+                <li><code>type</code>: 이벤트 종류 (예: "click")</li>
+                <li><code>target</code>: 이벤트가 발생한 실제 요소</li>
+                <li><code>currentTarget</code>: 이벤트 핸들러가 등록된 요소</li>
+                <li><code>bubbles</code>: 이벤트 버블링 여부 (true/false)</li>
+                <li><code>defaultPrevented</code>: 기본 동작 취소 여부</li>
+                <li><code>preventDefault()</code>: 기본 동작 취소</li>
+                <li><code>stopPropagation()</code>: 이벤트 전파 중단</li>
+            </ul>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>마우스 이벤트 속성</h2>
+    <ul>
+        <li><code>clientX, clientY</code>: 브라우저 창 기준 좌표</li>
+        <li><code>pageX, pageY</code>: 문서 전체 기준 좌표</li>
+        <li><code>screenX, screenY</code>: 모니터 화면 기준 좌표</li>
+        <li><code>button</code>: 누른 마우스 버튼 (0:왼쪽, 1:휠, 2:오른쪽)</li>
+        <li><code>buttons</code>: 동시에 눌린 버튼 비트값</li>
+        <li><code>altKey, ctrlKey, shiftKey, metaKey</code>: 조합 키 상태</li>
+        <li><code>relatedTarget</code>: mouseover/mouseout 시 진입·이탈한 요소</li>
+    </ul>
+</section>
+
+<section>
+    <h2>키보드 이벤트 속성</h2>
+    <ul>
+        <li><code>key</code>: 실제 눌린 키 값 (예: "a", "Enter")</li>
+        <li><code>code</code>: 키보드 물리적 위치 코드 (예: "KeyA")</li>
+        <li><code>keyCode</code>: 과거 방식 (숫자 코드, 현재는 비추천)</li>
+        <li><code>altKey, ctrlKey, shiftKey, metaKey</code>: 조합 키 상태</li>
+        <li><code>repeat</code>: 키가 길게 눌려 반복 입력 중인지 여부</li>
+    </ul>
+</section>
+
+<section>
+    <h2>폼 이벤트 속성</h2>
+    <ul>
+        <li><code>target.value</code>: 입력 요소의 현재 값</li>
+        <li><code>target.checked</code>: 체크박스/라디오 버튼 선택 상태</li>
+        <li><code>target.selectedIndex</code>: 선택된 옵션의 인덱스</li>
+    </ul>
+</section>
+
+<section>
+    <h2>윈도우/문서 이벤트 속성</h2>
+    <ul>
+        <li><code>scrollX, scrollY</code>: 현재 스크롤 위치</li>
+        <li><code>innerWidth, innerHeight</code>: 브라우저 뷰포트 크기</li>
+        <li><code>event.timeStamp</code>: 이벤트 발생 시각(ms)</li>
+    </ul>
+</section>
+</body>
+</html>
