@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>노드 생성 및 추가</title>
+</head>
+<body>
+    <h1>노드 생성 및 추가</h1>
+    <div id="container"></div>
+    <p>
+        <button id="innerHTMLBtn">innerHTML</button>
+        <button id="appendBtn">append(b)</button>
+    </p>
+    <script>
+        //노드를 생성!!
+        innerHTMLBtn.addEventListener("click", e=>{
+            // container.innerHTML=`<b>안녕</b>`
+            container.innerHTML=`
+                <table border="1">
+                    <tr>
+                        <th>a</th><th>b</th><th>c</th>
+                    </tr>
+                    <tr>
+                        <td>01</td><td>02</td><td>03</td>
+                    </tr>
+                </table>`
+        });
+        //"11px", "십일"=>11 : 파싱
+        //문자열을 특정 타입으로 변경하는 일은 어렵거나 불가능
+        //"<b>안녕</b>" => b요소개체로 만들어 (연산이 많이 발생)
+
+        appendBtn.addEventListener("click", e=>{
+            // container.append("<b>안녕!</b>") // 노드생성 X <b>안녕!</b> 그대로 출력
+            const bNode=document.createElement("b");
+            const textNode=document.createTextNode("안녕!")
+            bNode.append(textNode);
+            container.append(bNode);
+        });
+    </script>
+    <hr>
+    <h2>일정 어플 만들기</h2>
+    <li id="scheduleLiEx">
+        <span>일정 :</span>
+        <b class="value"></b>
+    </li>
+    <ul id="scheduleUl">
+        <li>일정: 양치</li>
+        <li>일정: 출근</li>
+        <li>일정: 퇴근</li>
+    </ul>
+                <!-- name : 고유 선택자, form내부에서만 유일함 -->
+                <!-- form안의 name은 필드로 인식-->
+    <form action="#" name="scheduleForm">
+        <label for="scheduleInput">일정 : </label>
+        <input type="text" value="저녁 밥" name="schedule" id="scheduleInput">
+    <p>
+    <!-- form.submit : action에 양식을 제출하는 이벤트, 다른페이지로 이동 -->
+        <button type="submit">제출</button>
+    </p>
+    </form>
+    <script>
+        //document.forms : html document내부의 모든 양식
+        //scheduleForm == document.form.scheduleForm
+        const scheduleForm=document.forms["scheduleForm"];
+
+        //아이디 식별자를 변수로 추가해주기
+        const scheduleUl=document.querySelector("#scheduleUl");
+
+        //form.name : 문서 전체에서 유일한 이름 (id)
+        //form.name > input.name : 입력요소의 이름은 양식내에서 유일하다.(양식의 필드취급)
+
+        const createLi= e=>{
+            e.preventDefault(); //(다른페이지로 이동 및 제출) 기본동작 삭제
+
+            //Form의 schedule로 사용가능한 선택자
+            //scheduleForm.schedule, scheduleInput, e.target or e.currenTarget
+
+            let value=scheduleForm.schedule.value;
+            console.log(value)
+            //권장하지 않는 방법 (3가지)
+            // scheduleUl.innerHTML=`<li>${value}</li>`;
+            // scheduleUl.innerHTML+=`<li>${value}</li>`;  이렇게 하면안되나욤 : A: 가능
+            // scheduleUl.insertAdjacentHTML("beforeend", `<li>${value}</li>`);
+
+            //권장방법
+            let li=document.createElement("li");
+            let text=document.createTextNode("일정: "+value);
+            li.append(text);
+            scheduleUl.append(li);
+        }
+        const liEx=document.querySelector("#scheduleLiEx");
+
+        //제출을 누르면 추가하고 제출하기 위해
+        const cloneLi=(e)=>{
+            e.preventDefault();
+
+            //object 복제 (노드 복제에 적합하지 않다.)
+            // {... a:10 b:{1,3,4,}} => {a:10}
+            const cloneLi=liEx.cloneNode(true); //딥하게 복제 한다?
+
+            //id 식별자, display:none 은 지우고 추가
+            //cloneLi.id=""; //지우기
+            cloneLi.removeAttribute("id");
+            let value=e.target.schedule.value;
+            let text=document.createTextNode(value);
+
+            cloneLi.querySelector(".value").append(text);
+
+            scheduleUl.append(cloneLi)
+        }
+
+
+        //submit(제출)에 이벤트 추가
+        scheduleForm.addEventListener("submit", cloneLi);
+
+        // 복제
+
+
+    </script>
+
+</body>
+</html>

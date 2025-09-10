@@ -167,5 +167,111 @@
             <li><code>DocumentFragment</code> : 여러 노드를 임시로 모아 한 번에 삽입 → 성능 최적화</li>
         </ul>
     </section>
+    <section>
+        <h2>7.요소 노드 복제 (cloneNode)</h2>
+        <ul>
+            <li><code>node.cloneNode(deep)</code> : 현재 노드를 복제</li>
+            <li><code>deep</code> 매개변수
+                <ul>
+                    <li><code>false</code> (기본값) → 요소 노드 자체만 복제 (자식 노드 없음)</li>
+                    <li><code>true</code> → 요소와 그 안의 모든 자식 노드까지 전체 복제</li>
+                </ul>
+            </li>
+            <li>복제된 노드는 화면에 보이지 않으며, 반드시 <code>append()</code>, <code>before()</code> 등으로 문서에 삽입해야 함</li>
+            <li>복제 시 <strong>이벤트 핸들러는 복제되지 않음</strong> (다시 등록 필요)</li>
+            <li>활용 예시
+                <ul>
+                    <li>템플릿 형태의 요소를 복제하여 여러 개의 일정/게시글을 만들 때 사용</li>
+                    <li>같은 모양의 버튼, 카드 등을 반복적으로 찍어낼 때 효율적</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <style>
+        body { font-family: system-ui, sans-serif; line-height: 1.5; }
+        .wrap { max-width: 720px; margin: 24px auto; }
+        .toolbar { display: flex; gap: 8px; flex-wrap: wrap; }
+        .list { border: 2px solid #333; border-radius: 8px; padding: 12px; margin-top: 12px; }
+        .item { padding: 8px 10px; border-radius: 6px; background: #f2f6ff; margin: 6px 0; display: flex; justify-content: space-between; align-items: center; }
+        .meta { font-size: 0.9em; color: #555; }
+        .badge { font-size: 0.8em; padding: 2px 6px; border-radius: 999px; background: #dde5ff; margin-left: 6px; }
+        .danger { background: #ffeaea; }
+        .target { background: #e9ffe9; }
+        .muted { color: #777; font-size: 0.9em; }
+        form input { padding: 6px 8px; }
+        form button { padding: 6px 10px; }
+    </style>
+    <div class="wrap">
+        <h1>일정 앱 과제 (노드 추가/삽입 중심)</h1>
+
+        <!-- 입력 폼 -->
+        <form id="scheduleForm" class="toolbar" onsubmit="return false;">
+            <input id="titleInput" type="text" placeholder="제목" />
+            <input id="dateInput" type="datetime-local" />
+            <input id="placeInput" type="text" placeholder="장소(옵션)" />
+            <p>
+                <button id="addAppend">1.append로 추가</button>
+                <button id="addPrepend">2.prepend로 추가</button>
+                <button id="addBefore">3.before로 추가</button>
+                <button id="addAfter">4.after로 추가</button>
+            </p>
+        </form>
+
+        <!-- 안내 -->
+        <p class="muted">아래 문제 지시에 따라 스크립트를 작성하세요. innerHTML 남용 금지(문제에서 허용하는 경우만 사용).</p>
+
+        <!-- 일정 리스트 -->
+        <section class="list" id="scheduleList">
+            <div class="item target" id="anchorItem">
+                <div>
+                    <strong>팀 회의</strong>
+                    <span class="badge">기준(anchor)</span>
+                    <div class="meta">2025-09-10 10:00 · 회의실 A</div>
+                </div>
+                <button class="btnRemove">삭제</button>
+            </div>
+            <div class="item">
+                <div>
+                    <strong>리뷰 준비</strong>
+                    <div class="meta">2025-09-12 14:00 · 온라인</div>
+                </div>
+                <button class="btnRemove">삭제</button>
+            </div>
+        </section>
+
+        <hr />
+
+        <section>
+            <h2>노드 추가/삽입 과제 </h2>
+            <ul>
+                <li>
+                    문제 1. 폼의 입력값(제목/일시)을 이용해 새 일정 요소를 만들어
+                    <code>#scheduleList</code>에 <strong>append()</strong> 하시오.
+                </li>
+                <li>
+                    문제 2. 같은 입력값으로 새 일정을 <strong>prepend()</strong> 하시오.
+                    (리스트 맨 앞에 추가)
+                </li>
+                <li>
+                    문제 3. 기준 일정(<code>#anchorItem</code>) 바로 앞에
+                    “공지: 내일 오전 9시 전사 공지”라는 일정을 <strong>before()</strong> 로 삽입하시오.
+                </li>
+                <li>
+                    문제 4. 기준 일정(<code>#anchorItem</code>) 바로 뒤에
+                    “안내: 회의 끝나고 점심”이라는 일정을 <strong>after()</strong> 로 삽입하시오.
+                </li>
+                <li>
+                    문제 5. 각 일정의 “삭제” 버튼을 누르면 해당 일정이
+                    <strong>remove()</strong> 로 삭제되게 하시오.
+                </li>
+            </ul>
+        </section>
+        <!-- 스크립트 영역: 여기에 작성 -->
+        <script>
+            // 여기에 각 문제의 해답 코드를 작성하세요.
+            // 예시) document.querySelector('#addAppend').addEventListener('click', () => { ... })
+        </script>
+    </div>
 </body>
 </html>

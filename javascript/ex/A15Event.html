@@ -17,12 +17,14 @@
     </ul>
     <style>
         .wrap { display:flex; gap:1em; margin:1em 0; }
-        .box  { width:5em; height:5em; border:1px solid #333; background:#e8f4ff; transition:all 1s ease-in-out; display:flex; align-items:center; justify-content:center; user-select:none;}
+        .box  { width:5em; height:5em; border:1px solid #333; background:#e8f4ff; transition:all 0.6s ease-in-out; display:flex; align-items:center; justify-content:center; user-select:none;}
 
         .selected { border-width:1em; border-color:steelblue; }
         .shadowed { box-shadow:0 8px 16px rgba(0,0,0,.2); }
         .round { border-radius:1em; }
+        .radius { border-radius:50%; }
         .styled { width:10em; height:10em; border: 3px; }
+        .red { background-color: red}
     </style>
 </section>
 
@@ -30,22 +32,49 @@
     <h3>문제 1. 클릭 시 배경색 변경, 호버 시 테두리 두께 변경</h3>
     <p>구현 팁: <code>click</code>, <code>mouseenter</code>, <code>mouseleave</code> 이벤트를 활용하세요.</p>
     <div class="box">P1</div>
+    <div class="box">P1</div>
 </section>
     <!--문제.1 풀이-->
     <script>
-        const box1 = p1.querySelector(".box");
-        box1.onclick = function(){
-            box1.style.backgroundColor="red";
+        // const box1 = p1.querySelector(".box");
+        // box1.onclick = function(){
+        //     box1.style.backgroundColor="red";
+        // }
+        // box1.addEventListener("mouseenter",function(){
+        //     box1.style.borderWidth="5px";
+        // });
+        // box1.addEventListener("mouseleave",function(){
+        //     box1.style.borderWidth="1px";
+        // })
+    <!--문제.1 풀이 [T]-->
+        //#p1>div.box
+        let boxs=document.querySelectorAll("#p1>div.box")
+        //console.log(boxs)
+        for (let b of boxs){
+            //b.onclick=()=>{}                //직접정의 : 행동 하나만 정의 가능
+            b.addEventListener("click", ()=>{ //간접정의 : 다수의 행동 정의 가능
+                b.style.backgroundColor="pink"
+            })
+            // b.addEventListener("mouseenter", ()=>{
+            //     b.style.borderWidth="8px"
+            // })
+            b.addEventListener("mouseenter", (e)=>{
+                e.target.style.border="5px solid grey"
+                //b 대신에 e.target으로 작성
+            })
+            b.addEventListener("mouseleave", (e)=>{
+                e.currentTarget.style.border="1px solid black";
+                // 내가 진짜 정의한 이벤트 타겟
+            })
         }
-        box1.addEventListener("mouseenter",function(){
-            box1.style.borderWidth="5px";
-        });
-        box1.addEventListener("mouseleave",function(){
-            box1.style.borderWidth="1px";
-        })
     </script>
 
-
+<style>
+/* 토글시 스타일 변경사항 지정 */
+    .on{
+        box-shadow: 2px 2px 4px #000;
+    }
+</style>
 <section id="p2">
     <h3>문제 2. 더블클릭 시 스타일 토글, 우클릭 시 글자색 변경</h3>
     <p>구현 팁: <code>dblclick</code>, <code>contextmenu</code> 이벤트를 활용하세요.</p>
@@ -53,33 +82,105 @@
 </section>
     <!--문제.2 풀이-->
     <script>
-        const box2 = p2.querySelector(".box");
-        box2.addEventListener("dblclick", function(){
-            box2.style.borderWidth="4px";
-            box2.style.borderColor="skyblue";
-        })
-        box2.addEventListener("contextmenu",function(){
-            box2.style.color="red";
-        })
+        // const box2 = p2.querySelector(".box");
+        // box2.addEventListener("dblclick", function(){
+        //     box2.style.borderWidth="4px";
+        //     box2.style.borderColor="skyblue";
+        // })
+        // box2.addEventListener("contextmenu",function(){
+        //     box2.style.color="red";
+        // })
+    // 문제.2 풀이 [T]
+        const onHandler=(e)=>{
+            e.preventDefault(); // 기본동작을 막겠다
+            //form.submit() ; 제출 기본 동작
+
+            e.currentTarget.classList.toggle("on");
+            // ???.classList.toggle("on");
+        }
+        let p2Box = document.querySelector("#p2>.box")
+        p2Box.addEventListener("dblclick", onHandler)
+        p2Box.addEventListener("contextmenu", onHandler)
+
     </script>
 
 
 <section id="p3">
     <h3>문제 3. 마우스를 누르고 있는 동안 크기 확대, 떼면 원래 크기</h3>
     <p>구현 팁: <code>mousedown</code>, <code>mouseup</code> 이벤트를 활용하세요.</p>
-    <div class="box">P3</div>
+    <div class="box">
+        <span>P3</span>
+    </div>
 </section>
     <!--문제.3 풀이-->
     <script>
-        const box3 = p3.querySelector(".box");
-        box3.addEventListener("mousedown",function(){
-            box3.style.width = "10em";
-            box3.style.height = "10em";
+        // const box3 = p3.querySelector(".box");
+        // box3.addEventListener("mousedown",function(){
+        //     box3.style.width = "10em";
+        //     box3.style.height = "10em";
+        // })
+        // box3.addEventListener("mouseup",function(){
+        //     box3.style.width = "5em";
+        //     box3.style.height = "5em";
+        // })
+    // 문제.3 풀이 [T]
+        let p3Box = document.querySelector("#p3>.box")
+        // p3Box.addEventListener("mousedown", (e)=>{
+        //     // console.log(e.target)
+        //     // e.target.style.width="200px";  //target으로 하면 span이 커짐
+        //     // e.target.style.height="200px"; //방지 하기 위해 currentTarget => 내가 정의한 녀석
+        //     // let w=e.currentTarget.style.width="200px";
+        //     // let h=e.currentTarget.style.height="200px";
+        //     // console.log(w,h)  //스타일 반환 불가
+        //
+        //     //js element.style : 요소 스타일
+        //     //스타일의 종류 (3)
+        //     // 1) 요소 스타일 : sty;e="color=red;"
+        //     // 2) 인터 스타일 : <style>
+        //     //                      .box { color = blue; }
+        //     //                </>style>
+        //     // 3) 링크 스타일 : <link = ... > 외부 참조
+        //
+        //     //console.log(computedStyle)
+        //     // let computedStyle=window.getComputedStyle(e.currentTarget);
+        //     // let w=computedStyle.width;
+        //     // let h=computedStyle.height;
+        //
+        //     //더 심플하게 가져오기 => 구조분해 할당
+        //     let {width:w,height:h}=window.getComputedStyle(e.currentTarget)
+        //     //이름을 w와 h로 할당
+        //     // console.log(w*1.5) ==> NaN
+        //     w=Number.parseFloat(w); //뒤쪽의 px가 잘라짐
+        //     h=Number.parseFloat(h); //뒤쪽의 px가 잘라짐
+
+        //     console.log(w*1.5,h*1.5)
+        //     // e.currentTarget.style.width=w*1.5+"px";
+        //     // e.currentTarget.style.height=h*1.5+"px";
+        //
+        //     //assign으로 할당하기
+        //     Object.assign(e.currentTarget.style,{
+        //         width:w*2+"px",
+        //         height:h*2+"px",
+        //     })
+        // })
+        const sizeHandler=(e,n)=>{  // n은 배율
+            //타겟의 최종 너비와 높이를 가져오기
+            let {width,height} = window.getComputedStyle(e.currentTarget)
+            width=Number.parseFloat(width)*n;
+            height=Number.parseFloat(height)*n;
+            console.log(width,height)
+            Object.assign(e.currentTarget.style,{
+                width:width+"px",
+                height:height+"px",
+            })
+        }
+        p3Box.addEventListener("mousedown", (e)=>{
+            sizeHandler(e,1.5);
         })
-        box3.addEventListener("mouseup",function(){
-            box3.style.width = "5em";
-            box3.style.height = "5em";
+        p3Box.addEventListener("mouseup", (e)=>{
+            sizeHandler(e,0.66667);
         })
+
     </script>
 
 
@@ -154,13 +255,26 @@
         // })
         // 이렇게 하면 div에만 달리는디용
 
-        const wrap = document.getElementById("p7");
-        wrap.addEventListener("click", (e) => {      // wrap요소에 click이벤트 리스너 등록 e:이벤트객체(Event object)
-            const target = e.target.closest(".box"); //e.target : 클릭이 실제로 발생한 가장 안쪽의 요소 => box
-            if (target) {                            //closest(".box") : e.target에서 출발하여 부모 방향 탐색,
-                target.classList.toggle("selected"); //                  가장 가까운 .box클래스 찾기
-            }                                        //  1) .box 자체 클릭 : e.target = .box, closest() = 자기자신
-        });                                          //  2) .box 내부 요소 클릭 : e.target = 그 내부요소, closest() 요소 부모 .box
+        // const wrap = document.getElementById("p7");
+        // wrap.addEventListener("click", (e) => {      // wrap요소에 click이벤트 리스너 등록 e:이벤트객체(Event object)
+        //     const target = e.target.closest(".box"); //e.target : 클릭이 실제로 발생한 가장 안쪽의 요소 => box
+        //     if (target) {                            //closest(".box") : e.target에서 출발하여 부모 방향 탐색,
+        //         target.classList.toggle("selected"); //                  가장 가까운 .box클래스 찾기
+        //     }                                        //  1) .box 자체 클릭 : e.target = .box, closest() = 자기자신
+        // });                                          //  2) .box 내부 요소 클릭 : e.target = 그 내부요소, closest() 요소 부모 .box
+        //
+
+    <!--문제.7 풀이 [T]-->
+        let wrap=document.querySelector("#p7>.wrap");
+        //console.log(wrap)
+        wrap.addEventListener("click", function(e){
+            //this. e.target, e.currentTarget, wrap
+            //this 는 화살표함수에서 불가, (정의해준 클래스, 객체가 없으므로 window반환 예상)
+            // => e=>{}에서 function (e)로 변경
+            // this.classList.toggle("on") // this == e.currentTarget
+            e.target.classList.toggle("on"); //한번에 뭉탱이로 하는방법
+                                             //권장하는 방법은 아님
+        })
     </script>
 
 
@@ -188,12 +302,28 @@
 </section>
     <!--문제.9 풀이-->
 <script>
-    const box9 = p9.querySelector(".box");
-    box9.addEventListener("click", function(){
-        box9.style.backgroundColor="yellow";
+    // const box9 = p9.querySelector(".box");
+    // box9.addEventListener("click", function(){
+    //     box9.style.backgroundColor="yellow";
+    // })
+    // box9.addEventListener("click", function(){
+    //     box9.style.borderWidth="15px";
+    // })
+    // 문제.9 풀이 [T]
+    let p9Box = document.querySelector("#p9>.box");
+    // console.log(p9Box)
+    // p9Box.onclick=(e)=>{
+    //     e.currentTarget.classList.toggle("on");
+    // };
+    // p9Box.onclick=(e)=>{
+    //     e.currentTarget.classList.toggle("red");
+    // };
+
+    p9Box.addEventListener("click", function(e){
+        e.currentTarget.classList.toggle("on");
     })
-    box9.addEventListener("click", function(){
-        box9.style.borderWidth="15px";
+    p9Box.addEventListener("click", function(e){
+        e.currentTarget.classList.toggle("red");
     })
 </script>
 
@@ -277,10 +407,41 @@
 </section>
     <!--문제.14 풀이-->
 <script>
-    const wrap = p14.querySelector(".wrap");
-    wrap.addEventListener("mouseenter", function(){
-
+    // const wrap14 = p14.querySelector(".wrap");
+    // wrap14.addEventListener("mouseenter", function(){
+    //     const target = e.target.closest(".box");
+    // })
+    // 문제.14 풀이 [T]
+    wrap = document.querySelector("#p14>.wrap");
+    console.log(wrap)
+    wrap.addEventListener("mouseenter",function(e){
+        // console.log(e.target.children);
+        for(let b of e.target.querySelectorAll(".box")){
+            b.classList.add("radius");
+        }
+    });
+    wrap.addEventListener("mouseleave",function(e){
+        for(let b of e.target.querySelectorAll(".box")){
+            b.classList.remove("radius");
+        }
     })
+
+    for(let b of wrap.querySelectorAll(".box")){
+        b.addEventListener("click",function (e){
+            e.currentTarget.classList.toggle("radius");
+        })
+    }
+
+    // mouseover : 요소 위에 마우스 올라갈 때
+    //                 돌아가면서 실행이 다 됨
+    //                 내부에서 노드구간마다 실행됨
+    // mouseenter : 요소 진입할때 (버블링 없음)
+    //                 부모가 엔터되어있어도 나만 실행됨
+    //                 한번 진입하면 더이상 실행 X
+
+    //e.target : 차이가 뭐징
+    //e.currentTarget :
+
 </script>
 
 

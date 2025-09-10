@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>노드 생성 및 클론</title>
+</head>
+<body>
+    <h1>노드 생성 및 클론</h1>
+    <h2>양식 요소</h2>
+<!--
+    http://localhost:63342/html_Study/javascript/signup.jsp?
+    http://localhost:63342/html_Study/javascript/signup.jsp?userId=develjhk
+    http://localhost:63342/html_Study/javascript/signup.jsp?userId=develjhk&userPw=1234
+    동적페이지(backend resource)
+    1.get : 파라미터로 조회해서 반환
+    2.post : 파라미터를 처리해서 결과를 반환 or 다른 페이지로 이동(redirect)
+-->
+    <form action="signup.jsp" name="signupForm">
+        <p><label> 아이디 <input type="text" name="userId" value="develjhk"></label></p>
+        <p><label> 비밀번호 <input type="password" name="userPw" value="1234"></label></p>
+        <p>
+            <button type="reset">초기화</button>
+            <button type="submit">제출</button> <!-- action의 signup.jsp로 이동 -->
+            <!-- button 의 이벤트가 아닌 폼 양식의 이벤트! reset, submit-->
+            <button type="button">button은 아무 기능도 없다.</button>
+        </p>
+    </form>
+    <script>
+        const signupForm = document.forms['signupForm'];
+        //console.log(signupForm)
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // 이벤트의 기본기능 막기
+            if (signupForm.userPw.value.length >7){
+                signupForm.submit();
+            } else{
+                alert("비밀번호는 8자리 이상입니다.")
+            }
+        })
+    </script>
+    <hr>
+    <h2>일정관리 어플</h2>
+    <style>
+        .d-none{
+            display: none;
+        }
+    </style>
+
+
+    <!--샘플-->
+    <li id="scheduleLiEx" class="d-none"><span class="t"></span> <b class="s"></b></li>
+
+    <ul id="scheduleUl">
+        <li data-time="480"><span>8:00</span> <b>기상</b></li>
+        <li data-time="790"><span>13:10</span> <b>점심</b></li>
+        <li data-time="1110"><span>18:30</span> <b>퇴근</b></li>
+    </ul>
+    <hr>
+    <form action="#" name="schedule">
+        <p>
+            <input type="time" value="09:10" name="time">
+            <input type="text" value="출근" name="str">
+            <button>제출</button>
+        </p>
+    </form>
+    <script>
+        const scheduleUl=document.querySelector('#scheduleUl');
+        const schedule=document.forms['schedule'];
+        const htmlAppend= (e)=>{
+            e.preventDefault();
+            let time=schedule.time.value;
+            let str=schedule.str.value;
+            console.log(time,str)
+            // "11" =>11 파싱(오류)
+            // "십일"=>11 x==> NaN
+            let html =`
+                <li>
+                    <span>${time}</span>
+                    <b>${str}</b>
+                </li>`;
+                //scheduleUl.innerHTML=;
+            scheduleUl.insertAdjacentHTML("beforeend", html);
+        }
+        //노드를 직접 만들어서 추가
+        const nodeAppend= (e)=>{
+            e.preventDefault();
+            let li=document.createElement("li");
+            let span=document.createElement("span");
+            let b=document.createElement("b");
+            let time=schedule.time.value;
+            let str=schedule.str.value;
+            time=document.createTextNode(time);
+            str=document.createTextNode(str);
+            span.append(time);
+            b.append(str);
+            li.append(span);
+            li.append(b);
+            scheduleUl.append(li);
+        }
+
+        //샘플을 만들어서 클론해서 사용
+
+        const scheduleLiEx=document.querySelector('#scheduleLiEx');
+
+
+        //복제
+        const obj={a:10,b:20,c:{d:30,e:40}}
+        console.log({...obj}) //spread 문법으로 객체 복제, deep 복제는 불가능
+
+        let liClone={...scheduleLiEx};
+        console.log(liClone); // : {} 비어있음, => 복제 불가
+        liClone=scheduleLiEx.cloneNode(true);
+        console.log(liClone); // : li => deep 복제 가능
+        liClone.innerText="경민";
+
+
+
+
+
+        const cloneAppend= (e) =>{
+            e.preventDefault();
+            //textNode를 만들어서 추가하는 것은 불필요!
+
+            // 복제, deep
+            let li=scheduleLiEx.cloneNode(true);
+
+            //
+            li.id=""; //id를 공란으로 만들기
+            li.removeAttribute("id"); //id 속성을 지우기
+            li.classList.remove("d-none");
+
+            let time=schedule.time.value;
+            let str=schedule.str.value;
+            // let t=scheduleLiEx.querySelector(".t")
+            let t=li.querySelector(".t")
+            // let s=scheduleLiEx.querySelector(".s")
+            let s=li.querySelector(".s")
+
+            t.append(time);
+            s.append(str);
+
+            scheduleUl.append(li); //이렇게 하면 해당자리에만 계속 추가됨
+
+
+
+
+        }
+
+
+
+
+
+        schedule.onsubmit=cloneAppend;
+
+
+    </script>
+
+
+
+
+
+</body>
+</html>
