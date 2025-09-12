@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>객체의 얕은 복제와 깊은 복제</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+
+</head>
+<body>
+    <h1>객체의 얕은 복제와 깊은 복제</h1>
+    <section>
+        <h2>객체 복사: 얕은 복사 vs 깊은 복사</h2>
+        <ul>
+            <li>얕은 복사(Shallow): 최상위 1단계 속성만 새 객체에 복사되고, 내부 객체/배열은 참조 공유</li>
+            <li>깊은 복사(Deep): 모든 중첩 단계까지 새로 만들어 원본과 완전히 분리</li>
+        </ul>
+    </section>
+    <section>
+        <h2>얕은 복사 방법</h2>
+        <ul>
+            <li>스프레드 연산자
+                <p>새로운 객체를 만들 때 기존의 객체를 복사하면서 추가하는 문법</p>
+                <pre><code>const src = { a: 1, b: { c: 2 } };
+const copy = { ...src };            // 얕은 복사
+copy.b.c = 99;
+console.log(src.b.c); // 99 (내부 객체 참조 공유)</code></pre>
+            </li>
+            <li>Object.assign
+                <p>이미 존재하는 객체에 기존의 객체를 복사하면서 추가하는 문법</p>
+                <pre><code>//새로운 객체 생성
+const src = { a: 1, b: { c: 2 } };
+const copy = Object.assign({}, src); // 얕은 복사
+copy.b.c = 99;
+console.log(src.b.c); // 99
+
+//기존 객체에 복사
+const box=document.querySelector('#box');
+Object.assign(box, { color: 'red', backgroundColor: 'blue' });
+                </code></pre>
+            </li>
+            <li>배열 얕은 복사 예
+                <pre><code>const arr = [1, [2, 3]];
+const copy1 = [...arr];
+const copy2 = arr.slice();
+copy1[1][0] = 9;
+console.log(arr[1][0]); // 9 (내부 배열 참조 공유)</code></pre>
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>깊은 복사 방법(개념)</h2>
+        <ul>
+            <li>JSON 방식: 객체를 JSON 문자열로 직렬화했다가 다시 파싱하여 새 객체를 만들기 때문에 구조가 새로 생성된다
+                <ul>
+                    <li>예시
+                        <pre><code>const src = { a: 1, b: { c: 2 } };
+const deep = JSON.parse(JSON.stringify(src)); // 깊은 복사처럼 동작
+deep.b.c = 99;
+console.log(src.b.c); // 2 (원본 불변)</code></pre>
+                    </li>
+                    <li>JSON : {a:10} => "{\"a\":10}", 객체를 통신하기 위해 문자열로 변환하는 데이터 </li>
+                    <li>JSON.stringify(obj): 객체를 문자열(JSON 텍스트)로 변환 (단, 함수,Symbol,undefined,None 같은 값은 제거되고, Date는 문자열로 바뀐다)</li>
+                    <li>JSON.parse(text): JSON 문자열을 다시 일반 객체로 변환</li>
+                    <li>문자열을 거쳐 새로 만들어지므로 결과는 원본과 참조를 공유하지 않는다</li>
+                </ul>
+
+            </li>
+            <li>structuredClone: 브라우저/Node의 내장 깊은 복제(많은 타입 지원, DOM 노드는 제외)
+                <ul>
+                    <li>예시
+                        <pre><code>const deep = structuredClone(src); // Date, RegExp, Map, Set 등 많은 타입 지원</code></pre>
+                    </li>
+
+                    <li>Date, RegExp, Map, Set, ArrayBuffer, TypedArray 등 많은 타입을 안전하게 깊은 복제</li>
+                    <li>외부 라이브러리 없이 사용 가능(구형 환경은 미지원일 수 있음, 2022년에 나왔고 현재는 모든 브라우저가 지원)</li>
+                </ul>
+            </li>
+            <li>cloneNode : DOM 노드 복사
+                <ul>
+                    <li>얕은 복사: <code>node.cloneNode(false)</code> 현재 노드만 복제, 자식 미포함
+                        <pre><code>&lt;div id="box"&gt;&lt;span&gt;hi&lt;/span&gt;&lt;/div&gt;
+    const box = document.getElementById('box');
+    const shallow = box.cloneNode(false);
+    console.log(shallow.outerHTML); // &lt;div id="box"&gt;&lt;/div&gt;</code></pre>
+                    </li>
+                    <li>깊은 복사: <code>node.cloneNode(true)</code> 현재 노드와 모든 자식까지 복제
+                        <pre><code>const deep = box.cloneNode(true);
+    console.log(deep.outerHTML); // &lt;div id="box"&gt;&lt;span&gt;hi&lt;/span&gt;&lt;/div&gt;</code></pre>
+                    </li>
+                    <li>주의
+                        <ul>
+                            <li>복제된 노드는 문서에 붙지 않으므로 append/before/after 등으로 삽입해야 한다</li>
+                            <li>addEventListener로 등록한 이벤트 리스너는 복제되지 않는다</li>
+                            <li>id가 그대로 복제되므로 문서에 삽입할 때 id 중복에 주의</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
+    </section>
+</body>
+</html>

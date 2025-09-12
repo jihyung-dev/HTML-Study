@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>XMLHttpRequest 과제</title>
+</head>
+<body>
+    <h1>과제: 게시글 & 댓글 불러오기</h1>
+    <h2>과제 1. 게시글 불러오기
+        <button id="loadBoardBtn">Load Board</button>
+    </h2>
+        <section id="board">
+            <ul id="posts">
+
+            </ul>
+        </section>
+    <script>
+
+    const loadBoardBtn = document.querySelector('#loadBoardBtn');
+    const postsUl = document.querySelector('#posts');
+    const loadBoard = () => {
+        let url="https://jsonplaceholder.typicode.com/posts"            //url 지정
+
+        const request = new XMLHttpRequest();                           //XML요청
+        request.open("GET", url, true);                                 //초기화, get방식 url, 비동기
+        request.send();                                                 //요청전송
+        // console.log(url)
+        request.onload=function(){                                      //응답처리
+
+            let status = request.status;                                //요청의 상태
+            if(status == 200){                                          //상태가 200일 때,
+                const posts = JSON.parse(request.responseText);
+                // console.log(ids)
+
+                let html ="";
+
+                for (let post of posts){
+                    if((post.id)<11){ //1~10까지
+                        html+=`
+                               <li>${post.id}. ${post.title}
+                                <div style="text-align: end">
+                                    <button id="loadCommentBtn" onclick="loadComment(${post.id})">Comment</button>
+                                </div>
+                                <ol id="comments-${post.id}"></ol>
+                               </li>`
+                    }
+                }                                                  //클릭했을때, post의 id를 가져올것이고. to 59
+                console.log(html)
+                postsUl.innerHTML = html;
+            }
+        }
+    }
+    loadBoardBtn.addEventListener("click", loadBoard);
+
+        //const loadCommentBtn=document.querySelector('#loadCommentBtn'); //여기엔 존재하지않는데,
+        // const loadCommentBtn=window.getComputedStyle(textJu); //여기엔 존재하지않는데,
+                                                                        //이거를 화면이 완료된수 찾아라 라고 해야됨
+
+    function loadComment(postId){   //#postId그 postId를 매개변수로 할것이며
+        let url = `https://jsonplaceholder.typicode.com/posts/${postId}/comments`  //url 에도 이런식으로 쓸수 있군
+
+        const request = new XMLHttpRequest();                                     //#postId그 매개변수로 url도 가고
+        request.open("GET", url, true);
+        request.send();
+        request.onload=function(){
+            let status = request.status;
+            if(status == 200){
+                const comments = JSON.parse(request.responseText);
+                console.log(comments);
+                let html ="";
+                for (let comment of comments){
+                    html+=`
+                            <li> ${comment.name} (${comment.email})</li>
+                    `
+                    // console.log(html);
+                }
+                document.querySelector("#comments-"+postId).innerHTML = html;   // #postIdcomments의 구간선택으로도 쓸꺼야
+            }
+        }
+    }
+
+    </script>
+
+
+
+
+</body>
+</html>

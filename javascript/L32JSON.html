@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JSON</title>
+</head>
+<body>
+    <h1>JSON</h1>
+    <script>
+        //자료
+        //배열자료 : 인덱스+길이
+        let list=[];
+        list = new Array(1,2,3);
+        console.log(list)
+        list = Array.of(1,2,3);
+        console.log(list)
+                                  // (heap메모리에 저장되어 쉽게 저장되고 쉽게 지워짐)
+        //Object 자료형 (참조형, 인스턴스)
+        let obj = {a:10, b:20}                      //객체 선언!
+
+        //객체를 리터럴하게 표기?? => 멋진데 통신에 쓸 수 있을듯???
+        //객체의 리터럴표기법을 통신에 사용하도록 문자열로 변경 => `JSON` 빠밤!
+        let json = '{"a":10,"b":true,"c":"경민"}';  //객체선언이 아님!! //key값은 " "로 감싸기
+                                                   // => 데이터 통신에 사용할 문자열을 선언
+        //자바, 파이썬,c,c++,c# 어떤 언어든 객체가 있고 기본형으로 수, 논리, 문자열을 가지고 있음
+
+        obj=JSON.parse(json);                  //json을 도와주는 클래스 이름 : JSON
+        //파싱 : 문자열을 형변환 (말도안되게)
+        ++obj.a         //숫자의 덧셈
+        obj.c+="아!"    //문자열에 추가
+        obj.b=!obj.b    //boolean의 값 변환 가능
+        console.log(obj)
+
+
+        //let user = {name:"두지형", age:20, isMarried:false}; //리터럴 표기 같으므로
+        let user = new Object();
+            user["name"]="두지형";
+            user.age=22;
+            user.isMarried=false;
+            user.children=[1,2,3];  //배열도 통용됨
+            user.score=NaN;         //NaN은 JS의 고유 값이므로 null로 처리
+            user.city=undefined;    //undefined 없는 상태인데 js 기본형 타입으로 존재
+                                    //모순, 정의하지않았는데, 정의하지않음으로 정의함 ㅋㅋ?
+
+            //데이터가 비어있다는 상태 (공용상태)
+            user.contrty=null; //JSON에서도 표현함
+
+                                    //함수를 문자열로 나타내느 것 ==> 직렬화 불가능
+            user.say=()=>{          //JSON 에서 표현하지 않음
+                console.log("안녕!");   //자바에서는 class가있고, 그 안에서 선언
+            }
+
+        console.log(user);
+
+        let userStr = JSON.stringify(user);
+        console.log(userStr)                    //문자열은 "" 표현, ''불가 (like 자바)
+
+
+
+
+    </script>
+</body>
+</html>

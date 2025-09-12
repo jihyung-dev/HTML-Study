@@ -22,6 +22,7 @@
     .d-none { display: none; }
     form input { padding: 6px 8px; }
     form button { padding: 6px 10px; }
+
 </style>
 <div class="wrap">
     <h1>일정 앱 과제 (노드 추가/삽입 중심)</h1>
@@ -33,16 +34,30 @@
         <div class="meta"></div>
         <button class="btnRemove"></button>
     </div>
+
+    <!-- cloneNode 용 -->
+    <div class="item d-none" id="itemEx" >
+        <div>
+            <strong class="title"></strong>
+<!--        <div class="meta"></div> 이지만, time과 place로 나눠서 추가 -->
+            <div class="meta">
+                <span class="time"></span> ·
+                <span class="place"></span>
+            </div>
+        </div>
+        <button class="btnRemove">삭제</button>
+    </div>
+
     <!-- 입력 폼 -->
-    <form id="scheduleForm" class="toolbar" onsubmit="return false;">
-        <input id="titleInput" type="text" placeholder="제목" />
-        <input id="dateInput" type="datetime-local" />
-        <input id="placeInput" type="text" placeholder="장소(옵션)" />
+    <form id="scheduleForm" class="toolbar">  <!-- onsubmit="return false;" : 버튼 눌렀을때 submit 동작 제거 -->
+        <input id="titleInput" type="text" placeholder="제목" value="제목"/>
+        <input name="dateInput" type="datetime-local" value="2025-09-16T17:59"/>
+        <input name="placeInput" type="text" placeholder="장소(옵션)" value="장소(옵션)"/>
         <p>
-            <button id="addAppend">1.append로 추가</button>
-            <button id="addPrepend">2.prepend로 추가</button>
-            <button id="addBefore">3.before로 추가</button>
-            <button id="addAfter">4.after로 추가</button>
+            <button id="addAppend" type="submit">1.append로 추가</button>
+            <button id="addPrepend" type="button">2.prepend로 추가</button>
+            <button id="addBefore" type="button">3.before로 추가</button>
+            <button id="addAfter" type="button">4.after로 추가</button>
         </p>
     </form>
 
@@ -51,7 +66,6 @@
 
     <!-- 일정 리스트 -->
     <section class="list" id="scheduleList">
-        <div><strong> List </strong></div>
         <div class="item target" id="anchorItem">
             <div>
                 <strong>팀 회의</strong>
@@ -98,47 +112,282 @@
     </section>
     <!-- 스크립트 영역: 여기에 작성 -->
     <script>
-        // 여기에 각 문제의 해답 코드를 작성하세요.
-        // 예시) document.querySelector('#addAppend').addEventListener('click', () => { ... })
+        /*
+                // 여기에 각 문제의 해답 코드를 작성하세요.
+                // 예시) document.querySelector('#addAppend').addEventListener('click', () => { ... })
 
-        // 문제 1.
-        // List에 추가
-        // : titleInput, dateInput, placeInput 의 value들?
+                // 문제 1.
+                // List에 추가
+                // : titleInput, dateInput, placeInput 의 value들?
 
-        // 샘플 및 변수 생성
-            // 복제
-            const scheduleDivEx=document.querySelector('#scheduleDivEx');
-            // 버튼
-            const addAppend=document.querySelector('#addAppend');
-            const addPrepend=document.querySelector('#addPrepend');
-            const addBefore=document.querySelector('#addBefore');
-            const addAfter=document.querySelector('#addAfter');
-            //리스트
-            const list=document.querySelector('#scheduleList');
-            // 현재 값 가져오기
-            let title=scheduleForm.querySelector("#titleInput").value;
-            let date=scheduleForm.querySelector("#dateInput").value;
-            let place=scheduleForm.querySelector("#placeInput").value;
+                // 샘플 및 변수 생성
+                    // 복제
+                    const scheduleDivEx=document.querySelector('#scheduleDivEx');
+                    // 버튼
+                    const addAppend=document.querySelector('#addAppend');
+                    const addPrepend=document.querySelector('#addPrepend');
+                    const addBefore=document.querySelector('#addBefore');
+                    const addAfter=document.querySelector('#addAfter');
+                    //리스트
+                    const list=document.querySelector('#scheduleList');
+                    // 현재 값 가져오기
+                    let title=scheduleForm.querySelector("#titleInput").value;
+                    let date=scheduleForm.querySelector("#dateInput").value;
+                    let place=scheduleForm.querySelector("#placeInput").value;
 
-            console.log(title,date,place)
-        // 복제 deep
+                    console.log(title,date,place)
+                // 복제 deep
 
-        const cloneAppend = (e)=>{
-            e.preventDefault();
-            let divClone=scheduleDivEx.cloneNode(true);
-            divClone.removeAttribute('id');
-            divClone.classList.remove("d-none");
+                const cloneAppend = (e)=>{
+                    e.preventDefault();
+                    let divClone=scheduleDivEx.cloneNode(true);
+                    divClone.removeAttribute('id');
+                    divClone.classList.remove("d-none");
 
-            let div=document.createElement('div');
+                    let div=document.createElement('div');
 
 
-            t.append(title);
-            d.append(date);
-            p.append(place);
+                    t.append(title);
+                    d.append(date);
+                    p.append(place);
 
-            list.append(div)
+                    list.append(div)
+                }
+                addAppend.addEventListener('click',cloneAppend);
+        */
+    // 문제풀이 [T]
+        // 1. insertAdjacentHTML로 String으로 직접작성하기
+                // 요소를 만들어서 추가하기
+
+        // [공통사항] 많이 사용할 것들은 선택자로 찾아놓기
+        const scheduleForm = document.querySelector('#scheduleForm');   //스케줄등록폼
+        //const addAppend = document.querySelector('#addAppend');       //스케줄 추가 버튼(맨뒤)
+        const addprepend = document.querySelector('#addPrepend');       //스케줄 추가 버튼(맨앞)
+        const addBefore = document.querySelector('#addBefore');         //스케줄 추가 버튼(기준앞)
+        const addAfter = document.querySelector('#addAfter');           //스케줄 추가 버튼(기준뒤)
+        const scheduleList = document.querySelector('#scheduleList');   //스케줄 리스트
+
+
+
+        //버튼이 스케쥴 폼 안에 있으면, default로 submit을 발생시킴 -> type을 버튼으로 만들어주어서 방지하기
+        // addAppend.addEventListener('submit', e => {   //Q: click으로하니까 괜찮은듯한데요?
+        //     e.preventDefault();
+        //     console.log("레전드 상황 submit 이벤트 발생")
+        // })
+
+        scheduleForm.addEventListener('submit', function(e) {   //Q: click으로하니까 괜찮은듯한데요?
+            e.preventDefault();                                         //기본 동작 방지
+            //scheduleForm                                              //입력 양식 전체의 ID
+            //   ==e.target, currentTarget, function인경우 this도 가능    //동일한 선택자
+
+            let title=this.titleInput.value;                            //변수 title에 일정양식의 제목 참조
+            let date = this.dateInput.value.replace("T"," ");           //변수 date에 일정양식의 시간 참조
+                                                                        //date에 문자열 T를 " " 여백으로 변환
+            let place = this.placeInput.value;                          //변수 place에 일정양식의 장소 참조
+
+            //console.log(title,date,place) // 확인
+
+            //아무것도 없을시, 아무것도 없음을 반환   //유효성 검사
+            //falsy data => null, "", NaN, 0 (false로 데이터를 반환하는 데이터들 => falsy )
+            if(!(title && date && place)){                              // title, date, place중 하나라도 false
+                alert("일정,날짜,장소 모두 입력해야합니다.");                 //               => false일때 {} 내용 실행
+                return;                                                 //함수 종료, 반환할거 없으니 정의안해줘도됨
+            }
+
+            //console.log("레전드 상황 submit 이벤트 발생")
+            //1. html 문자열 => insertAdjacentHTML
+
+            // 기존에 id 였으나 재사용성을위해 name으로 사용
+            let html=`                                                  <!-- html 변수에 백틱으로 html 문서작성-->
+        <div class="item">
+            <div>
+                <strong>${title}</strong>                               <!-- title, date, place 값 가져오기-->
+                <div class="meta">${date} · ${place}</div>
+            </div>
+            <button class="btnRemove" <!--onclick="this.closest('.item').remove()"-->>삭제</button>
+        </div>
+        `;
+            scheduleList.insertAdjacentHTML("beforeend", html);
+                                // insertAdjacentHTMl의 삽입위치
+                                            // 1) beforebegin : element 시작 태그  앞 [element의 앞 형제]
+                                            // 2) afterbegin  : element 시작 태그  뒤 [element의 첫번째 자식 ]
+                                            // 3) beforeend   : element 끝 태그  앞   [element의 마지막 자식 ]
+                                            // 4) afterend    : element 끝 태그  뒤   [element의 뒤 형제]
+
+                                            //append와 prepend : 자식 요소로 추가하기
+                                            //before과 after   : 형제 요소로 추가하기
+        })
+
+        //#2 prepend로 추가
+                // 요소를 만들어서 추가하기
+
+        addprepend.addEventListener('click', function(e) {
+            //button click : e.target===this===addPrepend
+            //console.log(e.target.form) : button을 포함하는 폼
+            console.log(this)
+
+            //폼 요소 불러오기
+            let title = e.target.form.titleInput.value;                 //title 변수에 form의 titleInput의 값 참조,
+            console.log("title =",title)
+            let date = e.target.form.dateInput.value.replace("T"," ");  //이때 .form.titleInput으로 작성할 수 있는 이유는
+            console.log("date =",date)
+            let place = e.target.form.placeInput.value;                 //titleInput이 id 로 할당되어있어야함
+
+            //divItem 만들기
+            let divItem = createItemNode(title, date, place);           //div
+
+
+            /*
+            //요소 만들기! 선택하는거 XX, 잘라낼거!
+            let divItem = document.createElement("div");
+            divItem.className = "item";
+            let div=document.createElement("div");
+            let buttonRemove=document.createElement("button");
+            buttonRemove.className = "btnRemove";
+            buttonRemove.append("삭제")
+            divItem.append(div,buttonRemove);
+            let strong=document.createElement("strong");
+            let divMeta=document.createElement("div");
+            divMeta.className = "meta";
+            strong.append(title);
+            divMeta.append(`${date} ·${place}`);
+            div.append(strong,divMeta)
+
+            console.log(divItem)
+            scheduleList.prepend(divItem);
+            */
+
+            //버튼내의 히든요소 (글자, 꾸미기 등) 은, target이 되지 않음
+
+
+        })
+        function createItemNode(title,date,place){                      //노드를 만드는 함수
+
+            /* 이 노드 개체를 만들어서 반환하는 함수 // 마치 like 클래스
+            <div class="item">                                      // ⓐ
+                <div>                                                          // ⓒ
+                    <strong>${title}</strong>                                        // ⓓ
+                    <div class="meta">${date} · ${place}</div>                             // ⓔ
+                </div>
+                <button class="btnRemove">삭제</button>                   // ⓑ
+            </div>
+            */
+
+            //요소 만들기! 선택하는거 XX, 잘라낼거!
+            let divItem = document.createElement("div");            //요소 생성 : div _ 변수 : divItem
+            let div=document.createElement("div");                  //요소 생성 : div _ 변수 : div      //ⓐ
+            let buttonRemove=document.createElement("button");      //요소 생성 : button _ 변수 : buttonRemove
+            buttonRemove.className = "btnRemove";                   // buttonRemove의 클래스이름 : btnRemove
+            buttonRemove.append("삭제");                             // buttonRemove버튼의 뒤에 "삭제"추가 => 버튼에 삭제 기입 //ⓑ
+
+
+
+            // buttonRemove.addEventListener("click", function(e) {
+            //     divItem.remove();
+            // })
+
+
+            divItem.append(div,buttonRemove);                        //divItem.의 뒤에 div,와 buttonRemove 추가 //ⓒ
+            let strong=document.createElement("strong");             // strong 요소를 참조하는 변수 strong
+            let divMeta=document.createElement("div");               // div 요소를 참조하는 변수 divMeta
+            divMeta.className = "meta";                              // divMeta의 클래스 이름 meta
+            strong.append(title);                                    // strong의 자식맨뒤에 title 노드 추가 // ⓓ
+            divMeta.append(`${date} ·${place}`);                     // divMeta의 자식 맨뒤에 백틱내용 추가 // ⓔ
+            div.append(strong,divMeta)
+
+            console.log(divItem)
+            scheduleList.prepend(divItem);
+            return divItem; //반환을 해줘야함!
         }
-        addAppend.addEventListener('click',cloneAppend);
+
+        // #3 anchor아이템에 before로 추가
+
+            // 밖에 있으면 한번 anchor는 영원히 anchor
+            // let anchorItem=document.querySelector('#anchorItem');
+
+        addBefore.addEventListener('click', function(e) {
+            // 안에 있으면 그때 그때 anchor가 바뀔 수 있음, 그때마다 바뀜
+            // 실행할때마다 찾음, anchor의 변동가능성 있을 때,
+            let anchorItem=document.querySelector('#anchorItem');
+            let title = this.form.titleInput.value;
+            let date = this.form.dateInput.value.replace("T"," ");
+            let place = this.form.placeInput.value;
+            console.log(title, date, place);
+
+            let divItem = createItemNode(title, date, place);
+            anchorItem.before(divItem);
+        })
+
+        const itemEx = document.querySelector('#itemEx');
+        const itemCopy = function (title,time,place){
+            const item=itemEx.cloneNode(true);
+
+            item.removeAttribute("id");
+            item.classList.remove("d-none");
+
+            const titleNode=item.querySelector(".title");
+            const timeNode=item.querySelector(".time");
+            const placeNode=item.querySelector(".place");
+
+
+            // const btnRemove=item.querySelector(".btnRemove");
+            // btnRemove.addEventListener("click", function(e) {
+            //     item.remove();
+            // })
+
+
+            titleNode.append(title);
+            timeNode.append(time);
+            placeNode.append(place);
+            return item;
+        }
+
+
+        // #4 clone node를 사용하여 after추가
+        addAfter.addEventListener('click', function(e) {
+            const anchorItem=document.querySelector('#anchorItem');
+
+            let title=this.form.titleInput.value;
+            let time=this.form.dateInput.value.replace("T"," ");
+            let place=this.form.placeInput.value;
+
+            anchorItem.after(itemCopy(title,time,place));
+        })
+
+
+        // 삭제버튼을 통해 삭제시키기
+/*
+        btnRemove.addEventListener('click', function(e) {
+            //해당하는 div를 찾아서 없애버리기 Node로 하면될려나 ?
+            const btnRemove=document.querySelectorAll('#btnRemove');
+            this.querySelector(".item").remove();
+        })
+
+        gemini : btnRemove 버튼이 여러개므로
+                 scheduleList에 이벤트 리스너 등록, 이벤트 위임.
+                 btnRemove 확인, closest()를 사용해 가까운 부모인 .item 를 삭제
+*/
+
+            // 전역에 선언했으므로, 이 이후에 생성한 버튼에 대해서는 찾지 못하므로
+            // 동작하지 않음
+        /*
+            const btnRemove =document.querySelectorAll("#scheduleList .btnRemove");
+            for(let i of btnRemove){
+                i.addEventListener('click', function(e) {
+                    this.closest('.item').remove();
+                })
+            }
+        */
+
+            //scheduleList내부의 모든 클릭에 대해서 이벤트를 발생시키므로, 자원의 소모가 크다
+
+        // scheduleList.addEventListener("click", function(e) {
+        //     if(! e.target.classList.contains("btnRemove")) return
+        //     const removeItem = e.target.closest(".item");
+        //     removeItem.remove();
+        // })
+        //
+
 
 
 

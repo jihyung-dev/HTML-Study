@@ -126,7 +126,7 @@
         <script>
             ex1.addEventListener("click", (e) =>{
                 e.target.classList.toggle("active");
-            });
+            },true);
             for(let p of ex1.querySelectorAll("p")) {
                 p.addEventListener("click", (e) => {
                     e.target.classList.toggle("active");
@@ -180,6 +180,67 @@
             }
         </script>
     </section>
+    <section>
+        <h2>마우스 이벤트: mouseover/mouseout vs mouseenter/mouseleave</h2>
+        <ul>
+            <li><strong>mouseover / mouseout</strong>
+                <ul>
+                    <li>버블링 O → 자식에서 발생한 이벤트가 부모까지 전달된다.</li>
+                    <li>부모 리스너 실행 시 <code>event.target</code>은 실제 이벤트가 발생한 자식 요소가 될 수 있다.</li>
+                    <li><code>event.currentTarget</code>은 항상 리스너가 붙은 요소(부모).</li>
+                </ul>
+            </li>
+            <li><strong>mouseenter / mouseleave</strong>
+                <ul>
+                    <li>버블링 X → 자식에서 발생한 이벤트가 부모로 전달되지 않는다.</li>
+                    <li>부모에 등록한 리스너는 오직 “부모 자체에 들어오거나 나갈 때”만 실행된다.</li>
+                    <li>따라서 부모 리스너 안에서는 <code>event.target === event.currentTarget</code> 이 항상 성립한다.</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>실행 예시</h2>
+        <h3>mouseover : 타깃을 자식도 인식(버블링)</h3>
+        <div id="mouseoverEx">
+
+            <div class="parent" style="border:2px solid black; padding:20px; width:200px;">
+                Parent
+                <div class="child" style="margin-top:10px; background:lightblue; padding:10px;">
+                    Child
+                </div>
+            </div>
+            <div class="str"></div>
+        </div>
+        <hr>
+        <h3>mouseenter : 타깃으로 자식을 인식하지 않음(버블링x)</h3>
+        <div id="mouseenterEx">
+
+            <div class="parent" style="border:2px solid black; padding:20px; width:200px;">
+                Parent
+                <div class="child" style="margin-top:10px; background:lightblue; padding:10px;">
+                    Child
+                </div>
+            </div>
+            <div class="str"></div>
+        </div>
+
+        <script>
+            const mouseoverEx=document.querySelector("#mouseoverEx");
+            // mouseover (버블링 O)
+            mouseoverEx.querySelector(".parent").addEventListener("mouseover", e => {
+                mouseoverEx.querySelector(".str").innerText=("target:"+e.target.className+", currentTarget:"+e.currentTarget.className);
+            });
+
+            const mouseenterEx=document.querySelector("#mouseenterEx");
+            // mouseenter (버블링 X)
+            mouseenterEx.querySelector(".parent").addEventListener("mouseenter", e => {
+                mouseenterEx.querySelector(".str").innerText=("target:"+e.target.className+", currentTarget:"+e.currentTarget.className);
+            });
+        </script>
+    </section>
+
+
     <h2>버블링 캡처링 문제</h2>
     <section>
         <h3>문제 1</h3>

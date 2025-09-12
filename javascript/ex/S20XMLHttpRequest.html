@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>비동기식 통신과 XMLHttpRequest</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+    <h1>비동기식 통신과 XMLHttpRequest</h1>
+    <section>
+        <h2>통신(Communication)이란?</h2>
+        <ul>
+            <li>네트워크 상에서 <strong>클라이언트(브라우저)</strong>와 <strong>서버</strong>가 데이터를 주고받는 과정.</li>
+            <li>예시: 브라우저에서 로그인 요청 → 서버에서 사용자 정보 응답.</li>
+            <li>자바스크립트에서는 <strong>비동기 통신</strong>을 활용하여 화면을 새로고침하지 않고 서버와 데이터를 주고받을 수 있다.</li>
+        </ul>
+    </section>
+    <section>
+        <h2>동기식 통신 vs 비동기식 통신</h2>
+        <ul>
+            <li><strong>동기식 통신</strong>
+                <ul>
+                    <li>URL 요청 시 서버가 새로운 HTML을 내려주고, 브라우저가 전체 화면을 다시 렌더링한다.</li>
+                    <li>즉, URL과 화면이 1:1 대응 관계.</li>
+                    <li>특징: 새로고침(F5)과 비슷하게 전체 페이지 전환.</li>
+                </ul>
+            </li>
+            <li><strong>비동기식 통신</strong>
+                <ul>
+                    <li>렌더링된 화면이 유지된 상태에서 여러 번의 네트워크 요청을 보낼 수 있다.</li>
+                    <li>필요한 데이터만 받아와서 화면 일부만 갱신한다.</li>
+                    <li>새로고침 없이도 N개의 요청 결과가 순차적으로 반영 가능.</li>
+                    <li>대표 기술: AJAX(Asynchronous JavaScript And XML), fetch API.</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>통신 시 주로 사용되는 데이터 형태</h2>
+        <ul>
+            <li><strong>문자열 (Plain Text)</strong>
+                - 가장 단순한 형태, 짧은 메시지나 상태 코드 전달에 사용.
+                예시:
+                <pre><code>Hello World!</code></pre>
+            </li>
+
+            <li><strong>HTML</strong>
+                - 서버에서 내려주는 HTML 조각을 그대로 화면에 삽입 가능.
+                - 예전 방식(AJAX 초창기)에 많이 사용됨.
+                예시:
+                <pre><code>&lt;div&gt;로그인 성공!&lt;/div&gt;</code></pre>
+            </li>
+
+            <li><strong>XML</strong>
+                - 태그 기반 구조, 데이터 표현이 비교적 무겁고 복잡함.
+                - SOAP, 초기 AJAX 등에서 사용되었으나 현재는 JSON에 밀림.
+                예시:
+                <pre><code>&lt;user&gt;
+  &lt;id&gt;1&lt;/id&gt;
+  &lt;name&gt;Kim&lt;/name&gt;
+&lt;/user&gt;</code></pre>
+            </li>
+
+            <li><strong>JSON</strong>
+                - 현재 웹 통신의 사실상 표준. 가볍고 구조적이며 JS 객체와 호환성이 높음.
+                - 대부분의 REST API에서 사용.
+                예시:
+                <pre><code>{
+  "id": 1,
+  "name": "Kim"
+}</code></pre>
+            </li>
+
+            <li><strong>CSV</strong> (콤마로 구분된 값)
+                - 스프레드시트, 엑셀 등과 호환성 높음.
+                - 단순한 테이블 형태 데이터 교환에 적합.
+                예시:
+                <pre><code>id,name,age
+1,Kim,25
+2,Lee,30</code></pre>
+            </li>
+
+            <li><strong>이미지/바이너리 데이터</strong>
+                - 사진, 아이콘, 파일 등 멀티미디어 전송.
+                - base64 인코딩 또는 바이너리 형태로 주고받음.
+                예시:
+                <pre><code>data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...</code></pre>
+                (이미지를 base64 인코딩한 형태, 또는 직접 jpg/png 파일 전송)
+            </li>
+
+            <li><strong>Form Data</strong> (키-값 쌍)
+                - 전통적인 폼 전송 방식. 로그인, 회원가입, 파일 업로드 등에서 사용.
+                - `application/x-www-form-urlencoded` 또는 `multipart/form-data`로 인코딩됨.
+                예시:
+                <pre><code>username=kim&amp;password=1234</code></pre>
+            </li>
+
+            <li><strong>Blob / ArrayBuffer</strong>
+                - 대용량 파일, 오디오/비디오 스트리밍 등에서 사용되는 순수 이진 데이터 형식.
+                - 자바스크립트에서 파일 다운로드/업로드 처리 시 활용.
+                예시 (JS에서 바이너리 응답 받기):
+                <pre><code>fetch("video.mp4")
+  .then(res => res.arrayBuffer())
+  .then(buf => console.log(buf.byteLength));</code></pre>
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>Object 리터럴 표기법과 JSON의 차이점</h2>
+        <ul>
+            <li><strong>Object 리터럴 (자바스크립트 문법)</strong>
+                <ul>
+                    <li>자바스크립트에서 객체를 만드는 구문.</li>
+                    <li>문법:
+                        <pre><code>const obj = {
+  id: 1,
+  name: "Kim",
+  isActive: true
+};</code></pre>
+                    </li>
+                    <li>프로퍼티 이름은 따옴표 없이도 가능(<code>name: "Kim"</code>).</li>
+                    <li>값에는 함수, undefined, 심볼 등도 올 수 있음.</li>
+                </ul>
+            </li>
+
+            <li><strong>JSON (JavaScript Object Notation)</strong>
+                <ul>
+                    <li>데이터 교환을 위한 <strong>문자열 포맷</strong>, 언어 독립적 표준.</li>
+                    <li>문법:
+                        <pre><code>{
+  "id": 1,
+  "name": "Kim",
+  "isActive": true
+}</code></pre>
+                    </li>
+                    <li>모든 key는 반드시 큰따옴표("")로 감싸야 함.</li>
+                    <li>값으로는 문자열, 숫자, 불리언, null, 배열, 객체만 가능 (함수/undefined 불가).</li>
+                    <li>단순히 <strong>문자열</strong>일 뿐, 직접 실행되는 객체가 아님.</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>JSON 객체의 함수</h2>
+        <ul>
+            <li><strong>JSON.stringify()</strong>
+                <ul>
+                    <li>자바스크립트 객체 → JSON 문자열 변환.</li>
+                    <li>예시:
+                        <pre><code>const obj = { id: 1, name: "Kim" };
+const jsonText = JSON.stringify(obj);
+console.log(jsonText);
+// 결과: '{"id":1,"name":"Kim"}' (문자열)</code></pre>
+                    </li>
+                </ul>
+            </li>
+
+            <li><strong>JSON.parse()</strong>
+                <ul>
+                    <li>JSON 문자열 → 자바스크립트 객체 변환.</li>
+                    <li>예시:
+                        <pre><code>const text = '{"id":1,"name":"Kim"}';
+const obj = JSON.parse(text);
+console.log(obj.name); // Kim</code></pre>
+                    </li>
+                </ul>
+            </li>
+
+            <li><strong>활용</strong>
+                <ul>
+                    <li>서버 통신 시 주고받는 데이터는 대부분 JSON 문자열.</li>
+                    <li>받은 JSON → <code>JSON.parse()</code>로 객체 변환 → JS에서 사용.</li>
+                    <li>보낼 객체 → <code>JSON.stringify()</code>로 문자열 변환 → 서버로 전송.</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>JSON으로 변환할 수 없는 데이터와 이유</h2>
+        <ul>
+            <li><strong>함수(Function)</strong>
+                <ul>
+                    <li>JSON은 "데이터 교환 포맷"으로 설계 → 코드(함수)는 데이터가 아니므로 직렬화 대상이 아님.</li>
+                    <li>보안상 이유: 함수를 그대로 전송/실행 가능하게 하면 해킹 위험이 커지므로 의도적으로 제외.</li>
+                    <li>예시:
+                        <pre><code>JSON.stringify({ f: function(){} });
+// 결과: {}</code></pre>
+                    </li>
+                </ul>
+            </li>
+
+            <li><strong>undefined</strong>
+                <ul>
+                    <li><code>undefined</code>는 "값이 정의되지 않음"을 의미하는 <strong>자바스크립트 전용 타입</strong>.</li>
+                    <li>즉 "없음(null)"과는 다르고, "정의되지 않음"이라서 JSON 변환 시 표현 불가.</li>
+                    <li>예시:
+                        <pre><code>JSON.stringify({ a: undefined });
+// 결과: {}</code></pre>
+                    </li>
+                </ul>
+            </li>
+
+            <li><strong>Symbol</strong>
+                <ul>
+                    <li>ES6에서 추가된 고유 식별자 타입.</li>
+                    <li>JSON 표준에는 심볼 개념이 없으므로 직렬화 시 제거됨.</li>
+                    <li>예시:
+                        <pre><code>JSON.stringify({ s: Symbol("id") });
+// 결과: {}</code></pre>
+                    </li>
+                </ul>
+            </li>
+
+            <li><strong>순환 참조(Circular Reference)</strong>
+                <ul>
+                    <li>객체 내부가 자기 자신을 참조하는 구조.</li>
+                    <li>JSON은 트리 구조(끝이 있는 계층 구조)만 표현할 수 있어서 순환은 표현 불가.</li>
+                    <li>예시:
+                        <pre><code>const obj = {};
+obj.self = obj;
+JSON.stringify(obj);
+// TypeError: Converting circular structure to JSON</code></pre>
+                    </li>
+                </ul>
+            </li>
+
+            <li><strong>특수 객체(Date, RegExp, Map, Set 등)</strong>
+                <ul>
+                    <li>Date는 직렬화 시 ISO 문자열로 변환 → 원래 객체 성질(메서드 등)을 잃음.</li>
+                    <li>RegExp, Map, Set 등은 JSON 규격에 없어서 직렬화하면 무시되거나 빈 객체가 됨.</li>
+                    <li>예시:
+                        <pre><code>JSON.stringify({ d: new Date(), r: /abc/ });
+// 결과: {"d":"2025-09-11T04:00:00.000Z","r":{}}</code></pre>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <h3>정리</h3>
+        <ul>
+            <li>JSON이 지원하는 타입: 문자열, 숫자, 불리언, null, 배열, 객체.</li>
+            <li>함수 → 데이터가 아니므로 직렬화 불가 + 보안상 제외.</li>
+            <li>undefined → "정의되지 않음"이라는 JS 고유 개념이라 JSON 표준에 없음 → 직렬화 시 제거.</li>
+            <li>Symbol → 표준에 정의되지 않아 직렬화 시 제거.</li>
+            <li>순환 참조 → 무한 구조라 JSON 변환 불가 → 오류 발생.</li>
+            <li>Date/RegExp/Map/Set 등은 JSON 규격에서 보장되지 않아 변환 시 정보 손실.</li>
+        </ul>
+    </section>
+    <section>
+        <h2>XMLHttpRequest란?</h2>
+        <ul>
+            <li>브라우저에서 제공하는 <strong>비동기 통신 객체</strong>.</li>
+            <li>AJAX(Asynchronous JavaScript And XML)의 핵심 기술로 사용되던 방식.</li>
+            <li>페이지 전체 새로고침 없이 서버와 데이터를 주고받을 수 있게 해줌.</li>
+            <li>XML뿐만 아니라 JSON, HTML, 텍스트 등 다양한 데이터 전송 가능.</li>
+            <li>현재는 <code>fetch</code>가 표준으로 권장되지만, 원리 이해와 구형 브라우저 지원 때문에 여전히 사용됨.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>XMLHttpRequest 주요 메서드</h2>
+        <ul>
+            <li><code>open(method, url, async)</code>
+                - 요청 방식(GET/POST), 요청 URL, 비동기 여부(true/false) 지정.</li>
+            <li><code>send(body)</code>
+                - 요청 전송. GET은 body 없음, POST는 데이터(body) 포함 가능.</li>
+            <li><code>setRequestHeader(name, value)</code>
+                - 요청 헤더 추가 (예: <code>Content-Type</code> 설정).</li>
+            <li><code>abort()</code>
+                - 요청 중단.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>XMLHttpRequest 주요 속성</h2>
+        <ul>
+            <li><code>responseText</code>: 응답 데이터를 문자열로 반환.</li>
+            <li><code>status</code>: HTTP 상태 코드 (200, 404, 500 등).</li>
+            <li><code>readyState</code>: 요청 상태 (0~4 단계).
+                <ul>
+                    <li>0: UNSENT (open() 호출 전)</li>
+                    <li>1: OPENED (open() 호출됨)</li>
+                    <li>2: HEADERS_RECEIVED (응답 헤더 수신)</li>
+                    <li>3: LOADING (응답 본문 일부 수신 중)</li>
+                    <li>4: DONE (응답 완료)</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>HTTP Status Code란?</h2>
+        <ul>
+            <li>클라이언트(브라우저)가 서버에 요청을 보냈을 때, 서버가 그 요청에 대한 처리 결과를 <strong>숫자 코드</strong>로 알려주는 것.</li>
+        </ul>
+        <h3>HTTP Status Code 범위별 의미</h3>
+        <ul>
+            <li><strong>100번대 (정보)</strong> : 웹소켓과 같은 메세지와 관련된 번호로 요청을 받았고 계속 진행 중 (예: 100 Continue)</li>
+            <li><strong>200번대 (성공)</strong> : 요청이 정상 처리됨 (예: 200 OK, 201 Created, 204 No Content)</li>
+            <li><strong>300번대 (리다이렉션)</strong> : 요청 자원이 다른 위치로 이동 (예: 301 Moved Permanently, 302 Found, 304 Not Modified)</li>
+            <li><strong>400번대 (클라이언트 오류)</strong> : 요청에 오류가 있거나 권한 부족 (예: 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found)</li>
+            <li><strong>500번대 (서버 오류)</strong> : 서버 내부 문제로 처리 실패 (예: 500 Internal Server Error, 502 Bad Gateway, 503 Service Unavailable)</li>
+        </ul>
+    </section>
+    <section>
+        <h2>XMLHttpRequest 이벤트</h2>
+        <ul>
+            <li><code>onload</code>: 요청이 성공적으로 완료되면 실행.</li>
+            <li><code>onerror</code>: 네트워크 오류 발생 시 실행.</li>
+            <li><code>onreadystatechange</code>: <code>readyState</code> 값이 바뀔 때마다 실행.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>사용 예시 (GET 요청)</h2>
+        <pre><code>&lt;script&gt;
+const xhr = new XMLHttpRequest();
+
+// 요청 준비
+xhr.open("GET", "user.json");
+
+// 응답 처리
+xhr.onload = function() {
+  if (xhr.status === 200) {
+    const data = JSON.parse(xhr.responseText);
+    console.log("사용자 이름:", data.name);
+  } else {
+    console.error("에러 발생:", xhr.status);
+  }
+};
+
+// 요청 전송
+xhr.send();
+&lt;/script&gt;</code></pre>
+    </section>
+
+    <section>
+        <h2>JSON 제공 사이트 추천</h2>
+        <ul>
+            <li><strong>JSONPlaceholder</strong>
+                - URL: <a href="https://jsonplaceholder.typicode.com" target="_blank">https://jsonplaceholder.typicode.com</a>
+                - 가장 많이 쓰이는 무료 테스트용 REST API
+                - posts, comments, users, todos 등 다양한 JSON 데이터 제공</li>
+
+            <li><strong>ReqRes</strong>
+                - URL: <a href="https://reqres.in" target="_blank">https://reqres.in</a>
+                - 회원(User) 관련 JSON 데이터 제공
+                - 로그인, 회원 등록 같은 요청/응답 시뮬레이션 가능</li>
+
+            <li><strong>DummyJSON</strong>
+                - URL: <a href="https://dummyjson.com" target="_blank">https://dummyjson.com</a>
+                - products, users, carts 등 실제 서비스 같은 데이터 제공
+                - 페이지네이션, 검색 등 쿼리 테스트도 가능</li>
+
+
+        </ul>
+    </section>
+    <section>
+        <h1>할 일 목록 (Todos)</h1>
+        <p>url : https://jsonplaceholder.typicode.com/todos</p>
+        <p>데이터형식<pre><code>[
+  {
+    "userId": 1,
+    "id": 1,
+    "title": "delectus aut autem",
+    "completed": false
+  },
+  {
+    "userId": 1,
+    "id": 2,
+    "title": "quis ut nam facilis et officia qui",
+    "completed": false
+  },....]</code></pre></p>
+        <hr>
+        <p><button id="todosLoadBtn">할 일 목록 불러오기</button></p>
+
+        <ul id="todoList"></ul>
+
+        <script>
+            const todosLoadBtn = document.getElementById('todosLoadBtn');
+            // XMLHttpRequest 객체 생성
+            const loadTodos=()=>{
+
+                const xhr = new XMLHttpRequest();
+
+                // 요청 준비 (GET 방식, 비동기 true)
+                xhr.open("GET", "https://jsonplaceholder.typicode.com/todos", true);
+
+                // 응답 처리
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        // JSON 문자열 → 객체 변환
+                        const todos = JSON.parse(xhr.responseText);
+                        const list = document.getElementById("todoList");
+
+                        // 처음 10개만 출력
+                        todos.slice(0, 10).forEach(todo => {
+                            const li = document.createElement("li");
+                            li.textContent = `${todo.id}. ${todo.title} [${todo.completed ? "완료" : "미완료"}]`;
+                            list.appendChild(li);
+                        });
+                    } else {
+                        console.error("에러 발생:", xhr.status);
+                    }
+                };
+                // 요청 전송
+                xhr.send();
+            }
+            todosLoadBtn.onclick = loadTodos;
+        </script>
+
+    </section>
+    <section>
+        <h1>Posts (상위 10개)</h1>
+        <ul id="posts"></ul>
+
+        <script>
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://jsonplaceholder.typicode.com/posts", true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const posts = JSON.parse(xhr.responseText);
+                    const list = document.getElementById("posts");
+                    posts.slice(0, 10).forEach(p => {
+                        const li = document.createElement("li");
+                        li.textContent = `${p.id}. ${p.title}`;
+                        list.appendChild(li);
+                    });
+                } else {
+                    console.error("에러:", xhr.status);
+                }
+            };
+            xhr.onerror = () => console.error("네트워크 에러");
+            xhr.send();
+        </script>
+
+    </section>
+    <section>
+        <h1>과제: 게시글 & 댓글 불러오기</h1>
+
+        <!-- 과제 1 -->
+        <h2>과제 1. 게시글 불러오기</h2>
+        <button id="loadPosts">게시글 불러오기</button>
+        <ul id="postList"></ul>
+
+        <!-- 과제 2 -->
+        <h2>과제 2. 선택한 게시글 댓글 불러오기</h2>
+        <button id="loadComments">댓글 불러오기</button>
+        <ul id="commentList"></ul>
+
+        <script>
+            const $postList = document.getElementById("postList");
+            const $commentList = document.getElementById("commentList");
+            let selectedPostId = null; // 현재 선택된 게시글 id 저장
+
+            // 과제 1: 게시글 불러오기
+            document.getElementById("loadPosts").addEventListener("click", function () {
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", "https://jsonplaceholder.typicode.com/posts", true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        const posts = JSON.parse(xhr.responseText).slice(0, 10); // 10개만
+                        $postList.innerHTML = "";
+                        posts.forEach(p => {
+                            const li = document.createElement("li");
+                            li.textContent = `${p.id}. ${p.title}`;
+                            li.dataset.id = p.id;
+                            li.addEventListener("click", () => {
+                                selectedPostId = p.id;
+                                alert(`게시글 #${p.id} 선택됨`);
+                            });
+                            $postList.appendChild(li);
+                        });
+                    } else {
+                        console.error("에러:", xhr.status);
+                    }
+                };
+                xhr.onerror = () => console.error("네트워크 에러");
+                xhr.send();
+            });
+
+            // 과제 2: 댓글 불러오기
+            document.getElementById("loadComments").addEventListener("click", function () {
+                if (!selectedPostId) {
+                    alert("먼저 게시글을 선택하세요!");
+                    return;
+                }
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", `https://jsonplaceholder.typicode.com/posts/${selectedPostId}/comments`, true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        const comments = JSON.parse(xhr.responseText);
+                        $commentList.innerHTML = "";
+                        comments.forEach(c => {
+                            const li = document.createElement("li");
+                            li.textContent = `${c.id}. ${c.name} (${c.email})`;
+                            $commentList.appendChild(li);
+                        });
+                    } else {
+                        console.error("에러:", xhr.status);
+                    }
+                };
+                xhr.onerror = () => console.error("네트워크 에러");
+                xhr.send();
+            });
+        </script>
+    </section>
+</body>
+</html>
