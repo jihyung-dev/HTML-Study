@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>과제 : 비동기로 게시글 불러오기</title>
+</head>
+<body>
+<!--
+    <h1>과제 : 비동기로 게시글 불러오기</h1>
+    <b>
+        <button id="loadPostsBtn">불러오기</button>
+    </b>
+    <hr>
+        <ul id="posts"></ul>
+
+    <script>
+
+        //화면이 처음 로드 될때 찾기
+        const postsUl = document.querySelector("#posts");
+        const loadPostsBtn = document.getElementById("loadPostsBtn");
+        const loadComments=(e,postId)=>{
+            //로드되고 나서 존재할때 찾기
+            const commentsUl=document.querySelector("#comments-"+postId);
+            let url = `https://jsonplaceholder.typicode.com/posts/${postId}/comments`;
+            const req = new XMLHttpRequest();
+            req.open("GET", url, true);
+            req.send();
+            req.onload=()=>{
+                if(req.status === 200){ //"200"==200 문자열과숫자 비교
+                                      // 200===200 숫자끼리 비교
+                    const comments=JSON.parse(req.responseText);
+                    let html="";
+                    for (let comment of comments){
+                        html+=
+                            `<li>
+                                ${comment.id} /
+                                ${comment.name} /
+                                ${comment.email} /
+                                <hr>
+                                ${comment.body}
+                                </li>`;
+
+                    }
+                    commentsUl.innerHTML=html;
+                }
+
+            }
+
+        }
+
+        const loadPosts=()=>{
+            let url="https://jsonplaceholder.typicode.com/posts";
+            const req = new XMLHttpRequest();
+            req.open("GET",url,true);
+            req.send();
+            let json=req.responseText;
+            console.log(json);  // 아무것도 없음, 비동기함수,
+                                //send()가 끝남과 상관없이 log를 하므로, 비어있음
+            req.onload=()=>{
+                let status=req.status; // 성공:200 실패:400 서버측 오류 500
+
+                if (status==200){
+
+                let postsJson=req.responseText;
+                let posts=JSON.parse(postsJson);
+                //JSON
+                //stringify({a:20}) : 객체=>문자열
+                //parse 문자열 => 객체 (파싱)
+                //console.log(posts);
+
+                let html="";
+                for(let post of posts){
+                    html+=`
+<li>
+    <h4>
+
+        <b>${post.id}.</b> ${post.title}
+        <span>(${post.userId})</span>
+    </h4>
+    <hr>
+    <pre>${post.body}</pre>
+    <hr>
+    <div>
+        <p>
+            <button onclick="loadComments(event,${post.id})">댓글 불러오기</button>
+                    &lt;!&ndash; onclick (event) { }&ndash;&gt;
+        </p>
+            <ul id="comments-${post.id}">
+
+            </ul>
+    </div>
+</li>`
+
+
+                }
+                    console.log(html)
+                    postsUl.innerHTML=html;
+                }
+            }
+
+        }
+        ///loadPosts(); // 현재는 그냥 바로 실행,
+        // 버튼을 만들고 호출할 것임
+        loadPosts();
+        loadPostsBtn.addEventListener("click", loadPosts)
+
+        //(function a(){})();  //만들자마자 실행
+
+
+
+    </script>
+-->
+
+<h1>과제 : 비동기로 게시글 불러오기</h1>
+<b>
+    <button id="loadPostsBtn">불러오기</button>
+</b>
+<hr>
+<style>
+    .d-none{
+        display: none;
+    }
+</style>
+<li id="postEx" class="d-none"> <!-- 추가할때 id와 class는 삭제 -->
+    <h4>
+
+        <b class="id"></b><b>. </b>
+        <span class="title"></span>
+        (<span class="userId"></span>)
+    </h4>
+    <hr>
+    <pre class="body"></pre>
+    <hr>
+    <div>
+        <p>
+            <button class="loadCommentBtn">댓글 불러오기</button>
+            <!-- onclick (event) { }-->
+        </p>
+        <ul class="comments">
+
+        </ul>
+    </div>
+</li>
+<ul id="posts"></ul>
+
+<script>
+
+    //화면이 처음 로드 될때 찾기
+    const postsUl = document.querySelector("#posts");
+    const loadPostsBtn = document.getElementById("loadPostsBtn");
+    const postEx = document.getElementById("postEx"); //클론해서 찾기
+
+    const commentNode=(comment)=>{
+        const li=document.createElement("li");
+        let text=`${comment.id} / ${comment.name} / ${comment.email}`;
+        const hr=document.createElement("hr");
+        let body=comment.body;
+        li.append(text);
+        li.append(hr);
+        li.append(body);
+        return li;
+    }
+    const clonePostNode=(post)=>{
+        const postNode=postEx.cloneNode(true); //깊은 복제
+        postNode.removeAttribute("id")
+        postNode.classList.remove("d-none");
+
+        let id=postNode.querySelector(".id");
+        let title=postNode.querySelector(".title");
+        let userId=postNode.querySelector(".userId");
+        let body=postNode.querySelector(".body");
+        let loadCommentBtn=postNode.querySelector(".loadCommentBtn");
+        let comments=postNode.querySelector(".comments");
+
+        id.append(post.id);
+        title.append(post.title);
+        userId.append(post.userId);
+        body.append(post.body);
+
+        //loadCommentBtn.addEventListener("click", loadComments()) // 불가
+        //loadCommentBtn.addEventListener("click", loadComments)
+        // 원래 가능 이지만 postId가 매개변수로 있어서 불가
+        loadCommentBtn.addEventListener("click", (e)=>{
+            loadComments(e,post.id,comments)
+        });
+        return postNode;
+    }
+
+
+    const loadComments=(e,postId,commentsUl)=>{
+        //로드되고 나서 존재할때 찾기
+        // const commentsUl=document.querySelector("#comments-"+postId);
+        let url = `https://jsonplaceholder.typicode.com/posts/${postId}/comments`;
+        const req = new XMLHttpRequest();
+        req.open("GET", url, true);
+        req.send();
+        req.onload=()=>{
+            if(req.status === 200){ //"200"==200 문자열과숫자 비교
+                // 200===200 숫자끼리 비교
+                const comments=JSON.parse(req.responseText);
+                let html="";
+                for (let comment of comments){
+                    const li=commentNode(comment);
+                    commentsUl.append(li);
+                }
+            }
+
+        }
+
+    }
+
+    const loadPosts=()=>{
+        let url="https://jsonplaceholder.typicode.com/posts";
+        const req = new XMLHttpRequest();
+        req.open("GET",url,true);
+        req.send();
+        let json=req.responseText;
+        console.log(json);  // 아무것도 없음, 비동기함수,
+                            //send()가 끝남과 상관없이 log를 하므로, 비어있음
+        req.onload=()=>{
+            let status=req.status; // 성공:200 실패:400 서버측 오류 500
+
+            if (status==200){
+
+                let postsJson=req.responseText;
+                let posts=JSON.parse(postsJson);
+                //JSON
+                //stringify({a:20}) : 객체=>문자열
+                //parse 문자열 => 객체 (파싱)
+                //console.log(posts);
+
+                let html="";
+                for(let post of posts){
+                    const postNode=clonePostNode(post);
+                    console.log(postNode)
+                    postsUl.append(postNode);
+                }
+            }
+        }
+    }
+    ///loadPosts(); // 현재는 그냥 바로 실행,
+    // 버튼을 만들고 호출할 것임
+    loadPostsBtn.addEventListener("click", loadPosts)
+
+    //(function a(){})();  //만들자마자 실행
+
+
+
+</script>
+
+</body>
+</html>

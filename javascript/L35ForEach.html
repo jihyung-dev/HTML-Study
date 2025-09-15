@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>내부반복문과 외부반복문</title>
+</head>
+<body>
+    <h1>내부반복문과 외부반복문</h1>
+    <script>
+        const arr=[10,20,30,40];
+        let sum=0;
+
+        //인덱스기반의 탐색
+        for (let i=0; i<arr.length; i++){
+            sum+=arr[i];
+        }
+        console.log(sum)
+
+        //외부반복문 iterator
+        for(let n of arr){
+           sum+=n;
+        }
+        console.log(sum)
+
+        sum=0;
+        //내부반복문
+        //1. 명시적
+        //2. 재사용
+        const sumNum=(num)=>{ //함수의 재사용성 부여
+            sum+=num;
+        }
+        // arr.forEach((value,index,array)=>{
+        //     // console.log(value,index,array)
+        //     sum+=value;
+        // })
+        arr.forEach(sumNum);
+        console.log(sum);
+
+        let arrReduce =arr.reduce((a,b)=>{
+            return a+b;
+        },0)
+        console.log(arrReduce)
+        //3.함수 자체가 배열탐색의 목적
+
+
+    </script>
+
+
+</body>
+</html>

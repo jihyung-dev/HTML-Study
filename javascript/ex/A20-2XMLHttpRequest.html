@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XMLHttpRequest 과제</title>
+</head>
+<body>
+    <h1>과제: DummyJSON 유저 & 카트 불러오기</h1>
+    <h2></h2>
+    <style>
+        .d-none {
+            display: none;
+        }
+
+    </style>
+<!-- 유저 (유저정보) : 아이디(숫자), 이메일, 계정이름, 썸네일(이미지)-->
+<!-- 우측에 장바구니를 누르면, 해당유저의 카트 내용이 나오도록 -->
+
+    <!-- 몸땡이는 노드 생성으로 -->
+    <!-- 카트는 노드 복제로 진행시켜 -->
+
+    <button id="loadUserInfo">유저 정보 불러오기 </button>         <!-- V -->
+    <hr>
+    <section id="infoEx" class="d-none">
+        <ul id="userInfo">                                      <!-- V -->
+            <div id="thumNail">
+                <img src="" alt="">
+            </div>
+            <li id="id"></li>
+            <li id="userName"></li>
+            <li id="email"></li>
+        </ul>
+        <pre class="body"></pre>
+        <hr>
+    <div>
+        <p>
+            <button id="loadCartBtn">장바구니 불러오기</button>
+        </p>
+        <ul class="cart">
+
+        </ul>
+    </div>
+    </section>
+
+
+
+    <script>
+        const loadUserInfoBtn = document.querySelector('#loadUserInfo');
+        const userInfo = document.querySelector('#userInfo');
+        const infoEx = document.getElementById("infoEx");
+
+        const idNode=(users)=>{
+            const li=document.createElement("li");
+            let text=`${users.id} / ${users.username} / ${users.email}`;
+            const hr=document.createElement("hr");
+            let body=user.body;
+            li.append(text);
+            li.append(hr);
+            li.append(body);
+            return li;
+        }
+        const cloneUserNode=(users)=>{
+            const userNode=infoEx.cloneNode(true);  //깊은복제
+            userNode.removeAttribute("id");
+            userNode.classList.remove("d-none");
+
+            let thumnail=userNode.querySelector(".thumnail");
+            let id=userNode.querySelector(".id");
+            let name=userNode.querySelector(".userName");
+            let email=userNode.querySelector(".email");
+            let loadCartBtn=userNode.querySelector(".loadCartBtn");
+            let cart=userNode.querySelector(".cart")
+
+
+
+
+        }
+
+
+
+
+
+        const loadUserInfo=(userid)=>{
+            let url = `https://dummyjson.com/${userid}/users`
+            const req = new XMLHttpRequest();
+            req.open("GET", url, true);
+            req.send();
+            req.onload=()=>{
+                if(req.status==200){
+                    const comments=JSON.parse(req.responseText);
+                    let html="";
+
+                }
+            }
+
+
+        }
+
+
+
+    </script>
+
+</body>
+</html>
+
