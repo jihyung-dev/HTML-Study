@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>예외를 알고 처리하자</title>
+</head>
+<body>
+    <h1>예외를 알고 처리하자</h1>
+    <script>
+        //코드를 잘못 쓰는 것은 예외가 아니다 =>오류
+        let a=10;
+        // let a=20;
+        console.log("안녕1!");
+        /*
+        *
+        * Java (컴파일언어)
+        * int a=10;
+        * => 컴파일 오류
+        * 오류가 있는것이 배포(실행)되는것을 미연에 방지할 수 있음
+        *
+        * js (인터프리터언어)
+        * 바로실행!
+        *
+        * */
+
+        //예외 : 실행도중 발생하는 오류
+        //fetch("https://naver.com") //오류 blocked by CORS policy
+
+        let n=10; //Number
+        try {
+            console.log(n.UpperCase());
+        } catch (e) {
+            console.log(e)
+        }
+        //String.toUpperCase() "aaa"->"AAA"
+
+        console.log("안녕2!"); //실행되지 않음
+
+        try {
+            let arr=new Array(-1);//첫번째 인자 : 길이가 들어옴 (-1 -> 오류)
+            console.log(arr);
+        }catch (e) {
+            console.log(e.message);
+        }
+        //NaN,
+        console.log("십삼"*3);
+        //예외 => NaN
+        let arr=[1,2,3];
+        console.log(arr[3]);
+        //배열의 길이를 벗어나는 것을 참조=> 오류
+        console.log(1/0) //수학적 오류
+        //js 인터프리터언어라 오류를 상태로 표현
+
+        let text='{"a:10}';
+        //문자열로 객체를 표현 => JSON
+        try {
+            console.log(JSON.parse(text))
+        }catch (e) {
+            console.log(e.message);
+        }
+        console.log("제이슨 파싱중")
+
+
+
+    </script>
+</body>
+</html>

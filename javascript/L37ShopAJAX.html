@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+
+    <title>DummyJSON으로 AJAXX 쇼핑몰 구현</title>
+    <link rel="stylesheet" href="/src/bootstrap-5.3.7/bootstrap-5.3.7/dist/css/bootstrap.css">
+    <script defer src="/src/bootstrap-5.3.7/bootstrap-5.3.7/dist/js/bootstrap.bundle.js"></script>
+<!-- defer : 도큐먼트가 로드되고 script 다운   -->
+</head>
+<style>
+    .d-none {
+        display: none;
+    }
+
+</style>
+
+<body>
+
+<!-- navigation 바 by bootstrap -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Hostco</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Product</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        My page
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">My Information</a></li>
+                        <li><a class="dropdown-item" href="#">Cart</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item d-flex justify-content-center">
+                    <p class="" >chloem님 안녕하세요?</p>
+                    <button id="loadCartBtn" class="btn loadCartBtn btn-outline-success mb-2">Cart</button>
+                </li>
+                <li class="nav-item">
+                    <li class="nav-link" ></li>
+                </li>
+            </ul>
+            <form class="d-flex">
+                <a href="https://dummyjson.com/carts/user/11" class="btn btn-outline-primary">로그인</a>
+                <a href="https://dummyjson.com/carts/user/11" class="btn btn-outline-info">회원가입</a>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<!--장바구니 clone만들기 -->
+
+<hr>
+<li id="cartEx" class="d-none">
+    <ul class="cartInfo">           <!-- 장바구니 요소 리스트 -->
+        <li class="title"></li>     <!-- 제품명  -->
+        <li class="quantity"></li>  <!-- 수량  -->
+        <li class="discount"></li>     <!-- 할인율  -->
+        <li class="price"> </li>    <!-- 원가격  -->
+        <li class="dcPrice"></li>   <!-- 할인가격 -->
+    </ul>
+</li>
+
+<script>
+
+    const loadCartBtn = document.getElementById("loadCartBtn");
+    const cartEx = document.getElementById('cartEx');
+
+
+
+    <!--장바구니 복제-->
+    const cloneCartNode=(cart)=>{
+    const cartNode = cartEx.cloneNode(true);
+    cartNode.removeAttribute("id");
+    cartNode.classList.remove("d-none");
+
+    let title = cartNode.querySelector(".title");
+    let quantity = cartNode.querySelector(".quantity");
+    let discount = cartNode.querySelector(".discount");
+    let price = cartNode.querySelector(".price");
+    let dcPrice = cartNode.querySelector(".dcPrice");
+
+    title.append(cart.title);
+    quantity.append(cart.quantity);
+    discount.append(cart.discount);
+    price.append(cart.price);
+    dcPrice.append(cart.dcPrice);
+
+    loadCartBtn.addEventListener("click", (e) => {
+        loadCarts(e);
+    });
+    return cartNode;
+
+    //카트 불러오기 함수
+    const loadCarts =(e,cartsUl)=>{
+        let url = "https://dummyjson.com/carts/user/23";
+        const req = new XMLHttpRequest();
+        req.open("GET", url, true);
+        req.send();
+        req.onload=()=>{
+            let status=req.status;
+
+            if(status===200){
+
+                let carts=JSON.parse(req.responseText);
+
+                let html="";
+                for (let cart of carts){
+                    const cartNode=clonePostNode(cart);
+                    console.log(cartNode);
+                    cartsUl.append(li);
+                }
+            }
+        }
+    }
+}
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

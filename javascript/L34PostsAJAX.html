@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>과제 : 비동기로 게시글 불러오기</title>
 </head>
+<style>
+    .d-none{
+        display: none;
+    }
+</style>
 <body>
 <!--
     <h1>과제 : 비동기로 게시글 불러오기</h1>
@@ -113,14 +118,9 @@
 
 <h1>과제 : 비동기로 게시글 불러오기</h1>
 <b>
-    <button id="loadPostsBtn">불러오기</button>
+    <button id="loadPostsBtn">게시글 불러오기</button>
 </b>
 <hr>
-<style>
-    .d-none{
-        display: none;
-    }
-</style>
 <li id="postEx" class="d-none"> <!-- 추가할때 id와 class는 삭제 -->
     <h4>
 
@@ -146,23 +146,26 @@
 <script>
 
     //화면이 처음 로드 될때 찾기
-    const postsUl = document.querySelector("#posts");
-    const loadPostsBtn = document.getElementById("loadPostsBtn");
-    const postEx = document.getElementById("postEx"); //클론해서 찾기
+    const postsUl = document.querySelector("#posts");               //포스트 전체
+    const loadPostsBtn = document.getElementById("loadPostsBtn");   //게시글 불러오는 버튼
+    const postEx = document.getElementById("postEx");               //게시글 복사
 
-    const commentNode=(comment)=>{
+    //댓글 생성
+    const commentNode=(comment)=>{                                  //댓글 : 노드생성방법
         const li=document.createElement("li");
         let text=`${comment.id} / ${comment.name} / ${comment.email}`;
         const hr=document.createElement("hr");
         let body=comment.body;
-        li.append(text);
         li.append(hr);
+        li.append(text);
         li.append(body);
         return li;
     }
-    const clonePostNode=(post)=>{
-        const postNode=postEx.cloneNode(true); //깊은 복제
-        postNode.removeAttribute("id")
+
+    //게시글 복제
+    const clonePostNode=(post)=>{                                   //댓글 : 복제 방법
+        const postNode=postEx.cloneNode(true); //깊은 복제  //postNode는, postEx를 복제한 노드
+        postNode.removeAttribute("id")                     //postEx는 li의 id (글전체)
         postNode.classList.remove("d-none");
 
         let id=postNode.querySelector(".id");
@@ -186,7 +189,7 @@
         return postNode;
     }
 
-
+    //comment 불러오기
     const loadComments=(e,postId,commentsUl)=>{
         //로드되고 나서 존재할때 찾기
         // const commentsUl=document.querySelector("#comments-"+postId);
@@ -198,17 +201,55 @@
             if(req.status === 200){ //"200"==200 문자열과숫자 비교
                 // 200===200 숫자끼리 비교
                 const comments=JSON.parse(req.responseText);
+
+                //댓글 map과 spread활용해서 바꿔보기
+
                 let html="";
                 for (let comment of comments){
                     const li=commentNode(comment);
                     commentsUl.append(li);
                 }
+
+                // const cloneCommentArr=comments.map(comment=>{ //cloneCommentArr 선언
+                //     return commentNode(comment)               //
+                // })
+                // commentsUl.append(...cloneCommentArr);
+
+                // const commentArr=comments.map((comment)=>{
+                //     return comment;
+                //     console.log(comment)
+                // })
+                // commentsUl.append(...commentArr)
+
+
             }
+
+            // {1,2,3} 을 배열로 만들기
+
+            // 1. for ( n of [1,2,3])                    //외부 반복문 (파악이 어려움)
+            //      li  =document.createElemnt(`li`);
+            //      li.append(n);   // li(1), li(2), li(3)
+            //      lis = [    ]
+            //      lis.push(li) => lis == [ li(1),li(2),li(3) ]
+
+            // 2. lis == [1,2,3] 을 바꾸겠다 =>  map _ 내부 반복문
+            // lis.=[1,2,3].map ((  ) => {
+            //     바꾼걸로 //return// 을 반드시 해주어야함!
+            //          li=document.createElement(`li`);
+            //          return li.append(value); => li(1)을 만들어서 배열에 넣기
+            // })
+
+
+
+
+
+
+
 
         }
 
     }
-
+    //게시글 불러오기 함수
     const loadPosts=()=>{
         let url="https://jsonplaceholder.typicode.com/posts";
         const req = new XMLHttpRequest();
@@ -220,7 +261,7 @@
         req.onload=()=>{
             let status=req.status; // 성공:200 실패:400 서버측 오류 500
 
-            if (status==200){
+            if (status===200){
 
                 let postsJson=req.responseText;
                 let posts=JSON.parse(postsJson);
@@ -235,6 +276,16 @@
                     console.log(postNode)
                     postsUl.append(postNode);
                 }
+
+                // 위 문장을 map으로 다시 써보기
+
+                // const clonePostArr=posts.map((post)=>{
+                //     return clonePostNode(post);
+                // })
+                // postsUl.append(...clonePostArr);
+
+                //댓글도 같은 방법으로 바꿔보기 (map과 spread)를 활용해서
+
             }
         }
     }

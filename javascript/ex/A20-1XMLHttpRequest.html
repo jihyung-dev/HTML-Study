@@ -29,7 +29,7 @@
 
             let status = request.status;                                //요청의 상태
             if(status == 200){                                          //상태가 200일 때,
-                const posts = JSON.parse(request.responseText);
+                const posts = JSON.parse(request.responseText);         //요청의 응답을 JSON으로 형변환한것을 posts에 참조
                 // console.log(ids)
 
                 let html ="";

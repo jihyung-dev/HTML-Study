@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>async 함수로 Promise 객체의 실행을 동기화하자</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+    <h1>async 함수로 Promise 객체의 실행을 동기화하자</h1>
+    <section>
+        <h2>async 함수</h2>
+        <ul>
+            <li><code>async</code> 키워드를 붙이면 함수는 항상 <strong>Promise</strong>를 반환한다.</li>
+            <li>반환값이 일반 값이면 자동으로 <code>Promise.resolve(값)</code>으로 변환된다.</li>
+            <li>함수 안에서 에러가 발생하면 자동으로 <code>Promise.reject(에러)</code>가 된다.</li>
+        </ul>
+        <pre><code>async function hello() {
+  return "안녕"; // Promise.resolve("안녕") 과 같음
+}
+
+hello().then(msg => console.log(msg));</code></pre>
+    </section>
+
+    <section>
+        <h2>await 키워드</h2>
+        <ul>
+            <li><code>await</code>은 Promise가 끝날 때까지 기다린다.</li>
+            <li>성공(resolve) → 결과 값을 반환한다.</li>
+            <li>실패(reject) → 예외로 던져지므로 try/catch가 필요하다.</li>
+        </ul>
+        <pre><code>function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function run() {
+  console.log("1. 시작");
+  await delay(1000);   // 1초 기다림
+  console.log("2. 1초 후 실행");
+  return "완료";
+}
+
+run().then(msg => console.log(msg));</code></pre>
+    </section>
+
+    <section>
+        <h2>에러 처리</h2>
+        <ul>
+            <li><code>await</code>에서 reject된 Promise는 예외로 던져진다.</li>
+            <li><code>try/catch</code>로 처리할 수 있다.</li>
+        </ul>
+        <pre><code>async function runError() {
+  try {
+    throw new Error("문제 발생!");
+  } catch (e) {
+    console.error("catch로 처리:", e.message);
+  }
+}
+
+runError();</code></pre>
+    </section>
+    <h2>비동기 함수를 동시에 처리하기</h2>
+    <section>
+        <h2>Promise.all</h2>
+        <ul>
+            <li>여러 개의 Promise를 동시에 실행하고, 모두 성공하면 결과 배열을 반환한다.</li>
+            <li>하나라도 실패(reject)하면 즉시 실패한다.</li>
+        </ul>
+        <pre><code>Promise.all([
+  fetch("/data1"),
+  fetch("/data2"),
+  fetch("/data3")
+])
+.then(results => {
+  console.log("모두 성공:", results);
+})
+.catch(err => {
+  console.error("하나라도 실패:", err);
+});
+
+async function run(){
+    try{
+        const responses=await Promise.all([
+          fetch("/data1"),
+          fetch("/data2"),
+          fetch("/data3")
+        ])
+        responses.forEach(res => {
+          if (!res.ok) { //ok : status>=200 && status<300 경우 true
+            throw new Error(`HTTP 오류: ${res.status} ${res.url}`);
+          }
+        });
+
+        const results = await Promise.all(responses.map(res => res.json()));
+        console.log("모두 성공:", results);
+    }catch(err){
+        console.error("하나라도 실패:", err);
+        //네트워크 단절, CORS 차단, DNS 오류
+        //400,500은 상태지 오류가 아니니라 예외위임하지 않음
+    }
+}
+run();
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Promise.allSettled</h2>
+        <ul>
+            <li>모든 Promise가 끝날 때까지 기다린다.</li>
+            <li>성공 여부와 상관없이 각 Promise의 상태와 값을 배열로 반환한다.</li>
+        </ul>
+        <pre><code>
+Promise.allSettled([
+  fetch("/data1"),
+  fetch("/data2"),
+  fetch("/data3")
+])
+.then(results => {
+  results.forEach(r => {
+    if (r.status === "fulfilled") {
+      console.log("성공:", r.value);
+    } else {
+      console.log("실패:", r.reason);
+    }
+  });
+});
+
+async function run() {
+  const results = await Promise.allSettled([
+    fetch("/data1"),
+    fetch("/data2"),
+    fetch("/data3")
+  ]);
+
+  results.forEach(r => {
+    if (r.status === "fulfilled") {
+      console.log("성공:", r.value);
+    } else {
+      console.log("실패:", r.reason);
+    }
+  });
+}
+</code></pre>
+    </section>
+
+    <section>
+        <h2>Promise.race</h2>
+        <ul>
+            <li>여러 Promise 중에서 가장 먼저 끝난 것의 결과를 반환한다.</li>
+            <li>성공이든 실패든 먼저 끝난 결과가 최종값이 된다.</li>
+        </ul>
+    <pre><code>
+Promise.race([
+  fetch("/slow"),
+  fetch("/fast")
+])
+.then(result => {
+  console.log("가장 빨리 끝난 것:", result);
+})
+.catch(err => {
+  console.error("가장 빨리 실패한 것:", err);
+});
+
+async function run() {
+  try {
+    const result = await Promise.race([
+      fetch("/slow"),
+      fetch("/fast")
+    ]);
+    console.log("가장 빨리 끝난 것:", result);
+  } catch (err) {
+    console.error("가장 빨리 실패한 것:", err);
+  }
+}
+
+run();</code></pre>
+    </section>
+
+    <section>
+        <h2>Promise.any</h2>
+        <ul>
+            <li>여러 Promise 중에서 하나라도 성공하면 성공으로 처리한다.</li>
+            <li>모두 실패하면 <code>AggregateError</code>로 reject된다.</li>
+        </ul>
+        <pre><code>
+Promise.any([
+  fetch("/fail1"),
+  fetch("/data"),
+  fetch("/fail2")
+])
+.then(result => {
+  console.log("성공한 첫 번째:", result);
+})
+.catch(err => {
+  console.error("모두 실패:", err);
+});
+
+async function run() {
+  try {
+    const result = await Promise.any([
+      fetch("/fail1"),
+      fetch("/data"),
+      fetch("/fail2")
+    ]);
+    console.log("성공한 첫 번째:", result);
+  } catch (err) {
+    // 모두 실패하면 AggregateError 발생
+    console.error("모두 실패:", err);
+  }
+}
+run();
+        </code></pre>
+    </section>
+</body>
+</html>

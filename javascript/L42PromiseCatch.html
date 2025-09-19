@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>프라미스 객체에서 예외 위임</title>
+</head>
+<body>
+    <h1>프라미스 객체에서 예외 위임</h1>
+    <script>
+        let e=new Error(); //에러 객채를 만든다고 에러가 발생하진 않음
+        //throw e; //던져야 발생
+        let a=10;
+        let b="이십";
+
+        new Promise((resolve, reject) => {
+            let sum=(+a)+(+b); //NaN 가 아니면 resolve, NaN면 reject
+            //isNaN(NaN일수도 있는 데이터)를 검사
+            //isNaN("십") 검사 => true
+
+            //Number.isNaN(NaN) 검사
+            //Number.isNaN(("십") 검사 => false
+
+            if(Number.isNaN(sum)){ //a나 b 둘 중 하나가 NaN
+                //reject("a나 b 둘중 하나가 NaN") //오류다
+                throw new Error("NumberFormat:a나 b 둘중하나가 NaN")
+            } else{
+                resolve(sum);
+            }
+
+        }).then((sum)=>{
+            console.log("a+b="+sum);
+        }).catch((err)=>{
+            console.log("catch: "+err);
+        })
+
+        //async함수에서 promise의 예외처리
+        const run=async(n1,n2)=>{
+            try {
+                let result = await new Promise((resolve, reject)=>{
+                    let sum=(+n1)+(+n2);
+                    if(Number.isNaN(sum)){
+                        //문자열로만 받으면 안됨, new Error 가 필요함
+                                            //★★★  reject에선 습관적으로 new Error를 쓰기!
+                        //reject(new Error("reject n1,n2 둘중 NaN가 있습니다."));
+                        //reject대신 throw로 바꿀 수 있음, [대체가능]
+                        throw (new Error("throw n1,n2 둘중 NaN가 있습니다."));
+                        //Error는 어디서 에러가 발생했는지 알려줌
+                    }else {
+                        resolve(sum);
+                    }
+                });
+                console.log("run.result =",result)
+            } catch (e){
+                console.log(e)
+            }
+
+        };      //같은 코드 : 호이스팅 차이
+        //async function run(){};   //같은 코드 : 호이스팅 차이
+        run(10,20);
+        run("20",20);
+        run("이십",20);       //마이크로태스크 뒤에 실행됨 . 비동기함수
+        console.log("안녕!") //마이크로태스크
+
+
+
+    </script>
+
+</body>
+</html>

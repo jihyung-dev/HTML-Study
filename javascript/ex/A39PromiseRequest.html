@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>비동기 통신 동기화 하기</title>
+</head>
+<body>
+<!-- chloe씨의 아이디와 비밀번호로 로그인을 한 후 -->
+<!-- 더미제이슨에서 해당하는 user정보를 id를 통신으로 받아서 post를 받아오기 -->
+<!-- 1번: XMLHttpRequest 방법 사용//23 -->
+<!-- 2번: promise resolve 방법 사용 //11번  -->
+<!-- 3번: fetch 방법 사용 //32번 -->
+<h1>비동기 통신 동기화 하기</h1>
+<h2>chloem의 게시글 호출?</h2>
+<b>23번 유저로 받기 //chloe, chloem, chloemgpass</b>
+<p>
+    <button id="loadPostsBtn">chloem씨의 게시글을 호출</button>
+</p>
+<div id="postsWrap"></div>
+<hr>
+
+<script>
+    const username="chloem"
+    const password="chloempass"
+    const loadPostsBtn=document.getElementById("loadPostsBtn");
+    const postsWrap=document.getElementById("postsWrap");
+
+    const loadPosts=()=>{ //게시글 불러오기 함수
+        let userId=null;    //로그인으로 id 조회 =>
+        let url="https://dummyjson.com/user/login"
+        const userObj={
+            "username":username,
+            "password":password
+        }
+        const req=new XMLHttpRequest();
+        req.open("POST",url,true);
+        req.setRequestHeader("Content-type","application/json"); //데이터의 정보를 정하는 헤더에 이건 json이야 알려주기
+        req.send(JSON.stringify(userObj));//내가 userObj를 JSON의 직렬화한것으로 보냄
+        req.onload=()=>{
+            if(req.status!==200)return; //200일때만 실행하라의 반전
+            console.log(req.responseText); //send()의 응답된 내용
+            const loginObj=JSON.parse(req.responseText); //JSON으로 파싱
+            console.log(loginObj);
+            userId=loginObj.id;     //파싱한 내용중에 id정보 가져오기
+            console.log(userId);
+
+            //id로 정보를 보내서 post정보 받아오기
+            const postsReq=new XMLHttpRequest();
+            let postsUrl="https://dummyjson.com/posts/user/"+userId;  //post를 가져올 url 새로 지정 및 변수 저장
+            postsReq.open("GET",postsUrl,true); //새로운 url을 가지고 통신
+            postsReq.send();
+            postsReq.onload=()=>{
+                if(postsReq.status!==200)return;
+                postsWrap.innerText=postsReq.responseText; //내부내용은, 응답한 내용의 텍스트
+                console.log(postsReq.responseText);
+            }
+        }
+    }
+    loadPostsBtn.addEventListener("click",loadPosts);
+
+
+
+</script>
+
+<h2>#2promise resolve </h2>
+<b>11번 유저로 받기 //liam, liamg, liamgpass</b>
+<p>
+    <button id="loadLiamgPostBtn">liamg 게시글 호출</button>
+</p>
+<div id="liamgPostsWrap"></div>
+<hr>
+
+<script>
+    const loadLiamgPostBtn=document.getElementById("loadLiamgPostBtn");
+    const liamgPostsWrap=document.getElementById("liamgPostsWrap");
+
+    //id : liamg //pw : liamgpass
+
+    const loadLiamgPosts=()=>{
+        //promise로 id를 조회하고 => posts 조회
+        //id조회
+        new Promise((resolve)=>{
+            const req=new XMLHttpRequest();
+            let url = "https://dummyjson.com/user/login"
+            const userObj={
+                "username":"liamg",
+                "password":"liamgpass"           //""를 없애면 무슨차이 ??
+            }                                    //기존 서버의 것을 받아오게됨
+            //console.log(userObj);
+            req.open("POST",url,true);
+            req.setRequestHeader("Content-type","application/json");
+            req.send(JSON.stringify(userObj)); //userObj의 정보를 직렬화하여 보내기
+            req.onload=()=>{
+                if(req.status!==200)return;// 200일때만 보내줘의 반대 표현
+                const loginObj=JSON.parse(req.responseText); //loginObj는 응답의 text를 JSON으로 파싱
+                ///console.log(loginObj);
+                resolve(loginObj.id);//loginObj에서 id(11)을 가져오기
+                //console.log(loginObj.id)//여기서 resolve의 의미는??? then에서 사용
+            }
+        }).then((id)=>{ //post조회
+            //console.log(id); //11
+            let url="https://dummyjson.com/posts/user/"+id;
+            const req=new XMLHttpRequest();
+            req.open("GET",url,true);
+            req.send();
+            req.onload=()=>{
+                if(req.status!==200)return;
+                liamgPostsWrap.innerText=req.responseText; //url의 응답 Text를 div의 내부 텍스트에 할당
+            }
+        })
+    }
+    loadLiamgPostBtn.addEventListener("click",loadLiamgPosts);
+</script>
+
+<!-- 3번: fetch 방법 사용 //32번 -->
+    <h2>#3fetch</h2>
+    <b>32번 유저로 받기 //Natalieh, natalieh, nataliehpass</b>
+    <p>
+        <button id="loadNataliehPostsBtn">Natalieh 게시글 호출</button>
+    </p>
+    <div id="NataliehPostsWrap"></div>
+    <hr>
+    <script>
+        //$~~ : 노드개체   // ~~s == ~~의 복수형
+        //노드 선택자 생성
+        const $loadNataliehPostsBtn=document.getElementById("loadNataliehPostsBtn");
+        const $NataliehPostsWrap=document.getElementById("NataliehPostsWrap");
+
+        const loadNataliehPosts=()=>{
+            let url="https://dummyjson.com/user/login";
+            let userObj={
+                "username":"natalieh",
+                "password":"nataliehpass",
+            };
+            fetch(url,{ // 1) 로그인 요청
+                method:"POST",
+                headers:{"Content-type":"application/json"},
+                body:JSON.stringify(userObj)})
+                .then(res=>res.json()) // 2)응답을 JSON으로 parsing
+                .then(data=>{          // 3)JSON으로 파싱한 데이터
+                    console.log(data) //확인 : accessToken from user/login, id를 가져올 곳
+                    // id: 32
+                    let url=`https://dummyjson.com/posts/user/${data.id}`
+                    return fetch(url)})  // 4) url갱신된 두번째 fetch ※ url이 바뀌므로 재fetch!!!!!!
+                .then(res=>res.json())   // 5) 두번째 fetch에 대한 응답, 그 응답을 JSON으로 파싱
+                .then(posts=>{           // 6) 5의 응답을 Post에 HTML로 작성
+                    console.log(posts);
+                    $NataliehPostsWrap.innerHTML=JSON.stringify(posts);  //   ~~ //
+                })
+
+
+        }
+        $loadNataliehPostsBtn.addEventListener("click",loadNataliehPosts);
+    </script>
+
+    <h2>#4 fetch, async, await</h2>
+<b>35번 유저로 받기 //jackm jackw, jackwpass </b>
+<p>
+    <button id="loadJackwPostsBtn">jackw 게시글 호출</button>
+</p>
+<div id="jackwPostsWrap"></div>
+<hr>
+
+<script>
+    const $jackwPostsWrap=document.getElementById("jackwPostsWrap");
+    const $loadJackwPostsBtn=document.getElementById("loadJackwPostsBtn");
+    const loadJackwPosts= async ()=>{  //async 추가 !
+
+
+        let url="https://dummyjson.com/user/login"
+        let userObj={
+            "username":"jackw",
+            "password":"jackwpass"
+        }
+        let res= await fetch(url,{        //await 추가 !
+            method:"POST",
+            headers:{"Content-type":"application/json"},
+            body:JSON.stringify(userObj)
+        }) //.then(res=>res.json()).then(data=>{})를 하지 않고 await => then을 실행 및 반환
+            let data = await res.json(); //너의 의미는? //
+            console.log(data); //로그인 토큰 값
+
+            //조회합 id로 Post호출
+            url=`https://dummyjson.com/posts/user/${data.id}`
+            // console.log(url)
+            res= await fetch(url); //새로운 url로 fetch
+            // console.log(res)
+            data=await res.json(); //Json으로 파싱한 data
+            // console.log(data)
+            $jackwPostsWrap.innerText=JSON.stringify(data); //data를 JSON으로 직렬 => wrap의 내부 텍스트로.
+    }
+    $loadJackwPostsBtn.addEventListener("click",loadJackwPosts);
+
+
+</script>
+
+
+</body>
+</html>

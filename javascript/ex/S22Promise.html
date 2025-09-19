@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>비동기함수를 동기화 하는 promise</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+    <h1>비동기함수를 동기화 하는 promise</h1>
+
+    <section>
+        <h2>Promise란?</h2>
+        <ul>
+            <li>비동기 작업의 결과를 다루기 위한 객체</li>
+            <li>현재는 알 수 없지만 미래에 완료(fulfilled)되거나 실패(rejected)할 수 있는 값</li>
+            <li>콜백 지옥(callback hell)을 해결하기 위해 도입됨</li>
+        </ul>
+    </section>
+
+
+    <section>
+        <h2>Promise 상태(State)</h2>
+        <ul>
+            <li>pending: 대기 중 (결과를 모름)</li>
+            <li>fulfilled: 성공적으로 완료됨 → <code>resolve(value)</code></li>
+            <li>rejected: 실패함 → <code>reject(error)</code></li>
+        </ul>
+    </section>
+
+
+    <section>
+        <h2>Promise 생성</h2>
+        <pre><code>const promise = new Promise((resolve, reject) => {
+  const success = true;
+  if (success) {
+    resolve("작업 성공");
+  } else {
+    reject("작업 실패");
+  }
+});
+</code></pre>
+    </section>
+
+
+    <section>
+        <h2>then / catch / finally</h2>
+        <pre><code>promise
+  .then(result => {
+    console.log("성공:", result);
+  })
+  .catch(error => {
+    console.log("실패:", error);
+  })
+  .finally(() => {
+    console.log("항상 실행됨");
+  });
+</code></pre>
+    </section>
+    <section>
+        <h2>자바스크립트 예외 위임</h2>
+        <p><code>throw</code>로 예외를 발생시키고, <code>try/catch</code>에서 처리한다.<br>
+            만약 현 함수에서 처리하지 않으면 <strong>상위 호출자</strong>로 예외가 위임된다.</p>
+
+        <pre><code>function work() {
+  throw new Error("문제 발생!");
+}
+
+function task() {
+  try {
+    work(); // 예외 발생
+  } catch (e) {
+    console.log("task에서 처리:", e.message);
+    // throw e; // 다시 던지면 위로 위임
+  }
+}
+
+task();</code></pre>
+
+        <button onclick="demoThrow()">실행</button>
+    </section>
+
+    <section>
+        <h2>Promise의 예외 처리와 위임</h2>
+        <p>Promise 안에서 <code>reject</code>나 <code>throw</code>가 발생하면<br>
+            체인의 <code>.catch</code>에서 처리된다. <br>
+            <code>.catch</code>에서 <strong>값을 반환</strong>하면 복구, <strong>에러를 다시 던지면</strong> 위로 위임된다.</p>
+
+        <pre><code>new Promise((resolve, reject) => {
+  reject(new Error("처음부터 실패"));
+})
+.catch(err => {
+  console.log("첫 번째 catch:", err.message);
+  // return "복구";    // ← 값 반환하면 다음 then으로 이어짐
+  throw err;          // ← 다시 던지면 위로 위임
+})
+.then(result => {
+  console.log("then:", result);
+})
+.catch(err => {
+  console.log("두 번째 catch:", err.message);
+});</code></pre>
+
+        <button onclick="demoPromise()">실행</button>
+    </section>
+
+    <script>
+        function demoThrow() {
+            function work() {
+                throw new Error("문제 발생!");
+            }
+            function task() {
+                try {
+                    work();
+                } catch (e) {
+                    console.log("task에서 처리:", e.message);
+                    // throw e; // 다시 던지면 상위로 전달
+                }
+            }
+            task();
+        }
+
+        function demoPromise() {
+            new Promise((resolve, reject) => {
+                reject(new Error("처음부터 실패"));
+            })
+                .catch(err => {
+                    console.log("첫 번째 catch:", err.message);
+                    // return "복구"; // 주석 해제하면 복구
+                    throw err;       // 그대로 위로 위임
+                })
+                .then(result => {
+                    console.log("then:", result);
+                })
+                .catch(err => {
+                    console.log("두 번째 catch:", err.message);
+                });
+        }
+    </script>
+
+
+    <section>
+        <h2>프라미스화(Promisification)</h2>
+        <p>콜백 기반 함수를 <code>new Promise</code>로 감싸서 <strong>Promise 형태</strong>로 만든다.</p>
+
+        <pre><code>// 콜백 기반 함수 (error, result)
+function fakeReadFile(callback) {
+  setTimeout(() => {
+    const success = Math.random() > 0.5;
+    if (success) callback(null, "파일 내용");
+    else callback(new Error("읽기 실패"), null);
+  }, 500);
+}
+
+// 프라미스화
+function readFileP() {
+  return new Promise((resolve, reject) => {
+    fakeReadFile((err, data) => {
+      if (err) reject(err);
+      else resolve(data);
+    });
+  });
+}
+
+// 사용
+readFileP()
+  .then(data => console.log("성공:", data))
+  .catch(err => console.error("실패:", err.message));</code></pre>
+
+        <button onclick="demoPromisify()">실행</button>
+    </section>
+
+    <section>
+        <h2>체이닝(Chaining)</h2>
+        <p><code>.then</code>은 값을 반환하면 다음 <code>.then</code>으로 전달된다.<br>
+            중간에 <code>throw</code> 또는 <code>reject</code>가 발생하면 <code>.catch</code>로 위임된다.</p>
+
+        <pre><code>new Promise(resolve => resolve(1))
+  .then(num => {
+    console.log("첫 번째:", num);  // 1
+    return num + 1;
+  })
+  .then(num => {
+    console.log("두 번째:", num);  // 2
+    return num + 1;
+  })
+  .then(num => {
+    console.log("세 번째:", num);  // 3
+    throw new Error("에러 발생!");
+  })
+  .catch(err => {
+    console.error("catch에서 처리:", err.message);
+  });</code></pre>
+
+        <button onclick="demoChaining()">실행</button>
+    </section>
+
+    <script>
+        // 프라미스화 예제
+        function demoPromisify() {
+            function fakeReadFile(callback) {
+                setTimeout(() => {
+                    const success = Math.random() > 0.5;
+                    if (success) callback(null, "파일 내용");
+                    else callback(new Error("읽기 실패"), null);
+                }, 500);
+            }
+            function readFileP() {
+                return new Promise((resolve, reject) => {
+                    fakeReadFile((err, data) => {
+                        if (err) reject(err);
+                        else resolve(data);
+                    });
+                });
+            }
+            readFileP()
+                .then(data => console.log("성공:", data))
+                .catch(err => console.error("실패:", err.message));
+        }
+
+        // 체이닝 예제
+        function demoChaining() {
+            new Promise(resolve => resolve(1))
+                .then(num => {
+                    console.log("첫 번째:", num);
+                    return num + 1;
+                })
+                .then(num => {
+                    console.log("두 번째:", num);
+                    return num + 1;
+                })
+                .then(num => {
+                    console.log("세 번째:", num);
+                    throw new Error("에러 발생!");
+                })
+                .catch(err => {
+                    console.error("catch에서 처리:", err.message);
+                });
+        }
+    </script>
+
+
+</body>
+</html>

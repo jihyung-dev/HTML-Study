@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>내부 반복문의 다양한 종류</title>
+</head>
+<body>
+    <h1>내부 반복문의 다양한 종류</h1>
+
+    <ul id="numsUl"></ul>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>이름</th>
+            <th>과목</th>
+            <th>score</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>경민</td><td>수학</td><td class="score">88</td>
+        </tr>
+        <tr>
+            <td>김지형</td><td>수학</td><td class="score">98</td>
+        </tr>
+        <tr>
+            <td>이지형</td><td>수학</td><td class="score">100</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="2">과목의 총합</td>
+            <td id="scoresSumTd"></td>
+        </tr>
+        <tr>
+            <td colspan="2">과목의 평균</td>
+            <td id="scoresAvgTd"></td>
+        </tr>
+        </tfoot>
+    </table>
+    <script>
+        let tdScores=document.querySelectorAll("td:nth-child(3)");
+        tdScores=document.querySelectorAll(".score");//NodeList
+        console.log(tdScores)
+
+        let tdAverages=document.querySelectorAll(".score");
+        console.log(tdAverages)
+
+
+        //내부반복문 : Array forEach,map,...
+        //String,Nodelist,HTMLCollections... map, reduce 같은 내부반복문이 없다.
+
+        //Array.from(유사배열) => Array         //배열복제
+        //[...유사배열] => Array에 참조
+
+        // let scoresSum = 0;
+        // for (let td of tdScores) {
+        //     scoresSum+=Number.innerText;
+        //
+        // }
+        // console.log(scoresSum);///08898100
+        // scoresSumTd.innerHTML=scoresSum;
+
+        let scoresSum=[...tdScores].reduce((init,td)=>{
+            let score=Number(td.innerText);
+            return init+score;
+        },0)//초기값을 0으로 줘야함 그렇지 않으면, td[0]이 됨,
+        console.log(scoresSum);
+        scoresSumTd.innerText=scoresSum;
+
+        // 풀이
+        // let scoresAvg=[...tdAverages].reduce((init,td)=>{
+        //     let average=Number(td.innerText);
+        //     return (init+average)/tdAverages.length;
+        // })
+        // console.log(scoresAvg);
+        // scoresAvgTd.innerText=scoresAvg;
+
+        // 풀이[T]
+        let scoresAvg=([...tdScores].reduce((init,td)=>{
+            return init+Number(td.innerText);
+        },0))/tdScores.length;
+        scoresAvgTd.innerText=Math.round(scoresAvg); //소숫점 반올림 못함
+        // console.log(scoresAvg);
+        scoresAvgTd.innerText=scoresAvg.toFixed(2); //( )번째 자리까지 반올림
+
+        // every some
+        // some : 하나라도 조건이 같은것이 있는가?
+        // find findIndex
+
+        nums=[1,2,3,4,5,"6",7,8];
+        //1. some : 한개라도 수야?
+        //2. every : 모두 수야?
+        const isNum=(num)=>typeof num==="number";
+        console.log(isNum(""))
+        let result=nums.some(isNum);    //하나라도 수야?
+        console.log(result)
+        result=nums.every(isNum);       //전부 수야?
+        console.log(result)
+
+        //find : 조건이 맞으면 그 값을 반환
+        //findIndex : 조건이 맞는 인덱스를 반환
+        const isString=(str)=>typeof str==="string";
+        result=nums.find(isString);
+        console.log(result)                //해당 값, String인 것
+        result=nums.findIndex(isString);
+        console.log(result)                //해당값의 인덱스
+
+        //sort : 기존배열을 변경하면서 정렬(사용시 주의)
+        nums=[11,22,-22,0,100,3];
+
+        nums.sort();        //기본정렬기준 : 문자열 기준으로 정렬
+        console.log(nums);  //[-22, 0, 100, 11, 22, 3]
+
+        nums.sort((a,b)=> a - b); //오름차순
+        console.log(nums);  //[-22, 0, 3, 11, 22, 100]
+
+        nums.sort((a,b)=> b - a); //내림차순
+        console.log(nums);  //[100, 22, 11, 3, 0, -22]
+
+        nums.reverse();     // 기존것을 뒤집기 //쓰지마라 ~
+        console.log(nums);  //[-22, 0, 3, 11, 22, 100]
+
+
+
+
+
+
+    </script>
+
+    <script>
+        //[Array가 가지고 있는]
+        // filter(( item, index, array )=>{ return Boolean() })
+        //                              내부에 콜백함수가 들어감
+        //내부 자료중 하나를 제거하고 싶을 때, 사용 //말그대로 필터링
+
+        let arr=[1,2,3,"9",4,5,6,];
+
+        //number만 가지고 있는 배열 생성
+        let nums=[];
+        arr.forEach((value,index)=>{
+            console.log(value,index, typeof value)
+            //typeof : 기본형(number,string,symbol) or 자료형 object(null)
+
+            //여기서 "9"만 제거하고 싶다.
+            if(typeof value =="number"){
+                nums.push(value);
+            }
+        });
+
+        //특정 아이템을 제거한 새로운 배열 생성
+        console.log(nums);
+
+        //위의 행동을 편리하게 만들어준 것이 [filter]
+        let nums2=arr.filter((value,index)=>{
+                return typeof value =="number";
+        })
+        console.log(nums2);
+        console.log(arr);
+
+        //filter와forEach 가 다른 것
+
+        //forEach : 실행
+        //filter : 새로운 배열, return을 작성필요.
+
+        //map( (v,i) => return ?? ) == map(()=>{return ??}
+        let arr2=arr.map((v,i)=> v * 2 )  //map : 2배 한 데이터로 바꾸겠다
+        console.log(arr2);
+        let lis=arr.map((v,i)=>{
+            let li=document.createElement("li");
+            li.append(v);
+            return li;
+        })
+
+        console.log(lis);
+        numsUl.append(...lis);       //펴 발라서 li로 오는거
+        // numsUl.append(lis);          //그냥 때려 넣은거
+            // lis.forEach((v)=>{
+            //     numsUl.append(v)
+            // })
+
+        //배열이 아닌 단일 요소를 반환
+        // reduce => number,string,  some,every => boolean,
+        // find => item,  findIndex => index
+
+        nums=[10,20,30,40,50];
+        //reduce((초기값,item2,i,arr)=>연산,초기값)
+        let sum=nums.reduce((a,b)=>a+b,100);
+        console.log(sum)
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

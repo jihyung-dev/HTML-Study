@@ -19,83 +19,133 @@
     <!-- 몸땡이는 노드 생성으로 -->
     <!-- 카트는 노드 복제로 진행시켜 -->
 
+    <!-- 구조 형성하기 -->
     <button id="loadUserInfo">유저 정보 불러오기 </button>         <!-- V -->
     <hr>
-    <section id="infoEx" class="d-none">
-        <ul id="userInfo">                                      <!-- V -->
-            <div id="thumNail">
-                <img src="" alt="">
-            </div>
-            <li id="id"></li>
-            <li id="userName"></li>
-            <li id="email"></li>
+    <li id="infoEx" class="d-none">
+        <ul class="userInfo">                                      <!-- V -->
+            <li class="id">ID Number : </li>
+            <li class="username">Username : </li>
+            <li class="email">E-mail : </li>
         </ul>
-        <pre class="body"></pre>
+        <div>
+            <p>
+                <button class="loadCartBtn" >장바구니 불러오기</button>
+                <!-- onclick (event) { } -->
+            </p>
+            <ul class="carts"></ul>
+        </div>
         <hr>
-    <div>
-        <p>
-            <button id="loadCartBtn">장바구니 불러오기</button>
-        </p>
-        <ul class="cart">
-
-        </ul>
-    </div>
-    </section>
+    </li>
+    <ul id="userInfos"></ul>
 
 
 
     <script>
-        const loadUserInfoBtn = document.querySelector('#loadUserInfo');
-        const userInfo = document.querySelector('#userInfo');
-        const infoEx = document.getElementById("infoEx");
 
-        const idNode=(users)=>{
+        //화면이 처음 로드 될 때 찾기
+        const userInfosUl = document.querySelector('#userInfos');           //
+        const loadUserInfoBtn = document.getElementById("loadUserInfo");  //유저정보 불러오는 버튼
+        const infoEx = document.getElementById("infoEx");                 //유저정보 복사
+
+
+
+        //장바구니 노드 생성
+        const cartNode=(cart)=>{                                          //장바구니 : 노드 생성방법
             const li=document.createElement("li");
-            let text=`${users.id} / ${users.username} / ${users.email}`;
+            const img=document.createElement("img");
+            img.src=cart.thumbnail;
+            Object.assign(img.style,{width:'50px',height:'50px'});
+
+            let text=`제품명 : ${cart.title} / 수량 : ${cart.quantity} / 총 금액 : ${cart.discountedTotal}`;
             const hr=document.createElement("hr");
-            let body=user.body;
-            li.append(text);
-            li.append(hr);
-            li.append(body);
+            // let body=cart.body;
+
+            li.append(img,text,hr);
+            // li.append(body);
             return li;
         }
-        const cloneUserNode=(users)=>{
+
+
+        //유저 노드 복제하기
+        const cloneUserNode=(user)=>{                                  //장바구니 : 복제 방법
             const userNode=infoEx.cloneNode(true);  //깊은복제
             userNode.removeAttribute("id");
             userNode.classList.remove("d-none");
+            //console.log(userNode)
 
-            let thumnail=userNode.querySelector(".thumnail");
+            //유저 정보에 사용할 것들
+            //썸네일, id, 유저네임, 이메일, 로드카트 버튼, 카트
+
             let id=userNode.querySelector(".id");
-            let name=userNode.querySelector(".userName");
+            let name=userNode.querySelector(".username");
             let email=userNode.querySelector(".email");
             let loadCartBtn=userNode.querySelector(".loadCartBtn");
-            let cart=userNode.querySelector(".cart")
+            let cartsUl=userNode.querySelector(".carts")
 
+            //선언한 변수 활용하여, HTML뼈대 구성
+            id.append(user.id);
+            name.append(user.username);
+            email.append(user.email);
 
-
-
+            //카트불러오기 버튼에 기능 심기
+            loadCartBtn.addEventListener("click", (e)=>{
+                loadCarts(user.id,cartsUl)
+            });
+            return userNode;
         }
 
+        //장바구니 불러오기
+        const loadCarts=(userid,cartsUl)=>{
+            //로드되고 나서 존재할때 찾기
+            let url = `https://dummyjson.com/carts/user/`+userid;
+            const req = new XMLHttpRequest();
+            req.open("GET",url,true);
+            req.send();
 
+            req.onload=()=>{
+                if(req.status===200){
+                    const totalCarts=JSON.parse(req.responseText);
+                    for(let cart of totalCarts.carts){
+                        let h4=document.createElement("h4");
+                        h4.innerText="장바구니 id:"+cart.id;
+                        cartsUl.appendChild(h4);
+                        for (let product of cart.products){
+                            const li=cartNode(product);
+                            cartsUl.append(li)
+                            // console.log(cartsUl)
+                        }
+                    }
+                }
+            }
+        }
 
-
-
-        const loadUserInfo=(userid)=>{
-            let url = `https://dummyjson.com/${userid}/users`
+        //유저정보 불러오기
+        const loadUserInfo=()=>{
+            let url = "https://dummyjson.com/users";
             const req = new XMLHttpRequest();
             req.open("GET", url, true);
             req.send();
+            let json=req.responseText;
+            ///console.log(json) //아무것도 없음
+                              //send()가 끝남과 상관없이 log를 하므로, 비어있음
             req.onload=()=>{
-                if(req.status==200){
-                    const comments=JSON.parse(req.responseText);
+                let status=req.status;
+                if(status==200){
+                    let users=JSON.parse(req.responseText); //JSON은 문자열을 객체로 파싱해주는 것
+                    //console.log(users)               //내부 users : array
                     let html="";
-
+                    const usersArray=users.users;
+                    console.log(usersArray);
+                    for(let user of usersArray){
+                        const userNode=cloneUserNode(user);
+                        //console.log(userNode)
+                        userInfosUl.append(userNode);
+                    }
                 }
             }
-
-
         }
-
+    loadUserInfoBtn.addEventListener("click", loadUserInfo)
 
 
     </script>
