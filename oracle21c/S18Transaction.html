@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>트랜잭션과 TCL</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+    <h1>트랜잭션과 TCL</h1>
+    <section>
+        <h2>트랜잭션(Transaction) 개념</h2>
+        <ul>
+            <li>여러 DML(INSERT, UPDATE, DELETE) 작업을 하나의 논리적 단위로 묶어 모두 성공하거나 전혀 반영되지 않도록 보장한다.</li>
+            <li>은행 이체, 주문 처리, 재고 차감 등에서 데이터 무결성을 지키는 핵심 메커니즘이다.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>ACID 특성</h2>
+        <ul>
+            <li><strong>Atomicity(원자성)</strong>: 트랜잭션의 모든 작업은 전부 성공 또는 전부 실패해야 한다.</li>
+            <li><strong>Consistency(일관성)</strong>: 트랜잭션 전후로 데이터는 제약조건과 규칙을 항상 만족해야 한다.</li>
+            <li><strong>Isolation(고립성)</strong>: 동시에 실행되는 트랜잭션들이 서로 간섭 없이 독립적으로 동작해야 한다.</li>
+            <li><strong>Durability(지속성)</strong>: COMMIT된 변경은 시스템 장애 후에도 보존된다.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>TCL(Transaction Control Language)</h2>
+        <ul>
+            <li><strong>COMMIT</strong>: 현재 트랜잭션의 변경을 영구 반영</li>
+            <li><strong>ROLLBACK</strong>: 마지막 COMMIT 시점으로 모든 변경 취소</li>
+            <li><strong>SAVEPOINT &lt;이름&gt;</strong>: 트랜잭션 중간 저장점 설정</li>
+            <li><strong>ROLLBACK TO &lt;이름&gt;</strong>: 지정 저장점까지 부분 취소</li>
+            <li><strong>SET TRANSACTION</strong>: 읽기 전용, 격리 수준 등 트랜잭션 속성 지정</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>동작 특징</h2>
+        <ul>
+            <li>DML은 트랜잭션 안에서 실행되며 COMMIT 전까지 확정되지 않는다.</li>
+            <li>DDL(CREATE/ALTER/DROP)과 DCL(GRANT/REVOKE)은 자동 COMMIT이 발생하여 TCL로 되돌릴 수 없다.</li>
+            <li>개발 도구의 AUTO-COMMIT 옵션이 켜져 있으면 DML 후 자동으로 COMMIT될 수 있으니 주의한다.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>예시 1: 은행 이체 시나리오</h2>
+        <p><em>ACCOUNTS(ACC_NO, BALANCE)</em></p>
+        <pre><code>-- 1) 트랜잭션 시작(암묵적)
+UPDATE ACCOUNTS
+SET BALANCE = BALANCE - 10000
+WHERE ACC_NO = '111-111';  -- A 계좌 출금
+
+SAVEPOINT sp_after_withdraw;  -- 저장점 설정(출금까지 완료)
+
+UPDATE ACCOUNTS
+SET BALANCE = BALANCE + 10000
+WHERE ACC_NO = '222-222';    -- B 계좌 입금
+
+-- 2) 문제 발생 시 전체 취소
+-- ROLLBACK;
+
+-- 또는 출금만 유지하고 입금만 취소
+-- ROLLBACK TO sp_after_withdraw;
+
+-- 3) 모든 단계가 정상 완료되었다면
+COMMIT;  -- 확정</code></pre>
+    </section>
+
+    <section>
+        <h2>예시 2: 급여 인상(부분 복구 포함)</h2>
+        <p><em>PAY_HISTORY(PAY_ID, EMPNO, AMOUNT)</em></p>
+        <pre><code>-- 부서 10번 급여 10% 인상
+UPDATE pay_history
+SET AMOUNT = AMOUNT * 1.1
+WHERE EMPNO IN (SELECT empno FROM emp WHERE deptno = 10);
+
+SAVEPOINT sp_raise10;  -- 중간 저장점
+
+-- 부서 20번 급여 20% 인상
+UPDATE pay_history
+SET AMOUNT = AMOUNT * 1.2
+WHERE EMPNO IN (SELECT empno FROM emp WHERE deptno = 20);
+
+-- 조건 오류 등으로 예상과 다르게 변경되었다면
+ROLLBACK TO sp_raise10;   -- 부서 20 변경만 취소, 부서 10 인상은 유지
+
+COMMIT;  -- 최종 확정</code></pre>
+    </section>
+
+    <section>
+        <h2>요약</h2>
+        <ul>
+            <li>트랜잭션은 데이터 작업을 하나의 단위로 묶어 ACID를 보장한다.</li>
+            <li>TCL로 확정(COMMIT), 취소(ROLLBACK), 부분 복원(SAVEPOINT/ROLLBACK TO)을 제어한다.</li>
+            <li>DDL/DCL은 자동 COMMIT되므로 트랜잭션 제어 대상이 아니다.</li>
+        </ul>
+    </section>
+</body>
+</html>

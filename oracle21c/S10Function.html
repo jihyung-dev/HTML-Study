@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>함수와 집계함수</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+    <section>
+        <h2>1. 함수란 무엇인가</h2>
+        <ul>
+            <li>입력값을 받아 처리 후 결과를 반환하는 SQL 내 연산 단위</li>
+            <li>데이터 가공, 계산, 조건 처리 등에 활용된다</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>2. 함수의 구성</h2>
+        <ul>
+            <li><strong>입력값(매개변수)</strong>: 함수 실행 시 전달되는 값</li>
+            <li><strong>처리부</strong>: 입력값을 계산, 변환하는 로직</li>
+            <li><strong>반환값</strong>: 실행 후 결과값 (함수는 반드시 반환값을 가짐)</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>3. 함수 호출 방법</h2>
+        <ul>
+            <li><code>SELECT</code> 문에서 컬럼처럼 호출</li>
+            <li><code>dual</code> 테이블을 사용해 단순 테스트 가능</li>
+        </ul>
+        <pre><code>SELECT UPPER('oracle') FROM dual;  -- 결과: ORACLE</code></pre>
+    </section>
+
+    <section>
+        <h2>4. 사용자 정의 함수</h2>
+        <h3>(1) 형식</h3>
+        <pre><code>CREATE OR REPLACE FUNCTION 함수명(매개변수 datatype, ...)
+RETURN 반환자료형 IS
+BEGIN
+    -- 처리 로직
+    RETURN 결과값;
+END;
+/
+</code></pre>
+
+        <h3>(2) 예시</h3>
+        <pre><code>CREATE OR REPLACE FUNCTION total_income(
+    p_sal NUMBER,
+    p_comm NUMBER
+) RETURN NUMBER IS
+BEGIN
+    RETURN NVL(p_sal, 0) + NVL(p_comm, 0);
+END;
+/
+
+-- 호출
+SELECT ename, sal, comm, total_income(sal, comm) AS total
+FROM emp;
+</code></pre>
+    </section>
+
+    <section>
+        <h2>5. 내장 함수 (Built-in Functions)</h2>
+
+        <h3>(1) 문자 함수</h3>
+        <p>문자열을 변환하거나 부분 추출, 길이 확인 등을 할 때 사용한다</p>
+        <ul>
+            <li><code>UPPER</code>: 문자열을 모두 대문자로 변환</li>
+            <li><code>LOWER</code>: 문자열을 모두 소문자로 변환</li>
+            <li><code>INITCAP</code>: 각 단어의 첫 글자를 대문자로 변환</li>
+            <li><code>SUBSTR</code>: 지정한 위치에서 일정 길이만큼 문자열 추출</li>
+            <li><code>LENGTH</code>: 문자열 길이를 반환</li>
+        </ul>
+        <pre><code>SELECT UPPER('scott') FROM dual;     -- SCOTT
+SELECT LOWER('ORACLE') FROM dual;    -- oracle
+SELECT INITCAP('oracle db') FROM dual; -- Oracle Db
+SELECT SUBSTR('ORACLE', 2, 3) FROM dual; -- RAC
+SELECT LENGTH('ORACLE') FROM dual;   -- 6
+</code></pre>
+
+        <h3>(2) 숫자 함수</h3>
+        <p>숫자를 반올림, 버림, 나머지 계산, 제곱 계산 등에 활용한다</p>
+        <ul>
+            <li><code>ROUND</code>: 지정한 소수점 자리에서 반올림</li>
+            <li><code>TRUNC</code>: 지정한 소수점 자리에서 버림</li>
+            <li><code>MOD</code>: 나머지 연산 결과 반환</li>
+            <li><code>POWER</code>: 거듭제곱 계산</li>
+        </ul>
+        <pre><code>SELECT ROUND(123.456, 2) FROM dual;  -- 123.46
+SELECT TRUNC(123.456, 2) FROM dual;  -- 123.45
+SELECT MOD(10, 3) FROM dual;         -- 1
+SELECT POWER(2, 3) FROM dual;        -- 8
+</code></pre>
+
+        <h3>(3) 날짜 함수</h3>
+        <p>현재 날짜 조회, 특정 날짜 계산, 두 날짜 간 차이 계산 등을 할 때 사용한다</p>
+        <ul>
+            <li><code>SYSDATE</code>: 현재 날짜와 시간 반환</li>
+            <li><code>ADD_MONTHS</code>: 기준 날짜에 지정 개월 수를 더한 날짜 반환</li>
+            <li><code>MONTHS_BETWEEN</code>: 두 날짜 간 개월 차이 반환 (소수점 포함)</li>
+            <li><code>NEXT_DAY</code>: 지정 날짜 이후의 특정 요일을 반환</li>
+        </ul>
+        <pre><code>SELECT SYSDATE FROM dual;                     -- 현재 날짜
+SELECT ADD_MONTHS('2025-03-01', 3) FROM dual;      -- 2025-06-01  3개월 뒤
+SELECT MONTHS_BETWEEN('2025-10-01', '2025-01-01') FROM dual; --9
+SELECT NEXT_DAY('2025-03-01', '금요일') FROM dual; --  2025-03-07  다음 금요일
+</code></pre>
+
+        <h3>(4) 변환 함수</h3>
+        <p>데이터 타입을 문자, 숫자, 날짜로 변환할 때 사용한다</p>
+        <ul>
+            <li><code>TO_CHAR</code>: 날짜나 숫자를 문자로 변환</li>
+            <li><code>TO_DATE</code>: 문자열을 날짜로 변환</li>
+            <li><code>TO_NUMBER</code>: 문자열을 숫자로 변환</li>
+        </ul>
+        <pre><code>SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD') FROM dual; -- 2025-09-24
+SELECT TO_DATE('2025-09-24', 'YYYY-MM-DD') FROM dual;
+SELECT TO_NUMBER('12345') FROM dual;            -- 12345
+</code></pre>
+
+        <h3>(5) 일반 함수</h3>
+        <p>NULL 처리, 조건 분기 등을 지원한다</p>
+        <ul>
+            <li><code>NVL</code>: NULL을 지정한 값으로 치환</li>
+            <li><code>NVL2</code>: NULL 여부에 따라 다른 값 반환</li>
+            <li><code>DECODE</code>: 조건 분기 처리 (switch문과 유사)</li>
+            <li><code>CASE</code>: 조건문을 표현하는 표준 SQL 함수</li>
+        </ul>
+        <pre><code>SELECT NVL(NULL, 0) FROM dual;                  -- 0
+SELECT NVL2(NULL, 'YES', 'NO') FROM dual;       -- NO
+SELECT DECODE(10, 10, 'MATCH', 'NO') FROM dual; -- MATCH
+SELECT DECODE(20,
+              10, 'TEN',
+              20, 'TWENTY',
+              30, 'THIRTY',
+              'OTHER') AS result
+FROM dual; -- 첫 인자가 20이므로 결과: 'TWENTY'
+SELECT CASE WHEN 100 > 50 THEN 'BIG' ELSE 'SMALL' END FROM dual; -- BIG
+</code></pre>
+    </section>
+<section>
+    <h2>일반 함수 연습 문제</h2>
+    <ol>
+        <li><code>'oracle database'</code> 문자열을 모두 대문자로 바꾸어 출력하라.</li>
+        <li><code>'SCOTT'</code> 문자열을 소문자로 바꾸어 출력하라.</li>
+        <li><code>'hello world'</code>의 각 단어 첫 글자만 대문자로 바꾸어 출력하라.</li>
+        <li><code>'ORACLE'</code> 문자열에서 두 번째 위치부터 세 글자를 잘라내어 출력하라.</li>
+        <li><code>'DATABASE'</code> 문자열의 길이를 구하라.</li>
+        <li>숫자 <code>123.4567</code>을 소수 둘째 자리에서 반올림한 결과를 출력하라.</li>
+        <li>숫자 <code>123.4567</code>을 소수 둘째 자리에서 버림한 결과를 출력하라.</li>
+        <li>10을 3으로 나눈 나머지를 출력하라.</li>
+        <li>2의 5제곱 값을 출력하라.</li>
+        <li>현재 날짜와 시간을 출력하라.</li>
+        <li>현재 날짜에서 2개월 뒤의 날짜를 출력하라.</li>
+        <li><code>2025-01-01</code>과 오늘 날짜 사이의 개월 차이를 출력하라.</li>
+        <li>오늘 날짜 이후의 가장 가까운 금요일 날짜를 출력하라.</li>
+        <li>오늘 날짜를 <code>'YYYY/MM/DD'</code> 형식의 문자열로 바꾸어 출력하라.</li>
+        <li>문자열 <code>'2025-12-31'</code>을 날짜 데이터로 변환하라.</li>
+        <li>문자열 <code>'10000'</code>을 숫자로 변환하라.</li>
+        <li>사원의 커미션(comm)이 NULL이면 0을, NULL이 아니면 커미션 값을 출력하라.</li>
+        <li>사원의 커미션(comm)이 NULL이면 'NO', NULL이 아니면 'YES'를 출력하라.</li>
+        <li>사원의 부서 번호(deptno)가 10이면 'ACCOUNTING', 20이면 'RESEARCH', 그 외에는 'OTHERS'로 출력하라.</li>
+        <li>사원의 급여(sal)가 3000 이상이면 'HIGH', 그렇지 않으면 'LOW'로 출력하라.</li>
+    </ol>
+</section>
+<section>
+    <h2>일반 함수 정답</h2>
+    <ol>
+        <li>
+            <pre><code>SELECT UPPER('oracle database') FROM dual;</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT LOWER('SCOTT') FROM dual;</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT INITCAP('hello world') FROM dual;</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT SUBSTR('ORACLE', 2, 3) FROM dual;  -- 'RAC'</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT LENGTH('DATABASE') FROM dual;       -- 8</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT ROUND(123.4567, 2) FROM dual;       -- 123.46</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT TRUNC(123.4567, 2) FROM dual;       -- 123.45</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT MOD(10, 3) FROM dual;               -- 1</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT POWER(2, 5) FROM dual;              -- 32</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT SYSDATE FROM dual;</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT ADD_MONTHS(SYSDATE, 2) FROM dual;</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT MONTHS_BETWEEN(SYSDATE, DATE '2025-01-01') FROM dual;</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT NEXT_DAY(SYSDATE, '금요일') FROM dual;  -- 세션 언어가 KOREAN 기준</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT TO_CHAR(SYSDATE, 'YYYY/MM/DD') FROM dual;</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT TO_DATE('2025-12-31', 'YYYY-MM-DD') FROM dual;</code></pre>
+        </li>
+        <li>
+            <pre><code>SELECT TO_NUMBER('10000') FROM dual;       -- 10000</code></pre>
+        </li>
+        <li>
+      <pre><code>SELECT ename, NVL(comm, 0) AS comm_fixed
+FROM emp;</code></pre>
+        </li>
+        <li>
+      <pre><code>SELECT ename, NVL2(comm, 'YES', 'NO') AS has_comm
+FROM emp;</code></pre>
+        </li>
+        <li>
+      <pre><code>SELECT ename, deptno,
+       DECODE(deptno, 10, 'ACCOUNTING',
+                      20, 'RESEARCH',
+                      'OTHERS') AS dept_name
+FROM emp;</code></pre>
+        </li>
+        <li>
+      <pre><code>SELECT ename, sal,
+       CASE WHEN sal &gt;= 3000 THEN 'HIGH' ELSE 'LOW' END AS sal_level
+FROM emp;</code></pre>
+        </li>
+    </ol>
+</section>
+</body>
+</html>

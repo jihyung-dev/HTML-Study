@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/oracle21c/S09Scott.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L01CreateTable.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L02DML.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L03Contraints.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L04.DQLScott.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L05WhereHW.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L06Casting.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L07.Function.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L08AggregationFunction.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L09Join.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L10SubQuery.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L13-2.Pagination_HW.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L13.Pagination.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L14.Over.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L15.OverHW.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L16.View.sql" dialect="Oracle" />
+  </component>
+</project>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>서브쿼리(Subquery)</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+<h1>서브쿼리(Subquery)</h1>
+<section>
+    <h2>1. 정의</h2>
+    <ul>
+        <li>하나의 SQL 문 안에 괄호 <code>()</code>로 감싼 또 다른 <code>SELECT</code> 문</li>
+        <li>메인 쿼리보다 먼저(또는 각 행마다) 평가되어 조건/값/테이블처럼 사용됨</li>
+        <li>독립적으로 실행 가능한 <code>SELECT</code> 문이어야 함</li>
+    </ul>
+</section>
+
+<section>
+    <h2>2. 특징</h2>
+    <ul>
+        <li>반드시 괄호 <code>()</code>로 묶어 사용</li>
+        <li>결과 형태: 단일 값, 다중 행, 다중 컬럼 등 다양</li>
+        <li>사용 위치: <code>WHERE</code>, <code>SELECT</code>, <code>FROM</code>(인라인 뷰), <code>HAVING</code></li>
+    </ul>
+</section>
+
+<section>
+    <h2>3. 분류와 예시</h2>
+
+    <h3>(1) 단일 행 서브쿼리</h3>
+    <ul>
+        <li>결과가 1행 1열</li>
+        <li>단일 비교 연산자(=, &gt;, &lt;, &gt;=, &lt;=, &lt;&gt;)와 함께 사용</li>
+    </ul>
+    <pre><code>-- 전체 평균 급여보다 높은 사원
+SELECT ename, sal
+FROM emp
+WHERE sal &gt; (SELECT AVG(sal) FROM emp);</code></pre>
+
+    <h3>(2) 다중 행 서브쿼리</h3>
+    <ul>
+        <li>결과가 여러 행</li>
+        <li><code>IN</code>, <code>ANY(SOME)</code>, <code>ALL</code>과 함께 사용</li>
+    </ul>
+    <pre><code>-- 20번 부서와 동일 급여를 받는 사원
+SELECT ename, sal
+FROM emp
+WHERE sal IN (SELECT sal FROM emp WHERE deptno = 20);
+
+-- 20번 부서의 '어느 급여'보다 큰 사원(≈ 그 부서 최소값 초과)
+SELECT ename, sal, deptno
+FROM emp
+WHERE sal &gt; ANY (SELECT sal FROM emp WHERE deptno = 20);
+
+-- 20번 부서의 '모든 급여'보다 큰 사원(≈ 그 부서 최대값 초과)
+SELECT ename, sal
+FROM emp
+WHERE sal &gt; ALL (SELECT sal FROM emp WHERE deptno = 20);</code></pre>
+
+    <h3>(3) 다중 컬럼 서브쿼리</h3>
+    <ul>
+        <li>결과가 여러 컬럼</li>
+        <li><code>(col1, col2)</code> 튜플 비교 가능</li>
+    </ul>
+    <pre><code>-- 20번 부서의 (직무, 급여)와 동일한 사원
+SELECT *
+FROM EMP
+WHERE (deptno, sal) IN (
+    SELECT deptno, MAX(sal)
+    FROM EMP
+    GROUP BY deptno
+);</code></pre>
+
+    <h3>(4) 상관 서브쿼리 (메인 값 참조, 별칭 필수)</h3>
+    <ul>
+        <li>서브쿼리가 메인 쿼리의 컬럼을 참조(행마다 재평가)</li>
+        <li>테이블 별칭(alias)을 사용해 참조를 명확히 해야 함</li>
+    </ul>
+    <pre><code>-- 자기 부서 평균보다 급여가 높은 사원
+SELECT e.ename, e.sal, e.deptno
+FROM emp e
+WHERE e.sal &gt; (
+  SELECT AVG(s.sal)
+  FROM emp s
+  WHERE s.deptno = e.deptno
+);
+
+-- EXISTS 패턴(존재 여부 검사)
+SELECT d.deptno, d.dname
+FROM dept d
+WHERE EXISTS (
+  SELECT 1
+  FROM emp e
+  WHERE e.deptno = d.deptno
+);</code></pre>
+</section>
+
+<section>
+    <h2>4. 사용 위치별 정리 + 분류 매칭</h2>
+
+    <h3>(1) WHERE 절 (조건식)</h3>
+    <ul>
+        <li>단일 행 / 다중 행 / 상관 서브쿼리 모두 가능</li>
+    </ul>
+    <pre><code>-- 상관: 자기 부서 평균보다 높은 사원
+SELECT e.ename, e.sal, e.deptno
+FROM emp e
+WHERE e.sal &gt; (
+  SELECT AVG(s.sal) FROM emp s WHERE s.deptno = e.deptno
+);</code></pre>
+
+    <h3>(2) SELECT 절 (표시용 값 계산)</h3>
+    <ul>
+        <li>단일 행 또는 상관 단일 행</li>
+    </ul>
+    <pre><code>-- 상관: 같은 부서 평균을 열로 함께 출력
+SELECT e.ename, e.sal,
+       (SELECT AVG(s.sal) FROM emp s WHERE s.deptno = e.deptno) AS 부서평균
+FROM emp e;</code></pre>
+
+    <h3>(3) FROM 절 (인라인 뷰)</h3>
+    <ul>
+        <li>서브쿼리 결과를 테이블처럼 재사용</li>
+        <li>집계 결과 재활용, 다중 컬럼 결과 처리에 유용</li>
+    </ul>
+    <pre><code>-- 부서별 평균 급여 중 2000 이상
+SELECT t.deptno, t.평균급여
+FROM (
+  SELECT deptno, AVG(sal) AS 평균급여
+  FROM emp
+  GROUP BY deptno
+) t
+WHERE t.평균급여 &gt;= 2000;</code></pre>
+
+    <h3>(4) HAVING 절 (그룹 조건)</h3>
+    <ul>
+        <li>단일 행 또는 상관 단일 행</li>
+    </ul>
+    <pre><code>-- 부서별 평균 급여가 전체 평균보다 큰 부서
+SELECT deptno, AVG(sal) AS 평균급여
+FROM emp
+GROUP BY deptno
+HAVING AVG(sal) &gt; (SELECT AVG(sal) FROM emp);</code></pre>
+</section>
+
+<section>
+    <h2>5. 문법·동작 주의사항</h2>
+    <ul>
+        <li><strong>결과 개수 vs 연산자</strong>: 단일 비교 연산자는 1행 1열만 허용, 다중 행엔 <code>IN/ANY/ALL/EXISTS</code> 사용</li>
+        <li><strong>데이터 타입</strong>: 비교 대상 타입 일치 필요(필요 시 <code>TO_CHAR/TO_NUMBER/TO_DATE</code>)</li>
+        <li><strong>NULL</strong>: 하위 집합에 NULL이 섞이면 비교 결과에 영향. 존재 여부만 보려면 <code>EXISTS</code>가 직관적</li>
+        <li><strong>ORDER BY</strong>: 일반 서브쿼리 내부에는 두지 않음(최종 정렬은 바깥에서). 필요하면 인라인 뷰로 감싸 외부 <code>ORDER BY</code> 사용</li>
+    </ul>
+</section>
+
+<section>
+    <h2>6. 요약 치트시트</h2>
+    <ul>
+        <li>단일 행: <code>=, &gt;, &lt;, &gt;=, &lt;=, &lt;&gt;</code> + 1행 1열 결과</li>
+        <li>다중 행: <code>IN</code>, <code>ANY(SOME)</code>, <code>ALL</code></li>
+        <li>다중 컬럼: <code>(col1, col2) IN (SELECT col1, col2 ...)</code></li>
+        <li>상관: 서브쿼리에서 메인 별칭 참조(행마다 재평가)</li>
+        <li>위치: <code>WHERE</code>(필터), <code>SELECT</code>(표시), <code>FROM</code>(인라인 뷰), <code>HAVING</code>(그룹 필터)</li>
+    </ul>
+</section>
+<section>
+    <h2>서브쿼리 연습문제</h2>
+    <ol>
+        <li>전체 평균 급여보다 많은 급여를 받는 사원들의 이름과 급여를 조회하라.</li>
+        <li>이름이 'KING'인 사원과 동일한 직무를 가진 사원을 조회하라.</li>
+        <li>20번 부서에서 근무하는 사원과 동일한 급여를 받는 사원들의 이름과 급여를 조회하라.</li>
+        <li>30번 부서 사원 중 한 명이라도 급여가 더 낮은 사원들을 조회하라.</li>
+        <li>10번 부서 사원 전원보다 급여가 높은 사원을 조회하라.</li>
+        <li>20번 부서의 (직무, 급여) 조합과 같은 조건을 가진 사원들을 조회하라.</li>
+        <li>각 부서별 최고 급여를 받는 사원 정보를 조회하라.</li>
+        <li>자기 부서의 평균 급여보다 높은 급여를 받는 사원들의 이름, 부서번호, 급여를 조회하라.</li>
+        <li>사원이 존재하는 부서만 조회하라.</li>
+        <li>각 사원의 이름, 급여와 함께 해당 사원 부서의 평균 급여를 같이 출력하라.</li>
+    </ol>
+</section>
+
+<section>
+    <h2>정답</h2>
+    <ol>
+        <li>
+      <pre><code>SELECT ename, sal
+FROM emp
+WHERE sal &gt; (SELECT AVG(sal) FROM emp);</code></pre>
+        </li>
+        <li>
+      <pre><code>SELECT ename, job
+FROM emp
+WHERE job = (SELECT job FROM emp WHERE ename = 'KING');</code></pre>
+        </li>
+        <li>
+      <pre><code>SELECT ename, sal
+FROM emp
+WHERE sal IN (SELECT sal FROM emp WHERE deptno = 20);</code></pre>
+        </li>
+        <li>
+      <pre><code>SELECT ename, sal
+FROM emp
+WHERE sal &gt; ANY (SELECT sal FROM emp WHERE deptno = 30);</code></pre>
+        </li>
+        <li>
+      <pre><code>SELECT ename, sal
+FROM emp
+WHERE sal &gt; ALL (SELECT sal FROM emp WHERE deptno = 10);</code></pre>
+        </li>
+        <li>
+      <pre><code>SELECT ename, job, sal
+FROM emp
+WHERE (job, sal) IN (SELECT job, sal FROM emp WHERE deptno = 20);</code></pre>
+        </li>
+        <li>
+      <pre><code>SELECT *
+FROM emp
+WHERE (deptno, sal) IN (
+  SELECT deptno, MAX(sal)
+  FROM emp
+  GROUP BY deptno
+);</code></pre>
+        </li>
+        <li>
+      <pre><code>SELECT e.ename, e.deptno, e.sal
+FROM emp e
+WHERE e.sal &gt; (
+  SELECT AVG(s.sal)
+  FROM emp s
+  WHERE s.deptno = e.deptno
+);</code></pre>
+        </li>
+        <li>
+      <pre><code>SELECT d.deptno, d.dname
+FROM dept d
+WHERE EXISTS (
+  SELECT 1
+  FROM emp e
+  WHERE e.deptno = d.deptno
+);</code></pre>
+        </li>
+        <li>
+      <pre><code>SELECT e.ename, e.sal,
+       (SELECT AVG(s.sal)
+        FROM emp s
+        WHERE s.deptno = e.deptno) AS dept_avg
+FROM emp e;</code></pre>
+        </li>
+    </ol>
+</section>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>IntelliJ Maven 프로젝트와 JDBC Conn Test</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+
+</head>
+<body>
+<h1>IntelliJ에서 Maven 프로젝트 생성 후 JDBC Conn Test</h1>
+
+<section>
+    <h2>수업 목표</h2>
+    <ul>
+        <li>자바 Maven 프로젝트를 IntelliJ에서 생성하고, Oracle DB에 JDBC로 접속(Conn Test)까지 실행한다.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>사전 준비물</h2>
+    <ul>
+        <li>JDK(권장: 17 이상) 설치 및 IntelliJ SDK 설정 가능 상태</li>
+        <li>Oracle DB 실행 중(예: 21c XE)</li>
+        <li>접속 정보: 호스트, 포트(1521), 서비스명(XEPDB1) 또는 SID(XE), 사용자/비밀번호(scott/tiger)</li>
+        <li>네트워크/방화벽에서 1521 포트 접근 가능</li>
+    </ul>
+</section>
+
+<section>
+    <h2>프로젝트 생성(인텔리제이)</h2>
+    <ul>
+        <li>IntelliJ 실행 → New Project → Maven 선택</li>
+        <li>Project SDK 선택(예: 17)</li>
+        <li>GroupId / ArtifactId 입력 (예: com.example / jdbc-oracle-demo)</li>
+        <li>생성 후 프로젝트 열기</li>
+    </ul>
+</section>
+
+<section>
+    <h2>pom.xml 의존성 추가</h2>
+    <ul>
+        <li>프로젝트 루트의 pom.xml 열기</li>
+        <li><code>&lt;dependencies&gt;</code> 안에 Oracle JDBC 의존성 선언</li>
+    </ul>
+    <pre><code>&lt;dependencies&gt;
+  &lt;!-- JDK 11+ 환경이면 ojdbc11, JDK 8~11 호환이면 ojdbc8 사용 --&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;com.oracle.database.jdbc&lt;/groupId&gt;
+    &lt;artifactId&gt;ojdbc11&lt;/artifactId&gt;  &lt;!-- 또는 ojdbc8 --&gt;
+    &lt;version&gt;23.3.0.23.09&lt;/version&gt;   &lt;!-- 수업용 예시 버전 --&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+    <ul>
+        <li>저장 후, 우측 Maven 패널에서 “Reload All Maven Projects” 클릭</li>
+        <li>의존성 다운로드 → .m2 캐시 → 프로젝트에 주입</li>
+    </ul>
+</section>
+
+<section>
+    <h2>프로젝트 구조 확인</h2>
+    <ul>
+        <li>소스 디렉터리: <code>src/main/java</code></li>
+        <li>테스트 디렉터리: <code>src/test/java</code></li>
+        <li>빌드 산출물: <code>target/</code> 폴더</li>
+    </ul>
+</section>
+
+<section>
+    <h2>JDBC 접속 테스트 코드 작성</h2>
+    <ul>
+        <li><code>src/main/java</code> 아래 패키지 생성 (예: com.example)</li>
+        <li><code>OracleConnTest.java</code> 파일 작성</li>
+    </ul>
+    <pre><code>package com.example;
+
+import java.sql.*;
+
+public class OracleConnTest {
+    public static void main(String[] args) {
+        // 서비스명 방식(권장)
+        String url  = "jdbc:oracle:thin:@//localhost:1521/XEPDB1";
+        // SID 방식(환경에 따라)
+        // String url = "jdbc:oracle:thin:@localhost:1521:XE";
+
+        String user = "scott";
+        String pass = "tiger";
+
+        String sql = "SELECT SYSDATE AS NOW FROM DUAL";
+
+        try (Connection conn = DriverManager.getConnection(url, user, pass);
+             //Class.forName("oracle.jdbc.OracleDriver"); //생략가능 : url로 자동으로 찾음
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            System.out.println("Connected: " + (conn != null));
+            if (rs.next()) {
+                System.out.println("DB Time: " + rs.getTimestamp("NOW"));
+            }
+
+            DatabaseMetaData md = conn.getMetaData();
+            System.out.println("Driver: " + md.getDriverName() + " " + md.getDriverVersion());
+            System.out.println("DB: " + md.getDatabaseProductName() + " " + md.getDatabaseProductVersion());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+</section>
+
+<section>
+    <h2>실행(인텔리제이)</h2>
+    <ul>
+        <li><code>OracleConnTest.main()</code> 우클릭 → Run</li>
+        <li>콘솔에 “Connected: true” 및 DB Time, Driver/DB 정보가 출력되면 성공</li>
+    </ul>
+</section>
+
+<section>
+    <h2>접속 URL 선택 가이드</h2>
+    <ul>
+        <li>서비스명 방식(권장): <code>jdbc:oracle:thin:@//호스트:1521/서비스명</code>
+            예: <code>jdbc:oracle:thin:@//localhost:1521/XEPDB1</code></li>
+        <li>SID 방식(특정/구형 환경): <code>jdbc:oracle:thin:@호스트:1521:SID</code>
+            예: <code>jdbc:oracle:thin:@localhost:1521:XE</code></li>
+        <li>확인이 어려우면 DBA 문의, <code>tnsnames.ora</code> 확인, 서버에서 <code>lsnrctl status</code> 확인</li>
+    </ul>
+</section>
+
+<section>
+    <h2>오류 트러블슈팅 체크리스트</h2>
+    <ul>
+        <li><strong>ClassNotFoundException: oracle.jdbc.OracleDriver</strong> → Maven 의존성 누락/다운로드 실패 → pom.xml 및 Maven Reload 확인</li>
+        <li><strong>ORA-01017: invalid username/password</strong> → 계정/비밀번호 오류 또는 계정 잠김</li>
+        <li><strong>ORA-12514 / ORA-12541</strong> → 리스너/서비스명 문제 → <code>lsnrctl status</code> 확인</li>
+        <li><strong>SQLRecoverableException: IO Error</strong> → 호스트/포트/방화벽 문제, URL 오타, DB 미기동 여부 확인</li>
+        <li><strong>Invalid Oracle URL specified</strong> → URL 포맷 오류 (슬래시/콜론 위치 재확인)</li>
+    </ul>
+</section>
+</body>
+</html>

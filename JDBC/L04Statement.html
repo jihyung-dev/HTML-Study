@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>JDBC 주요 객체와 사용법</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+
+</head>
+<body>
+<h1>JDBC 주요 객체와 사용법</h1>
+
+<section>
+    <h2>DriverManager</h2>
+    <ul>
+        <li>역할: JDBC 드라이버 관리, 드라이버 객체 동적 로딩, Connection 반환</li>
+        <li>예시:
+            <pre><code>Connection conn = DriverManager.getConnection(
+    "jdbc:oracle:thin:@//localhost:1521/XEPDB1",
+    "scott",
+    "tiger"
+);</code></pre>
+        </li>
+        <li>포인트: getConnection()이 적절한 드라이버를 찾아 Connection 객체를 생성한다.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Statement</h2>
+    <ul>
+        <li>역할: SQL을 문자열로 전달해 실행하는 객체</li>
+        <li>종류:
+            <ul>
+                <li><code>executeQuery(String sql)</code>: SELECT 실행 → ResultSet 반환</li>
+                <li><code>executeUpdate(String sql)</code>: INSERT, UPDATE, DELETE 실행 → 영향받은 행 수 반환</li>
+                <li><code>execute(String sql)</code>: 혼합 쿼리 실행 → boolean 반환</li>
+            </ul>
+        </li>
+        <li>예시:
+            <pre><code>Statement stmt = conn.createStatement();
+ResultSet rs = stmt.executeQuery("SELECT * FROM EMP");</code></pre>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>PreparedStatement</h2>
+    <ul>
+        <li>역할: 미리 컴파일된 SQL 실행, 파라미터 바인딩 가능</li>
+        <li>장점:
+            <ul>
+                <li>SQL 인젝션 방지</li>
+                <li>반복 실행 시 성능 향상</li>
+            </ul>
+        </li>
+        <li>예시:
+            <pre><code>String sql = "SELECT * FROM EMP WHERE DEPTNO = ?";
+PreparedStatement ps = conn.prepareStatement(sql);
+ps.setInt(1, 10); // 첫 번째 ?에 값 바인딩
+ResultSet rs = ps.executeQuery();</code></pre>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>쿼리 실행 결과 타입</h2>
+    <ul>
+        <li>SELECT → <code>executeQuery()</code> → ResultSet 반환</li>
+        <li>INSERT, UPDATE, DELETE → <code>executeUpdate()</code> → int 반환</li>
+        <li>DDL(CREATE, DROP 등) → <code>executeUpdate()</code> → 보통 0 반환</li>
+        <li>혼합 쿼리(스토어드 프로시저 등) → <code>execute()</code> → boolean 반환</li>
+    </ul>
+</section>
+
+<section>
+    <h2>ResultSet</h2>
+    <ul>
+        <li>역할: SELECT 결과 집합(행·열)을 담는 객체</li>
+        <li>커서를 통해 한 행(row)씩 순차적으로 읽는다.</li>
+        <li>주요 메서드:
+            <ul>
+                <li><code>rs.next()</code>: 다음 행으로 커서 이동, 있으면 true</li>
+                <li><code>rs.getInt("컬럼명")</code>, <code>rs.getString("컬럼명")</code>: 컬럼 값 읽기</li>
+            </ul>
+        </li>
+        <li>예시:
+            <pre><code>while (rs.next()) {
+    int empno = rs.getInt("EMPNO");
+    String ename = rs.getString("ENAME");
+    System.out.println(empno + " " + ename);
+}</code></pre>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>ResultSet과 Iterator 비교</h2>
+    <ul>
+        <li>ResultSet은 Iterator를 직접 구현하지 않았지만 동작 구조가 유사하다.</li>
+        <li>Iterator: <code>hasNext()</code>, <code>next()</code></li>
+        <li>ResultSet: <code>next()</code>, <code>getXXX()</code></li>
+        <li>예시:
+            <pre><code>while (rs.next()) { // hasNext() 느낌
+    String name = rs.getString("ENAME"); // next() + 값 추출
+    System.out.println(name);
+}</code></pre>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>문제</h2>
+    <ul>
+        <li>1.Statement를 사용하여 EMP 테이블에 새로운 직원 등록하기
+            <br>EMPNO=9001, ENAME='ALLEN2', JOB='SALESMAN', SAL=1600, DEPTNO=30
+        </li>
+        <li>2.PreparedStatement를 사용하여 EMP 테이블에 새로운 직원 등록하기
+            <br>EMPNO=9002, ENAME='SMITH2', JOB='CLERK', SAL=800, DEPTNO=20
+            <br>힌트: <code>?</code> 파라미터 바인딩 사용
+        </li>
+        <li>3.PreparedStatement를 사용하여 EMP 테이블 직원 정보 수정하기
+            <br>EMPNO=9002인 직원의 SAL을 1200으로 변경
+        </li>
+        <li>4.PreparedStatement를 사용하여 EMP 테이블 직원 삭제하기
+            <br>EMPNO=9001 삭제
+        </li>
+        <li>5.Statement로 EMP 테이블 전체 조회하기
+            <br><code>SELECT * FROM EMP</code>
+            <br>사번, 이름, 직무, 급여 출력
+        </li>
+        <li>6.PreparedStatement로 특정 부서 사원 조회하기
+            <br><code>SELECT EMPNO, ENAME, DEPTNO FROM EMP WHERE DEPTNO = ?</code>
+            <br>부서번호를 파라미터로 받아 출력
+        </li>
+        <li>7.조인을 사용하여 사원과 부서명 함께 조회하기
+            <br><code>SELECT E.EMPNO, E.ENAME, D.DNAME
+                FROM EMP E JOIN DEPT D ON E.DEPTNO = D.DEPTNO</code>
+            <br>사번, 이름, 부서명 출력
+        </li>
+        <li>8.별칭을 사용하여 조회 결과 컬럼명 변경하기
+            <br><code>SELECT ENAME AS NAME, SAL AS SALARY FROM EMP</code>
+            <br>이름과 급여를 별칭으로 출력
+        </li>
+        <li>9.집계 함수와 GROUP BY 사용하기
+            <br><code>SELECT DEPTNO, AVG(SAL) AS AVG_SAL FROM EMP GROUP BY DEPTNO</code>
+            <br>부서별 평균 급여 출력
+        </li>
+    </ul>
+</section>
+<section>
+    <h2>정답</h2>
+    <ul>
+        <li>
+            1. Statement를 사용하여 EMP 테이블에 새로운 직원 등록하기
+            <pre><code>Statement stmt = conn.createStatement();
+stmt.executeUpdate(
+  "INSERT INTO EMP (EMPNO, ENAME, JOB, SAL, DEPTNO) " +
+  "VALUES (9001, 'ALLEN2', 'SALESMAN', 1600, 30)"
+);</code></pre>
+        </li>
+
+        <li>
+            2. PreparedStatement를 사용하여 EMP 테이블에 새로운 직원 등록하기
+            <pre><code>String sql = "INSERT INTO EMP (EMPNO, ENAME, JOB, SAL, DEPTNO) VALUES (?, ?, ?, ?, ?)";
+PreparedStatement ps = conn.prepareStatement(sql);
+ps.setInt(1, 9002);
+ps.setString(2, "SMITH2");
+ps.setString(3, "CLERK");
+ps.setInt(4, 800);
+ps.setInt(5, 20);
+ps.executeUpdate();</code></pre>
+        </li>
+
+        <li>
+            3. PreparedStatement를 사용하여 EMP 테이블 직원 정보 수정하기
+            <pre><code>String sql = "UPDATE EMP SET SAL = ? WHERE EMPNO = ?";
+PreparedStatement ps = conn.prepareStatement(sql);
+ps.setInt(1, 1200);
+ps.setInt(2, 9002);
+ps.executeUpdate();</code></pre>
+        </li>
+
+        <li>
+            4. PreparedStatement를 사용하여 EMP 테이블 직원 삭제하기
+            <pre><code>String sql = "DELETE FROM EMP WHERE EMPNO = ?";
+PreparedStatement ps = conn.prepareStatement(sql);
+ps.setInt(1, 9001);
+ps.executeUpdate();</code></pre>
+        </li>
+
+        <li>
+            5. Statement로 EMP 테이블 전체 조회하기
+            <pre><code>Statement stmt = conn.createStatement();
+ResultSet rs = stmt.executeQuery("SELECT * FROM EMP");</code></pre>
+        </li>
+
+        <li>
+            6. PreparedStatement로 특정 부서 사원 조회하기
+            <pre><code>String sql = "SELECT EMPNO, ENAME, DEPTNO FROM EMP WHERE DEPTNO = ?";
+PreparedStatement ps = conn.prepareStatement(sql);
+ps.setInt(1, 20);
+ResultSet rs = ps.executeQuery();</code></pre>
+        </li>
+
+        <li>
+            7. 조인을 사용하여 사원과 부서명 함께 조회하기
+            <pre><code>String sql = "SELECT E.EMPNO, E.ENAME, D.DNAME " +
+             "FROM EMP E JOIN DEPT D ON E.DEPTNO = D.DEPTNO";
+PreparedStatement ps = conn.prepareStatement(sql);
+ResultSet rs = ps.executeQuery();</code></pre>
+        </li>
+
+        <li>
+            8. 별칭을 사용하여 조회 결과 컬럼명 변경하기
+            <pre><code>String sql = "SELECT ENAME AS NAME, SAL AS SALARY FROM EMP";
+PreparedStatement ps = conn.prepareStatement(sql);
+ResultSet rs = ps.executeQuery();</code></pre>
+        </li>
+
+        <li>
+            9. 집계 함수와 GROUP BY 사용하기
+            <pre><code>String sql = "SELECT DEPTNO, AVG(SAL) AS AVG_SAL FROM EMP GROUP BY DEPTNO";
+PreparedStatement ps = conn.prepareStatement(sql);
+ResultSet rs = ps.executeQuery();</code></pre>
+        </li>
+    </ul>
+</section>
+</body>
+</html>

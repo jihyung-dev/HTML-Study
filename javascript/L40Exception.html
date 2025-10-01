@@ -46,19 +46,21 @@
         console.log("십삼"*3);
         //예외 => NaN
         let arr=[1,2,3];
-        console.log(arr[3]);
+        console.log(arr[3]); //undefined
         //배열의 길이를 벗어나는 것을 참조=> 오류
-        console.log(1/0) //수학적 오류
+        console.log(1/0) //수학적 오류 //infinity
         //js 인터프리터언어라 오류를 상태로 표현
 
         let text='{"a:10}';
-        //문자열로 객체를 표현 => JSON
+        //문자열로 객체를 표현한 것 => JSON
         try {
-            console.log(JSON.parse(text))
+            console.log(JSON.parse(text))  //다시 객체로 파싱
         }catch (e) {
             console.log(e.message);
+        }finally {
+            console.log("제이슨 파싱중")
         }
-        console.log("제이슨 파싱중")
+        console.log("멈췄나요?")
 
 
 

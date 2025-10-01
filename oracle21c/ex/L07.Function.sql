@@ -1,0 +1,172 @@
+SELECT * FROM EMP;
+SELECT LOWER(ENAME) FROM EMP; -- 소문자로
+SELECT INITCAP(ENAME) FROM EMP; -- 첫글자만 대문자로
+--to_char, number, cast
+SELECT SUBSTR(ENAME,0,1) FROM EMP;
+SELECT SUBSTR('ORACLE',0,4) FROM DUAL;
+SELECT SUBSTR('ORACLE',1,4) FROM DUAL; -- ORACLE의 INDEX는 1부터 시작
+SELECT LENGTH(ENAME) FROM EMP;
+SELECT CONCAT(ENAME,' 님') FROM EMP;
+SELECT ENAME || ' 님' || ' 안녕하세요!' FROM EMP;
+
+SELECT ROUND(1234.567) FROM DUAL;
+SELECT ROUND(1234.567,1) FROM DUAL;
+SELECT ROUND(1234.567,2) FROM DUAL;
+SELECT FLOOR(1234.567) FROM DUAL;    -- 내림과 버림의 차이
+SELECT FLOOR(-0.1) FROM DUAL;
+
+SELECT TRUNC(1234.567) FROM DUAL;    -- 내림과 버림의 차이
+SELECT TRUNC(1234.567,2) FROM DUAL;
+SELECT TRUNC(1234.567,2) FROM DUAL;
+SELECT TRUNC(-0.1) FROM DUAL;
+-- SELECT 2**3 FROM DUAL; -- 안됨, 다른 문법
+SELECT POWER (2,10) FROM DUAL; -- 2의 10승
+SELECT POWER (2,20) FROM DUAL;
+
+--SELECT 10%4 FROM DUAL;
+SELECT MOD(10,4) FROM DUAL; -- 10을 4로 나눈 나머지
+
+SELECT 10+10 FROM DUAL;
+SELECT 10/10 FROM DUAL;
+
+-- SELECT 10/0 FROM DUAL; : 수학적 오류
+SELECT 10/3 FROM DUAL;
+
+--SELECT 10=10 FROM DUAL; : 수학적 오류
+--SELECT 10==10 FROM DUAL;
+SELECT * FROM EMP WHERE SAL=800; -- WHERE 절에서는 사용 가능
+
+--decode () 비교연산 수행하는 함수
+
+SELECT * FROM EMP WHERE SAL!=800; -- 같지 않다도 실행 가능
+SELECT * FROM EMP WHERE SAL<>800; -- 같지 않다의 옛날 문법, 사용 비권장
+
+ALTER SESSION SET TIME_ZONE = 'Asia/seoul';
+
+-- os의 시간
+SELECT SYSDATE FROM DUAL;
+SELECT SYSTIMESTAMP FROM DUAL;
+-- oracle의 시간
+SELECT CURRENT_TIMESTAMP FROM DUAL; -- ORACLE의 시간 (나노초까지 표기)
+SELECT CURRENT_DATE FROM DUAL; -- ORACLE의 시간 (초까지 표기)
+
+SELECT ADD_MONTHS(SYSDATE, 6) FROM DUAL;
+SELECT ADD_MONTHS(SYSDATE, -8) FROM DUAL;
+SELECT ADD_MONTHS(SYSDATE, -8.5) FROM DUAL;
+-- SELECT SYSDATE-'2025-01-25 02:56:41' FROM DUAL; --계산 불가
+SELECT SYSDATE-TO_DATE('2025-01-25') FROM DUAL;
+SELECT SYSDATE-TO_DATE('2025-01-25 02:56:41', 'YYYY-MM-DD HH24:MI,SS') FROM DUAL;
+SELECT SYSDATE-DATE'2025-01-25' FROM DUAL;
+SELECT SYSDATE-CAST('2025-01-25' AS DATE) FROM DUAL;
+-- 일수
+
+--SELECT MONTHS_BETWEEN(SYSDATE, '2025-01-25 02:56:41') FROM DUAL; -- 문제가 있다
+SELECT MONTHS_BETWEEN(SYSDATE, '2025-01-25') FROM DUAL; -- 시분초를 지워서 자동 형변환
+SELECT NEXT_DAY(SYSDATE, '금요일') FROM DUAL;
+SELECT NEXT_DAY(SYSDATE, '일요일') FROM DUAL;
+
+
+--NVL : Null VaLue
+SELECT * FROM EMP;
+SELECT ENAME, SAL, COMM, SAL+COMM 총급여 FROM EMP;
+-- 결과값 <null> : null + 수 => null
+SELECT ENAME, SAL, COMM, SAL+NVL(COMM,0) 총급여 FROM EMP;
+
+-- NVL2(COMM,있으면 Y,없으면 N)
+-- 커미션을 받으면 YES, 받지 않으면 NO
+SELECT * FROM EMP;
+SELECT ENAME, NVL2(COMM,'YES','NO') 커미션유무 FROM EMP;
+
+SELECT ENAME,DEPTNO FROM EMP;
+SELECT * FROM DEPT;
+-- 10,ACCOUNTING,NEW YORK
+-- 20,RESEARCH,DALLAS
+-- 30,SALES,CHICAGO
+-- 40,OPERATIONS,BOSTON
+
+SELECT ENAME,
+    DECODE(DEPTNO,
+            10,'ACCOUNTING',
+            20,'RESEARCH',
+            30, 'SALE') AS 부서이름
+FROM EMP;
+
+
+-- SYSDATE : 날짜와 시간을 모두 포함 +++시간, 초 또는 밀리초 정보 제공
+-- CURRENTDATE : 날짜만 포함 (자정 기준)
+
+
+-- ************************** 문제 풀이 **************************
+-- 1.'oracle database' 문자열을 모두 대문자로 바꾸어 출력하라.
+SELECT UPPER('oracle database') FROM DUAL;
+
+-- 2. 'SCOTT' 문자열을 소문자로 바꾸어 출력하라.
+SELECT LOWER('SCOTT') FROM DUAL;
+
+-- 3. 'hello world'의 각 단어 첫 글자만 대문자로 바꾸어 출력하라.
+SELECT INITCAP('hello world') FROM DUAL;
+
+-- 4. 'ORACLE' 문자열에서 두 번째 위치부터 세 글자를 잘라내어 출력하라.
+SELECT SUBSTR('ORACLE',2,3) FROM DUAL;
+
+-- 5. 'DATABASE' 문자열의 길이를 구하라.
+SELECT LENGTH('DATABASE') FROM DUAL;
+
+-- 6. 숫자 123.4567을 소수 둘째 자리에서 반올림한 결과를 출력하라.
+SELECT ROUND(123.4567,2) FROM DUAL;
+
+-- 7. 숫자 123.4567을 소수 둘째 자리에서 버림한 결과를 출력하라.
+SELECT TRUNC(123.4567,2) FROM DUAL;
+
+-- 8. 10을 3으로 나눈 나머지를 출력하라.
+SELECT MOD(10,3) FROM DUAL;
+
+-- 9. 2의 5제곱 값을 출력하라.
+SELECT 2*2*2*2*2 FROM DUAL;
+SELECT POWER(2,5) FROM DUAL;
+
+-- 10. 현재 날짜와 시간을 출력하라.
+SELECT CURRENT_DATE FROM DUAL;
+
+-- 11. 현재 날짜에서 2개월 뒤의 날짜를 출력하라.
+SELECT ADD_MONTHS( DATE'2025-01-01',2) FROM DUAL;
+
+-- 12. 2025-01-01과 오늘 날짜 사이의 개월 차이를 출력하라.
+SELECT MONTHS_BETWEEN(DATE'2025-01-01',CURRENT_DATE) FROM DUAL;
+
+-- 13. 오늘 날짜 이후의 가장 가까운 금요일 날짜를 출력하라.
+SELECT NEXT_DAY(SYSDATE,'금요일') FROM DUAL;
+
+-- 14. 오늘 날짜를 'YYYY/MM/DD' 형식의 문자열로 바꾸어 출력하라.
+SELECT TO_CHAR(SYSDATE, 'YYYY/MM/DD') FROM DUAL;
+
+-- 15. 문자열 '2025-12-31'을 날짜 데이터로 변환하라.
+SELECT TO_DATE('2025-12-31', 'YYYY/MM/DD') FROM DUAL;
+
+-- 16. 문자열 '10000'을 숫자로 변환하라.
+SELECT TO_NUMBER('10000', 99999) FROM DUAL;
+
+-- 17. 사원의 커미션(comm)이 NULL이면 0을, NULL이 아니면 커미션 값을 출력하라.
+SELECT ENAME, NVL2(COMM,COMM,0) FROM EMP;
+
+-- 18. 사원의 커미션(comm)이 NULL이면 'NO', NULL이 아니면 'YES'를 출력하라.
+SELECT ENAME, NVL2(COMM,'YES','NO') FROM EMP;
+
+-- 19. 사원의 부서 번호(deptno)가 10이면 'ACCOUNTING', 20이면 'RESEARCH', 그 외에는 'OTHERS'로 출력하라.
+SELECT DEPTNO,
+    DECODE(DEPTNO,
+        10, 'ACCOUNTING',
+        20, 'RESEARCH',
+        'OTHERS')
+    FROM EMP;
+
+-- 20. 사원의 급여(sal)가 3000 이상이면 'HIGH', 그렇지 않으면 'LOW'로 출력하라.
+SELECT ENAME, SAL,
+       CASE
+        WHEN 3000>=sal THEN 'HIGH'
+        ELSE 'LOW'
+        END AS "SALARY CASE"
+      FROM EMP;
+
+
+

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>오라클 21c 설치</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+    <h1>오라클 21c 설치</h1>
+    <section>
+        <h3>Oracle 21c XE 특징</h3>
+        <ul>
+            <li>무료(Express Edition)이며 학습·개발용으로 충분</li>
+            <li>멀티테넌트(CDB/PDB) 구조, JSON 처리 강화, 자동 인덱스 등 최신 기능 포함</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>일반 설치 (네이티브 인스톨)</h3>
+        <ul>
+            <li>지원 OS: Windows, Linux (macOS는 설치 불가)</li>
+            <li>설치 파일 다운로드:
+                <a href="https://www.oracle.com/database/technologies/appdev/xe.html" target="_blank">
+                    Oracle 21c XE 다운로드 페이지
+                </a>
+            </li>
+            <li>설치 과정:
+                <ul>
+                    <li>다운로드한 설치 파일 실행</li>
+                    <li>설치 경로와 관리자 비밀번호 지정</li>
+                    <li>자동으로 서비스 등록 (Oracle DB 서비스, Listener 등)</li>
+                </ul>
+            </li>
+            <li>단점:
+                <ul>
+                    <li>삭제(언인스톨)가 복잡하고 레지스트리/서비스 흔적이 남음</li>
+                    <li>OS 환경 충돌 가능 → 학습용으로는 Docker 방식 권장</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>Docker란?</h3>
+        <ul>
+            <li>애플리케이션과 실행환경을 묶은 이미지를 컨테이너로 실행하는 가상화 플랫폼</li>
+            <li>이미지(Image): 실행환경 + 프로그램 묶음</li>
+            <li>컨테이너(Container): 이미지를 실제 실행한 인스턴스</li>
+            <li>장점: 설치/삭제가 간단하고 환경이 격리되어 이식성이 높음</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>Docker Hub와 Oracle Container Registry</h3>
+        <ul>
+            <li>Docker Hub: 공개 이미지 저장소 (개념 이해용)</li>
+            <li>오라클 DB 이미지는 Oracle Container Registry에서 제공</li>
+            <li>최초 사용 시 웹에서 약관 동의 및 CLI 로그인 필요</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>Windows에서 Docker 설치 및 설정</h3>
+        <ul>
+            <li>사전 요구사항:
+                <ul>
+                    <li>Windows 10/11 Pro 또는 Enterprise (Home은 WSL2 필요)</li>
+                    <li>BIOS에서 가상화(Virtualization) 활성화</li>
+                    <li>Windows 기능에서 <code>WSL2</code>와 <code>Hyper-V</code> 설정 필요</li>
+                </ul>
+            </li>
+            <li>설치 단계:
+                <ul>
+                    <li>Docker Desktop 다운로드:
+                        <a href="https://www.docker.com/products/docker-desktop/" target="_blank">공식 사이트</a>
+                    </li>
+                    <li>설치 후 실행 → 기본 WSL2 Backend 선택
+                        <ol>
+                            <li>
+                                <strong>Windows 가상화 관련 기능 활성화 (PowerShell 관리자)</strong><br>
+                                PowerShell을 “관리자 권한”으로 실행 후 아래 명령을 입력하고 재부팅한다.
+                                <pre><code>
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart</code></pre>
+                            </li>
+                            <li>
+                                <strong> WSL2 기본 버전 설정 및 커널 업데이트</strong><br>
+                                재부팅 후 PowerShell에서 기본 버전을 2로 설정한다.
+                                <pre><code>wsl --set-default-version 2</code></pre>
+                                필요하다면 WSL 업데이트도 진행한다.
+                                <pre><code>wsl --update</code></pre>
+                            </li>
+                            <li>
+                                <strong> 리눅스 배포판 설치/재설치</strong><br>
+                                Microsoft Store 또는 명령으로 배포판을 설치한다.
+                                <pre><code>wsl --install -d Ubuntu</code></pre>
+                                만약 기존 배포판이 꼬였다면 등록 해제 후 재설치한다.
+                                <pre><code>wsl --unregister &lt;배포판이름&gt;
+wsl --install -d Ubuntu</code></pre>
+                            </li>
+                            <li>
+                                <strong> Docker Desktop 점검</strong><br>
+                                Docker Desktop을 실행한 뒤 설정에서 확인한다.
+                                <ul>
+                                    <li>Settings → General → “Use the WSL 2 based engine” 체크</li>
+                                    <li>Settings → Resources → WSL Integration → 사용 중인 Ubuntu 배포판 선택</li>
+                                    <li>적용 후 Docker Desktop 재시작</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </li>
+                    <li><code>docker --version</code> 명령으로 정상 설치 확인</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>Oracle 21c XE 이미지 내려받기</h3>
+        <ul>
+            <li>이미지 Pull</li>
+        </ul>
+        <pre><code>docker pull container-registry.oracle.com/database/express:21.3.0-xe</code></pre>
+        <ul>
+            <li>Apple Silicon(M1/M2/M3) 맥은 옵션 추가</li>
+        </ul>
+        <pre><code>docker pull --platform linux/amd64 container-registry.oracle.com/database/express:21.3.0-xe</code></pre>
+    </section>
+
+    <section>
+        <h3>컨테이너 실행</h3>
+        <ul>
+            <li>포트: 1521(DB), 5500(EM Express)</li>
+            <li>환경변수: <code>ORACLE_PWD</code> = 초기 관리자 비밀번호</li>
+        </ul>
+        <pre><code>docker run -d --name oracle21c-xe
+  -p 1521:1521
+  -e ORACLE_PWD=oracle
+  container-registry.oracle.com/database/express:21.3.0-xe</code></pre>
+        <ul>
+            <li>컨테이너 상태 확인</li>
+        </ul>
+        <pre><code>docker ps
+docker logs -f oracle21c-xe</code></pre>
+    </section>
+
+    <section>
+        <h3>SQL*Plus 접속</h3>
+        <ul>
+            <li>컨테이너 내부에서</li>
+        </ul>
+        <pre><code>docker exec -it oracle21c-xe sqlplus / as sysdba</code></pre>
+        <ul>
+            <li>호스트에서 포트로</li>
+        </ul>
+        <pre><code>sqlplus system/&lt;비밀번호&gt;@localhost:1521/XEPDB1
+sqlplus sys/&lt;비밀번호&gt;@localhost:1521/XEPDB1 as sysdba</code></pre>
+    </section>
+
+    <section>
+        <h3>정리/삭제</h3>
+        <ul>
+            <li>컨테이너 정지/삭제</li>
+        </ul>
+        <pre><code>docker stop oracle21c-xe
+docker rm oracle21c-xe</code></pre>
+        <ul>
+            <li>이미지 삭제</li>
+        </ul>
+        <pre><code>docker rmi container-registry.oracle.com/database/express:21.3.0-xe</code></pre>
+    </section>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SQL이란</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+
+</head>
+<body>
+    <h1>SQL이란</h1>
+    <section>
+        <h2>SQL 개요</h2>
+        <ul>
+            <li>SQL(Structured Query Language)은 관계형 데이터베이스를 다루는 언어</li>
+            <li>데이터 정의, 조작, 조회, 제어 모두 SQL로 수행</li>
+            <li>ANSI와 ISO에 의해 제정된 <strong>국제 표준 언어</strong></li>
+            <li>오라클, MySQL, PostgreSQL, SQL Server 등 모든 DBMS에서 공통 사용</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>데이터 기본 연산 – CRUD</h2>
+        <ul>
+            <li>데이터베이스의 네 가지 기본 동작</li>
+            <li><strong>Create (등록)</strong>: INSERT</li>
+            <li><strong>Read (조회)</strong>: SELECT</li>
+            <li><strong>Update (수정)</strong>: UPDATE</li>
+            <li><strong>Delete (삭제)</strong>: DELETE</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>SQL 명령어 분류</h2>
+        <ul>
+            <li><strong>DDL (Data Definition Language)</strong>: 데이터 정의
+                <ul>
+                    <li>CREATE, ALTER, DROP, TRUNCATE</li>
+                    <li>테이블, 뷰, 인덱스 등 구조 정의</li>
+                </ul>
+            </li>
+            <li><strong>DML (Data Manipulation Language)</strong>: 데이터 조작
+                <ul>
+                    <li>INSERT, UPDATE, DELETE</li>
+                    <li>실제 데이터 등록/수정/삭제</li>
+                </ul>
+            </li>
+            <li><strong>DQL (Data Query Language)</strong>: 데이터 조회
+                <ul>
+                    <li>SELECT</li>
+                    <li>데이터 검색 및 조건, 정렬, 집계 수행</li>
+                </ul>
+            </li>
+            <li><strong>TCL (Transaction Control Language)</strong>: 트랜잭션 제어
+                <ul>
+                    <li>COMMIT, ROLLBACK, SAVEPOINT</li>
+                    <li>작업의 완료와 취소를 관리</li>
+                </ul>
+            </li>
+            <li><strong>DCL (Data Control Language)</strong>: 권한 제어
+                <ul>
+                    <li>GRANT, REVOKE</li>
+                    <li>사용자 권한 부여 및 회수</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>DQL의 위치에 대한 관점</h2>
+        <ul>
+            <li><strong>ANSI/ISO 표준</strong>: SELECT는 DML에 포함</li>
+            <li><strong>교육/실무</strong>: SELECT의 비중이 커서 DQL로 따로 분리해 설명하기도 함</li>
+            <li><strong>정리</strong>: SELECT는 DML의 일부지만, 학습할 때는 DQL로 구분하면 이해가 쉬움</li>
+        </ul>
+    </section>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>라이브러리와 Maven</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+
+</head>
+<body>
+<h1>라이브러리와 Maven</h1>
+
+<section>
+    <h2>1. 라이브러리(Library)란?</h2>
+    <ul>
+        <li>다른 개발자가 미리 작성해 둔 <strong>재사용 가능한 코드 묶음</strong>.</li>
+        <li>자바에서는 보통 <code>JAR</code> 파일 형태로 제공된다.</li>
+        <li>예:
+            <ul>
+                <li>Oracle JDBC 드라이버(ojdbc)</li>
+                <li>JSON 처리 라이브러리(jackson)</li>
+                <li>로깅 라이브러리(slf4j, logback)</li>
+            </ul>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>2. 라이브러리 수동 다운로드 & 설정</h2>
+    <ul>
+        <li>원시적인 방식: JAR 파일을 직접 받아서 프로젝트에 포함.</li>
+        <li>절차:
+            <ol>
+                <li>Oracle 공식 사이트에서 <code>ojdbc8.jar</code> 다운로드</li>
+                <li>프로젝트 <code>libs/</code> 폴더에 저장</li>
+                <li>IDE(Project Structure → Libraries)에 JAR 추가</li>
+                <li>명령줄 실행 시 classpath 지정 필요</li>
+            </ol>
+        </li>
+        <li>예시:
+            <ul>
+                <li>Windows: <code>java -cp ".;libs/ojdbc8.jar" Main</code></li>
+                <li>macOS/Linux: <code>java -cp ".:libs/ojdbc8.jar" Main</code></li>
+            </ul>
+        </li>
+        <li>단점:
+            <ul>
+                <li>버전 충돌 해결 어려움</li>
+                <li>프로젝트마다 JAR을 따로 관리해야 함</li>
+                <li>자동화/협업 환경에서 불편</li>
+            </ul>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>3. Maven 의존성 관리</h2>
+    <ul>
+        <li>Maven: <strong>자바 프로젝트 빌드 및 의존성 관리 도구</strong>.</li>
+        <li><code>pom.xml</code> 파일에 의존성을 선언하면,
+            <ul>
+                <li>Maven이 중앙 저장소(Maven Central)에서 다운로드</li>
+                <li>로컬 저장소(<code>.m2/repository</code>)에 캐싱</li>
+                <li>프로젝트 classpath에 자동 반영</li>
+            </ul>
+        </li>
+    </ul>
+    <pre><code>&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;com.oracle.database.jdbc&lt;/groupId&gt;
+    &lt;artifactId&gt;ojdbc8&lt;/artifactId&gt;
+    &lt;version&gt;23.3.0.23.09&lt;/version&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+    <ul>
+        <li><strong>groupId</strong>: 제공 그룹(회사/조직)</li>
+        <li><strong>artifactId</strong>: 라이브러리 이름</li>
+        <li><strong>version</strong>: 버전 번호</li>
+    </ul>
+</section>
+
+<section>
+    <h2>4. Maven 수명주기(Lifecycle)</h2>
+    <ul>
+        <li><strong>clean</strong>: 이전 빌드 산출물 삭제</li>
+        <li><strong>compile</strong>: 소스 코드 컴파일</li>
+        <li><strong>test</strong>: 단위 테스트 실행</li>
+        <li><strong>package</strong>: JAR/WAR 산출물 생성</li>
+        <li><strong>install</strong>: 로컬 저장소(.m2)에 설치</li>
+        <li><strong>deploy</strong>: 원격 저장소에 배포</li>
+    </ul>
+    <p>→ 표준화된 빌드 단계를 제공하기 때문에, 어떤 프로젝트든 동일한 방식으로 빌드 가능하다.</p>
+</section>
+
+<section>
+    <h2>5. Maven과 CI/CD</h2>
+    <ul>
+        <li>Maven은 빌드와 의존성 관리가 자동화되어 있어 CI/CD 도구와 쉽게 연계된다.</li>
+        <li>Jenkins, GitHub Actions, GitLab CI 등과 연결하면
+            <ul>
+                <li>코드 푸시 → 자동 빌드 → 자동 테스트 → 자동 배포</li>
+            </ul>
+        </li>
+        <li>수업에서는 CI/CD 자체를 다루지 않고,
+            <strong>“Maven은 자동화 파이프라인에서 잘 쓰인다”</strong> 정도만 설명하면 충분하다.</li>
+    </ul>
+</section>
+</body>
+</html>

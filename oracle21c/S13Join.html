@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>관계형 데이터베이스의 꽃 조인</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+    <h1>관계형 데이터베이스의 꽃 조인</h1>
+    <section>
+        <h2>조인(Join)의 개념</h2>
+        <ul>
+            <li>여러 테이블을 결합하여 하나의 결과 집합을 만드는 것</li>
+            <li>관계형 데이터베이스에서는 보통 테이블이 분리되어 있으므로 원하는 데이터를 얻기 위해 조인이 필요함</li>
+            <li>보통 기본 키(PK)와 외래 키(FK) 관계를 기준으로 데이터를 연결</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>예시 테이블</h2>
+        <h3>DEPT</h3>
+        <pre><code>DEPTNO | DNAME
+-------|--------
+10     | ACCOUNT
+20     | SALES
+30     | IT
+40     | HR</code></pre>
+
+        <h3>EMP</h3>
+        <pre><code>EMPNO | ENAME | DEPTNO
+------|-------|-------
+101   | 철수  | 10
+102   | 영희  | 20
+103   | 민수  | 50   -- 존재하지 않는 부서번호
+104   | 수지  | NULL -- 부서 배정 없음</code></pre>
+    </section>
+
+    <section>
+        <h2>1. 내부 조인 (INNER JOIN)</h2>
+        <ul>
+            <li>양쪽 테이블에서 조건이 일치하는 행만 반환</li>
+            <li>가장 기본적이고 많이 쓰이는 조인 방식</li>
+        </ul>
+        <pre><code>SELECT e.empno, e.ename, d.dname
+FROM emp e
+INNER JOIN dept d
+  ON e.deptno = d.deptno;</code></pre>
+
+        <h3>결과</h3>
+        <pre><code>EMPNO | ENAME | DNAME
+------|-------|--------
+101   | 철수  | ACCOUNT
+102   | 영희  | SALES</code></pre>
+    </section>
+
+    <section>
+        <h2>2. 외부 조인 (OUTER JOIN)</h2>
+        <ul>
+            <li>조건이 일치하지 않아도 한쪽 테이블의 모든 행을 포함</li>
+            <li>LEFT, RIGHT, FULL 세 가지 방식이 있음</li>
+        </ul>
+
+        <h3>LEFT OUTER JOIN</h3>
+        <pre><code>SELECT e.empno, e.ename, d.dname
+FROM emp e
+LEFT OUTER JOIN dept d
+  ON e.deptno = d.deptno;</code></pre>
+        <pre><code>EMPNO | ENAME | DNAME
+------|-------|--------
+101   | 철수  | ACCOUNT
+102   | 영희  | SALES
+103   | 민수  | NULL
+104   | 수지  | NULL</code></pre>
+
+        <h3>RIGHT OUTER JOIN</h3>
+        <pre><code>SELECT e.empno, e.ename, d.dname
+FROM emp e
+RIGHT OUTER JOIN dept d
+  ON e.deptno = d.deptno;</code></pre>
+        <pre><code>EMPNO | ENAME | DNAME
+------|-------|--------
+101   | 철수  | ACCOUNT
+102   | 영희  | SALES
+NULL  | NULL  | IT
+NULL  | NULL  | HR</code></pre>
+
+        <h3>FULL OUTER JOIN</h3>
+        <pre><code>SELECT e.empno, e.ename, d.dname
+FROM emp e
+FULL OUTER JOIN dept d
+  ON e.deptno = d.deptno;</code></pre>
+        <pre><code>EMPNO | ENAME | DNAME
+------|-------|--------
+101   | 철수  | ACCOUNT
+102   | 영희  | SALES
+103   | 민수  | NULL
+104   | 수지  | NULL
+NULL  | NULL  | IT
+NULL  | NULL  | HR</code></pre>
+    </section>
+
+    <section>
+        <h2>3. 자기 조인 (SELF JOIN)</h2>
+        <ul>
+            <li>같은 테이블을 자기 자신과 조인</li>
+            <li>상하 관계, 계층 구조 표현에 유용</li>
+        </ul>
+        <pre><code>SELECT e.ename AS 사원, m.ename AS 관리자
+FROM emp e
+LEFT JOIN emp m
+  ON e.deptno = m.deptno
+ AND e.empno &lt;&gt; m.empno;</code></pre>
+        <pre><code>사원 | 관리자
+----|--------
+철수 | 영희
+영희 | 철수
+민수 | NULL
+수지 | NULL</code></pre>
+    </section>
+
+    <section>
+        <h2>4. 교차 조인 (CROSS JOIN)</h2>
+        <ul>
+            <li>조건 없이 모든 행을 결합 (카테시안 곱)</li>
+            <li>실무에서는 잘 쓰지 않고 데이터 조합이나 테스트 용도로 사용</li>
+        </ul>
+        <pre><code>SELECT e.ename, d.dname
+FROM emp e
+CROSS JOIN dept d;</code></pre>
+        <pre><code>ENAME | DNAME
+------|--------
+철수  | ACCOUNT
+철수  | SALES
+철수  | IT
+철수  | HR
+영희  | ACCOUNT
+...   | ...</code></pre>
+    </section>
+
+    <section>
+        <h2>조인 정리 포인트</h2>
+        <ul>
+            <li><strong>INNER JOIN</strong>: 공통된 데이터만</li>
+            <li><strong>OUTER JOIN</strong>: 한쪽 테이블의 모든 데이터 포함 (LEFT/RIGHT/FULL)</li>
+            <li><strong>SELF JOIN</strong>: 같은 테이블을 두 번 사용</li>
+            <li><strong>CROSS JOIN</strong>: 모든 경우의 수 조합</li>
+        </ul>
+    </section>
+    <section>
+        <h2>조인 연습문제</h2>
+        <ol>
+            <li>EMP와 DEPT를 내부 조인하여 모든 사원의 이름(ENAME)과 소속 부서명(DNAME)을 조회하라.</li>
+            <li>모든 사원의 이름과 소속 부서를 출력하되, 소속이 없는 사원도 포함되도록 LEFT JOIN을 사용하라.</li>
+            <li>모든 부서명을 출력하되, 사원이 없는 부서도 포함되도록 RIGHT JOIN을 사용하라.</li>
+            <li>EMP와 DEPT를 FULL OUTER JOIN하여 사원 또는 부서가 없어도 모두 조회하라.</li>
+            <li>EMP 테이블에서 사원 이름과 같은 부서에 속한 다른 사원의 이름을 SELF JOIN으로 조회하라.</li>
+            <li>EMP와 DEPT를 CROSS JOIN하여 모든 가능한 조합을 조회하라.</li>
+            <li>EMPNO와 DEPTNO가 일치하는 데이터만 INNER JOIN으로 조회하고, DEPTNO 순으로 정렬하라.</li>
+            <li>사원의 이름, 부서명을 출력하되, 부서명이 없는 경우 "NO DEPT"로 표시하라. (LEFT JOIN + NVL/COALESCE 활용)</li>
+            <li>EMP에서 ENAME, DEPT에서 DNAME을 INNER JOIN으로 조회하되, 부서명이 'SALES'인 사원만 출력하라.</li>
+            <li>EMP 테이블에서 관리자를 표현하려고 SELF JOIN을 사용해 사원의 이름과 같은 부서의 다른 사원을 "관리자"로 표시하라.</li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>조인 연습문제 정답</h2>
+        <ol>
+            <li>
+      <pre><code>SELECT e.ename, d.dname
+FROM emp e
+INNER JOIN dept d
+  ON e.deptno = d.deptno;</code></pre>
+            </li>
+            <li>
+      <pre><code>SELECT e.ename, d.dname
+FROM emp e
+LEFT JOIN dept d
+  ON e.deptno = d.deptno;</code></pre>
+            </li>
+            <li>
+      <pre><code>SELECT e.ename, d.dname
+FROM emp e
+RIGHT JOIN dept d
+  ON e.deptno = d.deptno;</code></pre>
+            </li>
+            <li>
+      <pre><code>SELECT e.ename, d.dname
+FROM emp e
+FULL OUTER JOIN dept d
+  ON e.deptno = d.deptno;</code></pre>
+            </li>
+            <li>
+      <pre><code>SELECT e.ename AS 사원, m.ename AS 동료
+FROM emp e
+JOIN emp m
+  ON e.deptno = m.deptno
+ AND e.empno &lt;&gt; m.empno;</code></pre>
+            </li>
+            <li>
+      <pre><code>SELECT e.ename, d.dname
+FROM emp e
+CROSS JOIN dept d;</code></pre>
+            </li>
+            <li>
+      <pre><code>SELECT e.empno, e.ename, d.deptno
+FROM emp e
+INNER JOIN dept d
+  ON e.deptno = d.deptno
+ORDER BY d.deptno;</code></pre>
+            </li>
+            <li>
+      <pre><code>SELECT e.ename,
+       COALESCE(d.dname, 'NO DEPT') AS dname
+FROM emp e
+LEFT JOIN dept d
+  ON e.deptno = d.deptno;</code></pre>
+            </li>
+            <li>
+      <pre><code>SELECT e.ename, d.dname
+FROM emp e
+INNER JOIN dept d
+  ON e.deptno = d.deptno
+WHERE d.dname = 'SALES';</code></pre>
+            </li>
+            <li>
+      <pre><code>SELECT e.ename AS 사원, m.ename AS 관리자
+FROM emp e
+LEFT JOIN emp m
+  ON e.deptno = m.deptno
+ AND e.empno &lt;&gt; m.empno;</code></pre>
+            </li>
+        </ol>
+    </section>
+    <section>
+        <h2>조인 문제</h2>
+        <ul>
+            <li>문제 1. 사원 이름(ENAME)과 해당 사원의 부서 이름(DNAME)을 조회하시오.</li>
+            <li>문제 2. 부서 위치(LOC)가 'DALLAS'인 사원의 이름과 직무(JOB)를 조회하시오.</li>
+            <li>문제 3. 급여(SAL)가 2000 이상인 사원의 이름과 부서 이름을 조회하시오.</li>
+            <li>문제 4. 각 사원의 이름과 급여, 그리고 급여 등급(GRADE)을 함께 조회하시오.</li>
+            <li>문제 5. 'ACCOUNTING' 부서에 소속된 모든 사원의 이름과 입사일(HIREDATE)을 조회하시오.</li>
+            <li>문제 6. 관리자가 존재하는 사원의 이름과 해당 관리자의 이름을 조회하시오.</li>
+            <li>문제 7. 부서별로 사원이 한 명도 없는 부서의 부서 이름을 조회하시오.</li>
+            <li>문제 8. 'RESEARCH' 부서에 소속된 사원의 이름과 급여 등급을 조회하시오.</li>
+            <li>문제 9. 모든 사원의 이름과, 해당 사원이 속하지 않은 부서 이름까지 포함하여 출력하시오.</li>
+            <li>문제 10. 모든 사원의 이름과 부서 이름을 조회하되, 부서가 지정되지 않은 사원도 함께 출력하시오.</li>
+        </ul>
+    </section>
+    <section>
+        <h2>조인 정답</h2>
+        <ul>
+            <li>
+                문제 1 정답
+                <pre><code>SELECT e.ename, d.dname
+FROM emp e
+JOIN dept d ON e.deptno = d.deptno;</code></pre>
+            </li>
+            <li>
+                문제 2 정답
+                <pre><code>SELECT e.ename, e.job
+FROM emp e
+JOIN dept d ON e.deptno = d.deptno
+WHERE d.loc = 'DALLAS';</code></pre>
+            </li>
+            <li>
+                문제 3 정답
+                <pre><code>SELECT e.ename, d.dname
+FROM emp e
+JOIN dept d ON e.deptno = d.deptno
+WHERE e.sal &gt;= 2000;</code></pre>
+            </li>
+            <li>
+                문제 4 정답
+                <pre><code>SELECT e.ename, e.sal, s.grade
+FROM emp e
+JOIN salgrade s ON e.sal BETWEEN s.losal AND s.hisal;</code></pre>
+            </li>
+            <li>
+                문제 5 정답
+                <pre><code>SELECT e.ename, e.hiredate
+FROM emp e
+JOIN dept d ON e.deptno = d.deptno
+WHERE d.dname = 'ACCOUNTING';</code></pre>
+            </li>
+            <li>
+                문제 6 정답
+                <pre><code>SELECT e.ename AS emp_name, m.ename AS mgr_name
+FROM emp e
+JOIN emp m ON e.mgr = m.empno;</code></pre>
+            </li>
+            <li>
+                문제 7 정답
+                <pre><code>SELECT d.dname
+FROM dept d
+LEFT JOIN emp e ON d.deptno = e.deptno
+WHERE e.empno IS NULL;</code></pre>
+            </li>
+            <li>
+                문제 8 정답
+                <pre><code>SELECT e.ename, s.grade
+FROM emp e
+JOIN dept d ON e.deptno = d.deptno
+JOIN salgrade s ON e.sal BETWEEN s.losal AND s.hisal
+WHERE d.dname = 'RESEARCH';</code></pre>
+            </li>
+            <li>
+                문제 9 정답
+                <pre><code>-- 각 사원에 대해 ‘소속하지 않은’ 모든 부서를 함께 표시
+SELECT e.ename, d.dname
+FROM emp e
+CROSS JOIN dept d
+WHERE d.deptno &lt;&gt; e.deptno
+ORDER BY e.ename, d.dname;</code></pre>
+            </li>
+            <li>
+                문제 10 정답
+                <pre><code>-- 부서가 지정되지 않은 사원(null deptno)도 함께 출력
+SELECT e.ename, d.dname
+FROM emp e
+LEFT JOIN dept d ON e.deptno = d.deptno
+ORDER BY e.ename;</code></pre>
+            </li>
+        </ul>
+    </section>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>테이블 생성 및 수정 DDL</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+    <h1>테이블 생성 및 수정 DDL</h1>
+    <section>
+        <h2>테이블 생성 (CREATE TABLE)</h2>
+        <ul>
+            <li>테이블은 데이터를 저장하는 기본 단위 (행/열 구조)</li>
+            <li>컬럼마다 데이터 타입과 제약조건을 지정할 수 있음</li>
+            <li>자주 쓰는 데이터 타입
+                <ul>
+                    <li>CHAR(n): 고정 길이 문자열 (예: 'A  ')</li>
+                    <li>VARCHAR2(n): 가변 길이 문자열 (예: '서울')</li>
+                    <li>NUMBER(p,s): 숫자 (예: 123.45)</li>
+                    <li>DATE: 날짜와 시간 (예: 2025-09-21)</li>
+                    <li>CLOB: 대용량 텍스트</li>
+                    <li>BLOB: 대용량 바이너리 데이터</li>
+                </ul>
+            </li>
+            <li>기본값 지정: <code>DEFAULT</code> 키워드로 값이 없을 때 자동 입력
+                <pre><code>CREATE TABLE member (
+  id NUMBER PRIMARY KEY,
+  name VARCHAR2(50) NOT NULL,
+  grade VARCHAR2(10) DEFAULT '일반',
+  reg_date DATE DEFAULT SYSDATE
+);</code></pre>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>제약조건 (Constraint)</h2>
+        <ul>
+            <li>데이터 무결성을 보장하기 위한 규칙</li>
+            <li>종류
+                <ul>
+                    <li>PRIMARY KEY: 유일, NULL 불가</li>
+                    <li>UNIQUE: 중복 불가, NULL 허용</li>
+                    <li>NOT NULL: 반드시 값 입력</li>
+                    <li>CHECK: 조건 만족해야 함</li>
+                    <li>FOREIGN KEY: 다른 테이블 키 참조</li>
+                </ul>
+            </li>
+            <li>예시
+                <pre><code>CREATE TABLE orders (
+  order_id NUMBER PRIMARY KEY,
+  member_id NUMBER NOT NULL,
+  amount NUMBER CHECK(amount > 0),
+  FOREIGN KEY (member_id) REFERENCES member(id)
+);</code></pre>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>시퀀스 (CREATE SEQUENCE)</h2>
+        <ul>
+            <li>자동 번호 생성을 위한 객체 (MySQL의 AUTO_INCREMENT 대체)</li>
+            <li>문법
+                <pre><code>CREATE SEQUENCE seq_member
+START WITH 1
+INCREMENT BY 1
+NOCACHE
+NOCYCLE;</code></pre>
+            </li>
+            <li>사용 예시
+                <pre><code>INSERT INTO member (id, name)
+VALUES (seq_member.NEXTVAL, '홍길동');
+
+SELECT seq_member.CURRVAL FROM dual;</code></pre>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>테이블 수정 (ALTER TABLE)</h2>
+        <ul>
+            <li>컬럼 추가: <code>ALTER TABLE member ADD phone VARCHAR2(20);</code></li>
+            <li>컬럼 삭제: <code>ALTER TABLE member DROP COLUMN phone;</code></li>
+            <li>컬럼 수정: <code>ALTER TABLE member MODIFY name VARCHAR2(100);</code></li>
+            <li>제약조건 추가: <code>ALTER TABLE member ADD CONSTRAINT uq_email UNIQUE(email);</code></li>
+            <li>제약조건 삭제: <code>ALTER TABLE member DROP CONSTRAINT uq_email;</code></li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>테이블 삭제</h2>
+        <ul>
+            <li><strong>DROP TABLE</strong>: 구조 + 데이터 완전 삭제</li>
+            <li><strong>TRUNCATE TABLE</strong>: 데이터만 삭제, 롤백 불가</li>
+            <li><strong>DELETE</strong>: 조건 지정 가능, 롤백 가능</li>
+            <li>예시
+                <pre><code>DROP TABLE member;
+TRUNCATE TABLE member;
+DELETE FROM member WHERE id = 1;</code></pre>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>실습 아이디어</h2>
+        <ul>
+            <li>member 테이블 생성 → 시퀀스로 데이터 입력</li>
+            <li>이메일에 UNIQUE 제약조건 추가 후 중복 데이터 입력 시도</li>
+            <li>ALTER TABLE로 컬럼 수정/삭제 → <code>DESC member;</code>로 확인</li>
+            <li>DELETE vs TRUNCATE vs DROP 차이 실습</li>
+        </ul>
+    </section>
+
+</body>
+</html>

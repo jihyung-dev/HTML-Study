@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>행을 줄이지 않고 집계를 출력하는 OVER</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+    <h1>행을 줄이지 않고 집계를 출력하는 OVER</h1>
+    <section>
+        <h2>1. 개념</h2>
+        <ul>
+            <li>OVER는 윈도 함수(Window / Analytic Function)를 정의하는 절이다.</li>
+            <li>행을 줄이지 않고, 기존 결과에 그룹·정렬 기준을 적용해 집계·순위·누적값을 계산해 새 컬럼으로 붙인다.</li>
+            <li>GROUP BY와 달리 원래의 행을 유지한다.</li>
+        </ul>
+    </section>
+    <section>
+        <h2>2. 기본 문법</h2>
+        <pre><code>&lt;집계·순위 함수&gt;(표현식)
+OVER (
+    [PARTITION BY 컬럼1, 컬럼2, ...] -- 그룹 나누기 (옵션)
+    [ORDER BY 컬럼1 [ASC|DESC], ...] -- 그룹 내 정렬 (옵션)
+    [ROWS | RANGE BETWEEN ...]       -- 윈도우 범위 지정 (옵션)
+)
+</code></pre>
+        <ul>
+            <li>PARTITION BY : 계산 범위를 그룹 단위로 나눔 (없으면 전체가 하나의 그룹)</li>
+            <li>ORDER BY : 각 그룹 내에서 순서 지정 → 순위/누적계산 시 필요</li>
+            <li>ROWS / RANGE : 현재 행을 기준으로 집계 범위를 지정</li>
+            <li>ROWS BETWEEN 2 PRECEDING AND CURRENT ROW : 현재 포함 + 앞 2행</li>
+            <li>UNBOUNDED PRECEDING : 그룹의 시작부터</li>
+            <li>UNBOUNDED FOLLOWING : 그룹의 끝까지</li>
+            <li>CURRENT ROW : 현재 행</li>
+        </ul>
+    </section>
+    <section>
+        <h2>3. 자주 쓰는 함수와 예시</h2>
+        <ul>
+            <li>집계
+                <pre><code>SUM(sal) OVER (PARTITION BY deptno) AS 부서합계
+AVG(sal) OVER ()                     AS 전체평균
+MAX(sal) OVER (PARTITION BY job)     AS 직무최대
+</code></pre>
+            </li>
+            <li>순위
+                <pre><code>ROW_NUMBER() OVER (PARTITION BY deptno ORDER BY sal DESC) AS rn
+RANK()       OVER (PARTITION BY deptno ORDER BY sal DESC) AS rk
+DENSE_RANK() OVER (PARTITION BY deptno ORDER BY sal DESC) AS dr
+</code></pre>
+            </li>
+            <li>이동 합계/평균 (슬라이딩 윈도우)
+                <pre><code>SUM(sal) OVER (ORDER BY hiredate ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS 최근3명합
+</code></pre>
+            </li>
+            <li>이전/다음 행 값
+                <pre><code>LAG(sal,1,0)  OVER (ORDER BY hiredate) AS prev_sal
+LEAD(sal,1,0) OVER (ORDER BY hiredate) AS next_sal
+</code></pre>
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>OVER 를 사용할 수 있는 함수</h2>
+        <section>
+            <h3>1. 집계 계열 (Aggregate Functions as Window)</h3>
+            <ul>
+                <li><code>SUM(expr) OVER(...)</code> — 합계
+                    <pre><code>SELECT ename, deptno, sal,
+       SUM(sal) OVER (PARTITION BY deptno) AS dept_sum
+FROM emp;</code></pre></li>
+                <li><code>AVG(expr) OVER(...)</code> — 평균
+                    <pre><code>SELECT ename, deptno, sal,
+       AVG(sal) OVER (PARTITION BY deptno) AS dept_avg
+FROM emp;</code></pre></li>
+                <li><code>COUNT(expr) OVER(...)</code> — 건수
+                    <pre><code>SELECT ename, deptno,
+       COUNT(*) OVER (PARTITION BY deptno) AS dept_cnt
+FROM emp;</code></pre></li>
+                <li><code>MIN(expr) OVER(...)</code> — 최소값
+                    <pre><code>SELECT ename, deptno, sal,
+       MIN(sal) OVER (PARTITION BY deptno) AS dept_min
+FROM emp;</code></pre></li>
+                <li><code>MAX(expr) OVER(...)</code> — 최대값
+                    <pre><code>SELECT ename, deptno, sal,
+       MAX(sal) OVER (PARTITION BY deptno) AS dept_max
+FROM emp;</code></pre></li>
+            </ul>
+        </section>
+        <section>
+            <h2>2. 순위·등수 (Ranking Functions)</h2>
+            <ul>
+                <li><code>ROW_NUMBER()</code> — 고유 일련번호
+                    <pre><code>SELECT ename, deptno, sal,
+       ROW_NUMBER() OVER (PARTITION BY deptno ORDER BY sal DESC) AS rn
+FROM emp;</code></pre></li>
+                <li><code>RANK()</code> — 동점 시 건너뜀
+                    <pre><code>SELECT ename, deptno, sal,
+       RANK() OVER (PARTITION BY deptno ORDER BY sal DESC) AS rk
+FROM emp;</code></pre></li>
+                <li><code>DENSE_RANK()</code> — 동점 후 번호 연속
+                    <pre><code>SELECT ename, deptno, sal,
+       DENSE_RANK() OVER (PARTITION BY deptno ORDER BY sal DESC) AS dr
+FROM emp;</code></pre></li>
+                <li><code>NTILE(n)</code> — 파티션을 n등분
+                    <pre><code>SELECT ename, deptno, sal,
+       NTILE(4) OVER (PARTITION BY deptno ORDER BY sal DESC) AS quartile
+FROM emp;</code></pre></li>
+                <li><code>CUME_DIST()</code> — 누적 분포
+                    <pre><code>SELECT ename, deptno, sal,
+       CUME_DIST() OVER (PARTITION BY deptno ORDER BY sal DESC) AS cume
+FROM emp;</code></pre></li>
+                <li><code>PERCENT_RANK()</code> — 백분위 순위
+                    <pre><code>SELECT ename, deptno, sal,
+       PERCENT_RANK() OVER (PARTITION BY deptno ORDER BY sal DESC) AS pr
+FROM emp;</code></pre></li>
+                <li><code>PERCENTILE_CONT()</code> — 연속형 백분위수
+                    <pre><code>SELECT DISTINCT deptno,
+       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY sal)
+       OVER (PARTITION BY deptno) AS median_sal
+FROM emp;</code></pre></li>
+                <li><code>PERCENTILE_DISC()</code> — 이산형 백분위수
+                    <pre><code>SELECT DISTINCT deptno,
+       PERCENTILE_DISC(0.5) WITHIN GROUP (ORDER BY sal)
+       OVER (PARTITION BY deptno) AS median_disc
+FROM emp;</code></pre></li>
+            </ul>
+        </section>
+        <section>
+            <h3>3. 값 참조 / 이동 (Window Navigation)</h3>
+            <ul>
+                <li><code>LAG(expr, offset, default)</code> — 이전 행 값
+                    <pre><code>SELECT ename, hiredate, sal,
+       LAG(sal,1,0) OVER (ORDER BY hiredate) AS prev_sal
+FROM emp;</code></pre></li>
+                <li><code>LEAD(expr, offset, default)</code> — 다음 행 값
+                    <pre><code>SELECT ename, hiredate, sal,
+       LEAD(sal,1,0) OVER (ORDER BY hiredate) AS next_sal
+FROM emp;</code></pre></li>
+                <li><code>FIRST_VALUE(expr)</code> — 첫 값
+                    <pre><code>SELECT ename, deptno, sal,
+       FIRST_VALUE(sal) OVER (PARTITION BY deptno ORDER BY hiredate) AS first_sal
+FROM emp;</code></pre></li>
+                <li><code>LAST_VALUE(expr)</code> — 마지막 값
+                    <pre><code>SELECT ename, deptno, sal,
+       LAST_VALUE(sal) OVER (PARTITION BY deptno ORDER BY hiredate
+                             ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS last_sal
+FROM emp;</code></pre></li>
+                <li><code>NTH_VALUE(expr, n)</code> — n번째 값
+                    <pre><code>SELECT ename, deptno, sal,
+       NTH_VALUE(sal,3) OVER (PARTITION BY deptno ORDER BY hiredate
+                              ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS third_sal
+FROM emp;</code></pre></li>
+            </ul>
+        </section>
+        <section>
+            <h3>4. 통계 / 분포 함수</h3>
+            <ul>
+                <li><code>VAR_POP(expr)</code> — 모집단 분산
+                    <pre><code>SELECT deptno,
+       VAR_POP(sal) OVER (PARTITION BY deptno) AS var_pop
+FROM emp;</code></pre></li>
+                <li><code>VAR_SAMP(expr)</code> — 표본 분산
+                    <pre><code>SELECT deptno,
+       VAR_SAMP(sal) OVER (PARTITION BY deptno) AS var_samp
+FROM emp;</code></pre></li>
+                <li><code>STDDEV_POP(expr)</code> — 모집단 표준편차
+                    <pre><code>SELECT deptno,
+       STDDEV_POP(sal) OVER (PARTITION BY deptno) AS std_pop
+FROM emp;</code></pre></li>
+                <li><code>STDDEV_SAMP(expr)</code> — 표본 표준편차
+                    <pre><code>SELECT deptno,
+       STDDEV_SAMP(sal) OVER (PARTITION BY deptno) AS std_samp
+FROM emp;</code></pre></li>
+                <li><code>COVAR_POP(x, y)</code> — 모집단 공분산
+                    <pre><code>SELECT deptno,
+       COVAR_POP(sal, comm) OVER (PARTITION BY deptno) AS cov_pop
+FROM emp;</code></pre></li>
+                <li><code>COVAR_SAMP(x, y)</code> — 표본 공분산
+                    <pre><code>SELECT deptno,
+       COVAR_SAMP(sal, comm) OVER (PARTITION BY deptno) AS cov_samp
+FROM emp;</code></pre></li>
+                <li><code>CORR(x, y)</code> — 상관계수
+                    <pre><code>SELECT deptno,
+       CORR(sal, comm) OVER (PARTITION BY deptno) AS corr
+FROM emp;</code></pre></li>
+            </ul>
+        </section>
+        <section>
+            <h3>5. 기타 / DB별</h3>
+            <ul>
+                <li><code>LISTAGG(expr, ',')</code> WITHIN GROUP (...) OVER(...) — 문자열 집계
+                    <pre><code>SELECT deptno,
+       LISTAGG(ename, ', ') WITHIN GROUP (ORDER BY ename)
+       OVER (PARTITION BY deptno) AS names
+FROM emp;</code></pre></li>
+                <li><code>ARRAY_AGG(expr)</code> OVER(...) — 배열 집계 (PostgreSQL 등)
+                    <pre><code>SELECT deptno,
+       ARRAY_AGG(ename) OVER (PARTITION BY deptno) AS name_list
+FROM emp;</code></pre></li>
+                <li><code>JSON_ARRAYAGG(expr)</code> OVER(...) — JSON 배열 집계 (MySQL 등)
+                    <pre><code>SELECT deptno,
+       JSON_ARRAYAGG(ename) OVER (PARTITION BY deptno) AS json_names
+FROM emp;</code></pre></li>
+            </ul>
+        </section>
+
+    </section>
+
+
+    <section>
+        <h2>4. GROUP BY vs OVER 비교</h2>
+        <ul>
+            <li>결과
+                GROUP BY: 행을 그룹으로 묶어 요약
+                OVER: 원래 행을 유지</li>
+            <li>용도
+                GROUP BY: 집계된 요약 테이블
+                OVER: 상세 데이터 + 집계/순위/누적</li>
+            <li>예시
+                <pre><code>SELECT deptno, SUM(sal)
+SELECT ename, SUM(sal) OVER (PARTITION BY deptno)
+</code></pre></li>
+        </ul>
+    </section>
+    <section>
+        <h2>5. 처리 순서 특징</h2>
+        <ul>
+            <li>OVER는 SELECT 단계에서 계산된다.</li>
+            <li>따라서 WHERE/HAVING에서 직접 사용할 수 없고 → FROM 서브쿼리/CTE로 감싼 뒤 바깥 쿼리에서 필터링해야 한다.</li>
+        </ul>
+        <pre><code>WITH t AS (
+  SELECT deptno, sal,
+         RANK() OVER (PARTITION BY deptno ORDER BY sal DESC) AS rk
+  FROM emp
+)
+SELECT * FROM t WHERE rk &lt;= 3;
+</code></pre>
+    </section>
+    <section>
+        <h2>6. DB/버전별 참고</h2>
+        <ul>
+            <li>표준: PARTITION BY, ORDER BY, ROWS/RANGE, RANK, SUM 등 대부분 지원</li>
+            <li>Oracle 23ai 이상: FETCH FIRST … PARTITION BY … WITH TIES 지원 (그룹별 Top-N을 서브쿼리 없이 바로 추출)</li>
+            <li>MySQL 8.0, SQL Server, PostgreSQL 등은 표준 윈도 함수는 지원하지만 위 Oracle 확장은 없음</li>
+        </ul>
+    </section>
+    <section>
+        <h2>핵심 요약</h2>
+        <ul>
+            <li>GROUP BY = 행을 요약</li>
+            <li>OVER = 행 유지 + 추가 계산</li>
+            <li>조건 필터링 시 → 반드시 서브쿼리/CTE 사용</li>
+            <li>정렬·누적·순위·이전/다음 행 참조 등을 한 번에 할 수 있어 실무 보고서/통계 쿼리에 매우 유용</li>
+        </ul>
+    </section>
+    <section>
+        <h2>문제</h2>
+        <ol>
+            <li>부서별 급여 합계
+                각 사원의 이름, 부서 번호, 급여와 함께 <strong>같은 부서의 총 급여 합계</strong>를 <code>OVER</code>를 이용해 구하시오.</li>
+            <li>부서별 급여 평균
+                각 사원의 이름과 급여를 출력하면서 <strong>같은 부서의 평균 급여</strong>를 <code>OVER</code>로 계산하시오.</li>
+            <li>전체 누적 급여 합계
+                입사일(<code>hiredate</code>) 기준으로 정렬했을 때 각 사원까지의 <strong>누적 급여 합계</strong>를 <code>OVER</code>와 <code>ROWS UNBOUNDED PRECEDING</code>을 사용하여 구하시오.</li>
+            <li>최근 3명 급여 합계
+                입사일 순으로 정렬했을 때 <strong>현재 행 + 바로 앞 두 명</strong>의 급여를 합산한 컬럼을 <code>OVER(ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)</code>로 구하시오.</li>
+            <li>부서별 급여 순위
+                각 사원의 부서별 급여 순위를 <code>ROW_NUMBER()</code>를 사용해 표시하시오. (동률은 순번이 달라야 함)</li>
+            <li>부서별 급여 RANK
+                부서별 급여 순위를 <code>RANK()</code>로 구하시오. (동률일 경우 같은 순위를 주고 다음 번호를 건너뛰게)</li>
+            <li>부서별 급여 DENSE_RANK
+                부서별 급여 순위를 <code>DENSE_RANK()</code>로 구하시오. (동률일 경우 다음 번호를 건너뛰지 않게)</li>
+            <li>이전 사원 급여 비교
+                입사일 순으로 정렬했을 때 이전 사람의 급여를 <code>LAG()</code>로 구하고, 현재 급여와 차이를 계산하는 컬럼을 만드시오.</li>
+            <li>다음 사원 급여 비교
+                입사일 순으로 정렬했을 때 다음 사람의 급여를 <code>LEAD()</code>로 구하고, 현재 급여와의 차이를 계산하는 컬럼을 만드시오.</li>
+            <li>부서별 최대 급여 행만 추출
+                부서별로 최대 급여를 가진 사원만 출력하시오.
+                (힌트: <code>MAX(sal) OVER (PARTITION BY deptno)</code>를 이용해 계산한 뒤, <strong>FROM 서브쿼리</strong>로 감싸 <code>WHERE</code> 조건으로 필터링)</li>
+        </ol>
+    </section>
+    <section>
+        <h2>정답</h2>
+        <ol>
+            <li>
+<pre><code>SELECT ename, deptno, sal,
+       SUM(sal) OVER (PARTITION BY deptno) AS dept_sum
+FROM emp;</code></pre>
+            </li>
+            <li>
+<pre><code>SELECT ename, deptno, sal,
+       AVG(sal) OVER (PARTITION BY deptno) AS dept_avg
+FROM emp;</code></pre>
+            </li>
+            <li>
+<pre><code>SELECT ename, hiredate, sal,
+       SUM(sal) OVER (ORDER BY hiredate
+                      ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS run_sum
+FROM emp;</code></pre>
+            </li>
+            <li>
+<pre><code>SELECT ename, hiredate, sal,
+       SUM(sal) OVER (ORDER BY hiredate
+                      ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS last3_sum
+FROM emp;</code></pre>
+            </li>
+            <li>
+<pre><code>SELECT ename, deptno, sal,
+       ROW_NUMBER() OVER (PARTITION BY deptno ORDER BY sal DESC) AS rn
+FROM emp;</code></pre>
+            </li>
+            <li>
+<pre><code>SELECT ename, deptno, sal,
+       RANK() OVER (PARTITION BY deptno ORDER BY sal DESC) AS rk
+FROM emp;</code></pre>
+            </li>
+            <li>
+<pre><code>SELECT ename, deptno, sal,
+       DENSE_RANK() OVER (PARTITION BY deptno ORDER BY sal DESC) AS dr
+FROM emp;</code></pre>
+            </li>
+            <li>
+<pre><code>SELECT ename, hiredate, sal,
+       LAG(sal,1,0) OVER (ORDER BY hiredate) AS prev_sal,
+       sal - LAG(sal,1,0) OVER (ORDER BY hiredate) AS diff_from_prev
+FROM emp;</code></pre>
+            </li>
+            <li>
+<pre><code>SELECT ename, hiredate, sal,
+       LEAD(sal,1,0) OVER (ORDER BY hiredate) AS next_sal,
+       LEAD(sal,1,0) OVER (ORDER BY hiredate) - sal AS diff_to_next
+FROM emp;</code></pre>
+            </li>
+            <li>
+<pre><code>SELECT *
+FROM (
+  SELECT ename, deptno, sal,
+         MAX(sal) OVER (PARTITION BY deptno) AS dept_max
+  FROM emp
+) t
+WHERE sal = dept_max;</code></pre>
+            </li>
+        </ol>
+    </section>
+
+</body>
+</html>

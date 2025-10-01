@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/1c068c21-9193-4958-abd4-507950940f0e/console.sql" value="1c068c21-9193-4958-abd4-507950940f0e" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/1c068c21-9193-4958-abd4-507950940f0e/console_1.sql" value="1c068c21-9193-4958-abd4-507950940f0e" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/1c068c21-9193-4958-abd4-507950940f0e/console_2.sql" value="1c068c21-9193-4958-abd4-507950940f0e" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/66433e04-1015-4210-a657-a1875bb52fbb/console.sql" value="66433e04-1015-4210-a657-a1875bb52fbb" />
+    <file url="file://$PROJECT_DIR$/oracle21c/S09Scott.sql" value="1c068c21-9193-4958-abd4-507950940f0e" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L01CreateTable.sql" value="1c068c21-9193-4958-abd4-507950940f0e" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L02DML.sql" value="3b93f883-f56a-4149-9f9c-8e5516e65f07" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L03Contraints.sql" value="3b93f883-f56a-4149-9f9c-8e5516e65f07" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L04.DQLScott.sql" value="4ecd7ef5-ebf4-404d-ba9b-68b10601653a" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L05WhereHW.sql" value="4ecd7ef5-ebf4-404d-ba9b-68b10601653a" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L06Casting.sql" value="4ecd7ef5-ebf4-404d-ba9b-68b10601653a" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L07.Function.sql" value="4ecd7ef5-ebf4-404d-ba9b-68b10601653a" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L08AggregationFunction.sql" value="4ecd7ef5-ebf4-404d-ba9b-68b10601653a" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L09Join.sql" value="4ecd7ef5-ebf4-404d-ba9b-68b10601653a" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L10SubQuery.sql" value="4ecd7ef5-ebf4-404d-ba9b-68b10601653a" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L13-2.Pagination_HW.sql" value="4ecd7ef5-ebf4-404d-ba9b-68b10601653a" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L13.Pagination.sql" value="4ecd7ef5-ebf4-404d-ba9b-68b10601653a" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L14.Over.sql" value="4ecd7ef5-ebf4-404d-ba9b-68b10601653a" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L15.OverHW.sql" value="4ecd7ef5-ebf4-404d-ba9b-68b10601653a" />
+    <file url="file://$PROJECT_DIR$/oracle21c/ex/L16.View.sql" value="4ecd7ef5-ebf4-404d-ba9b-68b10601653a" />
+  </component>
+</project>

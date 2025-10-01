@@ -1,0 +1,46 @@
+SELECT * FROM EMP;
+
+--SELECT EMPNO, ENAME, SAL, AVG(SAL) FROM EMP; --집계 이므로 불가능,
+SELECT EMPNO, ENAME, SAL FROM EMP;  -- (1)
+SELECT AVG(SAL) FROM EMP;           --를 TABLE로 취급해서 (1)에 조인하는 것과 같음
+-- => 아래에 추가 하는 것
+SELECT EMPNO, ENAME, SAL, 평균 FROM EMP,(SELECT AVG(SAL) 평균 FROM EMP);   -- 동일
+SELECT EMPNO, ENAME, SAL, AVG(SAL) OVER() 평균 FROM EMP;                  -- 동일
+
+-- GROUP BY 추가 -> 이름 변경 PARTITION BY
+SELECT EMPNO, ENAME, SAL, ROUND(AVG(SAL) OVER( PARTITION BY DEPTNO)) 평균
+    FROM EMP
+    ORDER BY EMPNO;
+
+SELECT EMPNO, ENAME, SAL, 평균
+    FROM EMP e, (SELECT DEPTNO, AVG(SAL) 평균 FROM EMP GROUP BY DEPTNO) a
+    WHERE e.DEPTNO=a.DEPTNO
+    ORDER BY EMPNO;
+
+
+--OVER만으로 구현가능한 함수  -> ROW_NUMBER, RANK, DENSE_RANK, 등
+SELECT e.* FROM EMP e;
+
+--
+SELECT RANK() OVER (ORDER BY SAL DESC), e.SAL, e.ENAME FROM EMP e;
+--       순위 표시 : 1,2,2,4,5,6,...
+SELECT DENSE_RANK() OVER (ORDER BY SAL DESC), e.SAL, e.ENAME FROM EMP e;
+--       순위 표시 : 1,2,2,3,4,5,...
+
+--부서별 랭킹
+SELECT DENSE_RANK() OVER ( PARTITION BY DEPTNO ORDER BY SAL DESC ) rank
+    ,e.DEPTNO,e.SAL,e.ENAME
+FROM EMP e;
+-- WHERE rank>3
+
+
+-- WHERE rank>3 를 바로 사용할수 없으므로, 가상테이블로 사용해주어야함 => FROM 절에 넣어서 후순위로 밀기
+SELECT * FROM (SELECT DENSE_RANK() OVER (PARTITION BY DEPTNO ORDER BY SAL DESC) rank
+               ,e.DEPTNO, e.SAL, e.ENAME
+               FROM EMP e)
+WHERE rank <=3;
+
+
+
+
+

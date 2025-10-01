@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>오라클의 유저생성</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+
+</head>
+<body>
+<h1>오라클의 유저생성</h1>
+<section>
+    <h3>SQL*Plus란?</h3>
+    <ul>
+        <li>오라클에서 제공하는 명령줄 클라이언트 도구로, 데이터베이스에 접속하고 SQL/관리 명령을 실행한다.</li>
+        <li>MySQL의 <code>mysql</code> 클라이언트와 같은 역할을 한다.</li>
+    </ul>
+</section>
+
+<section>
+    <h3>CDB와 PDB란?</h3>
+    <ul>
+        <li><strong>CDB(Container Database)</strong>: 오라클 전체를 관리하는 컨테이너 DB. 시스템 계정, 공통 데이터 등을 관리한다.</li>
+        <li><strong>PDB(Pluggable Database)</strong>: 실제 데이터를 저장하고 사용하는 DB. 우리가 계정과 테이블을 만드는 곳이다.</li>
+        <li>비유: CDB는 “아파트 건물”, PDB는 “아파트 개별 세대”와 같다.</li>
+        <li>CDB에서 계정을 만들면 이름 앞에 <code>C##</code>를 붙여야 한다. (예: <code>C##USER1</code>)</li>
+        <li>실습에서는 보통 PDB(XEPDB1)에 접속해 계정을 만든다. 이 경우 <code>C##</code> 없이 일반 이름으로 계정 생성 가능하다.</li>
+    </ul>
+</section>
+
+<section>
+    <h3>SQL*Plus로 PDB에 직접 접속</h3>
+    <ul>
+        <li>관리자(SYS)로 PDB에 바로 접속</li>
+    </ul>
+    <pre><code>sqlplus sys/&lt;SYS비밀번호&gt;@localhost:1521/XEPDB1 as sysdba</code></pre>
+    <ul>
+        <li>일반 계정으로 PDB에 바로 접속</li>
+    </ul>
+    <pre><code>sqlplus appuser/MyPass123@localhost:1521/XEPDB1</code></pre>
+</section>
+
+<section>
+    <h3>CDB로 접속 후 PDB로 전환</h3>
+    <pre><code>SHOW CON_NAME;
+ALTER SESSION SET CONTAINER = XEPDB1;
+SHOW CON_NAME;</code></pre>
+</section>
+
+<section>
+    <h3>계정과 스키마 개념</h3>
+    <ul>
+        <li>계정(User/Account): 로그인 주체. 아이디와 비밀번호를 가진다.</li>
+        <li>스키마(Schema): 특정 계정이 소유한 객체(테이블, 뷰, 시퀀스 등)의 논리적 묶음.</li>
+        <li>계정을 생성하면 같은 이름의 스키마가 자동으로 생긴다. (계정이 부모, 스키마는 자식 관계)</li>
+    </ul>
+</section>
+
+<section>
+    <h3>계정 생성</h3>
+    <pre><code>CREATE USER appuser IDENTIFIED BY "MyPass123"
+  DEFAULT TABLESPACE USERS
+  TEMPORARY TABLESPACE TEMP
+  QUOTA UNLIMITED ON USERS;</code></pre>
+    <ul>
+        <li><code>DEFAULT TABLESPACE USERS</code>: 테이블/인덱스 등 객체를 저장할 기본 공간.</li>
+        <li><code>TEMPORARY TABLESPACE TEMP</code>: 정렬, 해시 등 임시 연산을 위한 작업 공간.</li>
+        <li><code>QUOTA UNLIMITED ON USERS</code>: USERS 공간에 저장할 수 있는 용량에 제한 없음.</li>
+    </ul>
+</section>
+
+<section>
+    <h3>비밀번호 지정</h3>
+    <pre><code>ALTER USER appuser IDENTIFIED BY "NewPass123!";</code></pre>
+</section>
+
+<section>
+    <h3>권한 종류</h3>
+    <ul>
+        <li>시스템 권한(System Privilege): DB 전체 차원의 기능 권한</li>
+        <ul>
+            <li><code>CREATE SESSION</code>: DB에 접속(세션 생성) 가능</li>
+            <li><code>CREATE TABLE</code>: 테이블 생성 가능</li>
+            <li><code>CREATE VIEW</code>: 뷰 생성 가능</li>
+            <li><code>CREATE SEQUENCE</code>: 시퀀스(번호 자동 증가) 생성 가능</li>
+            <li><code>CREATE PROCEDURE</code>: 저장 프로시저(자주 쓰는 SQL 문을 함수처럼 저장해두고 재사용하는 프로그램 블록) 생성 가능</li>
+        </ul>
+        <li>객체 권한(Object Privilege): 특정 객체에 대한 동작 권한</li>
+        <ul>
+            <li><code>SELECT</code>: 데이터 조회</li>
+            <li><code>INSERT</code>: 데이터 삽입</li>
+            <li><code>UPDATE</code>: 데이터 수정</li>
+            <li><code>DELETE</code>: 데이터 삭제</li>
+        </ul>
+    </ul>
+</section>
+
+<section>
+    <h3>권한 주는 법</h3>
+    <ul>
+        <li>시스템 권한 부여</li>
+    </ul>
+    <pre><code>GRANT CREATE SESSION, CREATE TABLE, CREATE VIEW TO appuser;</code></pre>
+    <ul>
+        <li>객체 권한 부여(객체 소유자가 실행)</li>
+    </ul>
+    <pre><code>GRANT SELECT, INSERT ON hr.employees TO appuser;</code></pre>
+</section>
+
+<section>
+    <h3>기존에 존재하는 주요 롤(Role)</h3>
+    <ul>
+        <li><code>CONNECT</code>: 로그인 권한 제공 (<code>CREATE SESSION</code> 포함).</li>
+        <li><code>RESOURCE</code>: 개발용 객체 생성 권한 제공 (<code>CREATE TABLE</code>, <code>CREATE SEQUENCE</code>, <code>CREATE PROCEDURE</code> 포함).</li>
+        <li><code>DBA</code>: 모든 시스템/객체 권한을 가진 최고 관리자 롤.</li>
+    </ul>
+</section>
+
+<section>
+    <h3>커스텀 롤 생성</h3>
+    <pre><code>CREATE ROLE dev_role;
+GRANT CREATE SESSION, CREATE TABLE, CREATE VIEW TO dev_role;
+GRANT dev_role TO appuser;</code></pre>
+</section>
+</body>
+</html>

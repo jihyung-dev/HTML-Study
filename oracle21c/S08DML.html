@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DML 데이터 조작어</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+
+</head>
+<body>
+    <h1>DML 데이터 조작어</h1>
+    <section>
+        <h2>DML (Data Manipulation Language) 개요</h2>
+        <ul>
+            <li>DML은 데이터베이스의 데이터를 다루는 언어(CRUD).</li>
+            <li>CRUD: Create(등록)=INSERT, Read(조회)=SELECT, Update(수정)=UPDATE, Delete(삭제)=DELETE</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>등록 (INSERT)</h2>
+        <h3>단일 행</h3>
+        <pre><code>INSERT INTO member (id, name, email)
+VALUES (1, '홍길동', 'hong@test.com');</code></pre>
+
+        <h3>여러 행</h3>
+        <ul>
+            <li><strong>INSERT ALL</strong></li>
+        </ul>
+        <pre><code>INSERT ALL
+  INTO member (id, name, email) VALUES (2, '김철수', 'kim@test.com')
+  INTO member (id, name, email) VALUES (3, '이영희', 'lee@test.com')
+SELECT 1 FROM dual;</code></pre>
+
+        <ul>
+            <li><strong>INSERT INTO ... SELECT</strong> (다른 테이블에서 복사)</li>
+        </ul>
+        <pre><code>INSERT INTO member (id, name, email)
+SELECT id, name, email
+FROM backup_member;</code></pre>
+
+        <p><em>참고:</em> MySQL의 <code>VALUES (...), (...)</code> 다중 삽입 구문은 오라클에서 직접 지원하지 않음.</p>
+    </section>
+
+    <section>
+        <h2>조회 (SELECT)</h2>
+        <h3>기본</h3>
+        <pre><code>SELECT id, name
+FROM member;</code></pre>
+
+        <h3>전체 컬럼</h3>
+        <pre><code>SELECT *
+FROM member;</code></pre>
+
+        <h3>WHERE (동등 비교)</h3>
+        <pre><code>SELECT id, name
+FROM member
+WHERE name = '홍길동';</code></pre>
+    </section>
+
+    <section>
+        <h2>수정 (UPDATE)</h2>
+        <pre><code>UPDATE member
+SET email = 'new@test.com', name = '홍길동2'
+WHERE id = 1;</code></pre>
+    </section>
+
+    <section>
+        <h2>삭제 (DELETE)</h2>
+        <pre><code>DELETE FROM member
+WHERE id = 1;</code></pre>
+    </section>
+
+    <section>
+        <h2>트랜잭션</h2>
+        <ul>
+            <li><code>COMMIT</code>: 작업 확정</li>
+            <li><code>ROLLBACK</code>: 작업 취소</li>
+            <li><code>SAVEPOINT</code>: 중간 저장점</li>
+        </ul>
+        <pre><code>SAVEPOINT sp1;
+UPDATE member SET grade = 'VIP' WHERE id = 2;
+ROLLBACK TO sp1;  -- 부분 취소
+COMMIT;           -- 최종 확정</code></pre>
+    </section>
+
+    <!-- (선택) 실습용 예제 테이블 -->
+    <section>
+        <h2>예제 테이블 (선택)</h2>
+        <pre><code>CREATE TABLE member (
+  id        NUMBER PRIMARY KEY,
+  name      VARCHAR2(50) NOT NULL,
+  email     VARCHAR2(100),
+  grade     VARCHAR2(10) DEFAULT '일반',
+  reg_date  DATE DEFAULT SYSDATE
+);
+
+CREATE SEQUENCE seq_member START WITH 1 INCREMENT BY 1;</code></pre>
+    </section>
+</body>
+</html>
