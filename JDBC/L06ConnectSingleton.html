@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+
+
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>L06. JDBC Connection 싱글톤과 커넥션 풀</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+
+</head>
+<body>
+
+
+<h1>L06. JDBC Connection 싱글톤과 커넥션 풀</h1>
+
+
+<section>
+    <h2>1. 싱글톤 패턴의 개념</h2>
+    <ul>
+        <li>의도: 객체를 하나만 생성해 프로그램 전체에서 공유</li>
+        <li>특징
+            <ul>
+                <li>생성자를 <code>private</code>으로 막아 외부 생성 불가</li>
+                <li>정적 메서드(<code>getInstance()</code>)를 통해 단 하나의 인스턴스 반환</li>
+            </ul>
+        </li>
+        <li>장점
+            <ul>
+                <li>공통 리소스를 효율적으로 관리</li>
+                <li>객체 생성 비용 절감</li>
+            </ul>
+        </li>
+        <li>단점
+            <ul>
+                <li>상태를 가지는 객체일 경우 동시성 문제 발생</li>
+                <li>테스트 및 확장성 제한</li>
+            </ul>
+        </li>
+    </ul>
+</section>
+
+
+<section>
+    <h2>2. JDBC에서 싱글톤 적용 이유</h2>
+    <ul>
+        <li>DAO마다 <code>DriverManager.getConnection()</code>을 호출할 때마다 새 연결 생성 → 비효율</li>
+        <li>DB 연결 정보를 공통으로 관리할 필요</li>
+        <li>따라서 “Connection 생성자 역할”을 단일화하고, 필요 시 자동 복구</li>
+    </ul>
+</section>
+
+
+<section>
+    <h2>3. 구현 예시 (단일 Connection 유지형)</h2>
+    <pre><code>import java.sql.*;
+
+public class DB {
+    private static Connection conn;
+    private static final String URL = “jdbc:oracle:thin:@localhost:1521:xe”;
+    private static final String USER = “scott”;
+    private static final String PASS = “tiger”;
+
+    static {
+        try {
+            Class.forName("oracle.jdbc.OracleDriver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("드라이버 로드 실패", e);
+        }
+    }
+
+    private DB() {}
+
+    public static Connection getConnection() {
+        try {
+            if (conn == null || conn.isClosed()) {
+                conn = DriverManager.getConnection(URL, USER, PASS);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("DB 연결 실패", e);
+        }
+        return conn;
+    }
+}</code></pre>
+
+
+</section>
+
+
+<section>
+    <h2>4. 사용 예시 (서비스에서 트랜잭션 관리)</h2>
+    <pre><code>public class EmpService {
+    private Connection conn;
+    private UserDao userDao;
+    private historyDao historyDao;
+
+    public EmpService() {
+        conn = DB.getConnection(); // 생성자에서 커넥션 맺음
+        userDao = new UserDao(conn);
+        historyDao = new HistoryDao(conn);
+    }
+
+    public void updateSalary(int empno, int amount) {
+        try {
+            conn.setAutoCommit(false);
+            userDao.updateSalary(empno, amount);
+            historyDao.insertSalary(empno, amount);
+            conn.commit(); // 트랜잭션 커밋
+        } catch (Exception e) {
+            try { conn.rollback(); } catch (Exception ignore) {}
+        } finally {
+            try { conn.close(); } catch (Exception ignore) {}
+        }
+    }
+}
+</code></pre>
+
+  <h3>설명 포인트</h3>
+  <ul>
+    <li>서비스 생성 시점에 한 번 연결</li>
+    <li>여러 DAO 호출을 하나의 커넥션으로 묶어 트랜잭션 관리 가능</li>
+    <li><code>commit()</code> / <code>rollback()</code> 명확히 구분</li>
+    <li><code>close()</code> 후 다음 호출 시 <code>DB.getConnection()</code>이 재연결</li>
+  </ul>
+</section>
+
+
+<section>
+    <h2>5. 사용 한계</h2>
+    <ul>
+        <li><code>close()</code> 호출 시 다시 연결해야 하므로 완전한 싱글톤이 아님</li>
+        <li>동시에 여러 요청이 들어올 경우 커넥션 충돌 또는 부족 발생</li>
+        <li>커넥션 생성/종료 비용이 큼</li>
+        <li>→ 실무에서는 “Connection 하나만 유지”하지 않고 커넥션 풀(Connection Pool)을 사용</li>
+    </ul>
+</section>
+
+
+<section>
+    <h2>6. 커넥션 풀의 개념과 역할</h2>
+    <ul>
+        <li>미리 여러 개의 Connection을 만들어 풀(Pool)에 저장</li>
+        <li>필요 시 하나를 빌려 쓰고, 사용 후 반납 (<code>close()</code> 시 풀로 복귀)</li>
+        <li>장점
+            <ul>
+                <li>매번 연결 생성 비용 절감</li>
+                <li>동시성 안전</li>
+                <li>커넥션 수 제한 관리 가능</li>
+            </ul>
+        </li>
+        <li>대표 라이브러리: <code>HikariCP</code>, <code>Apache DBCP</code>, <code>C3P0</code></li>
+    </ul>
+</section>
+
+
+<section>
+    <h2>7. 커넥션 풀 사용 예시 (HikariCP)</h2>
+    <pre><code>import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import javax.sql.DataSource;
+import java.sql.Connection;
+
+
+public class DBPool {
+    private static HikariDataSource ds;
+
+    static {
+        HikariConfig cfg = new HikariConfig();
+        cfg.setJdbcUrl("jdbc:oracle:thin:@localhost:1521:xe");
+        cfg.setUsername("scott");
+        cfg.setPassword("tiger");
+        cfg.setDriverClassName("oracle.jdbc.OracleDriver");
+        cfg.setMaximumPoolSize(10);
+        ds = new HikariDataSource(cfg);
+    }
+
+    private DBPool() {}
+
+    public static Connection getConnection() throws Exception {
+        return ds.getConnection(); // 풀에서 대여
+    }
+}
+</code></pre>
+
+  <h3>특징</h3>
+  <ul>
+    <li>외부 코드는 <code>DBPool.getConnection()</code> 한 줄만 다름</li>
+    <li>내부에서 풀을 싱글톤으로 유지</li>
+    <li><code>close()</code>는 커넥션을 종료하지 않고 풀로 반환</li>
+  </ul>
+</section>
+
+
+</body>
+</html>

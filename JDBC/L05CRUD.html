@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>L05. 디자인 패턴 · CRUD · DAO · DTO · 싱글톤 (이론 정리)</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+
+</head>
+<body>
+<h1>L05. 디자인 패턴 · CRUD · DAO · DTO · 싱글톤 (이론 정리)</h1>
+
+<section>
+    <h2>1. 디자인 패턴(Design Pattern)</h2>
+    <ul>
+        <li><strong>정의</strong>: 소프트웨어 설계에서 반복적으로 등장하는 문제를 해결하기 위해 검증된 설계 방법을 정리한 것.</li>
+        <li><strong>필요성</strong>: 설계 재사용성·유지보수성 향상, 팀 간 공통 언어 제공(“싱글톤 적용”만으로 의도 공유).</li>
+        <li><strong>대표 분류</strong>:
+            <ul>
+                <li><em>생성 패턴</em>: 객체 생성 방식 제어 (싱글톤, 팩토리 메서드, 추상 팩토리, 빌더, 프로토타입)</li>
+                <li><em>구조 패턴</em>: 클래스/객체 조합 방식 (어댑터, 데코레이터, 퍼사드, 프록시, 컴포지트, 브리지, 플라이웨이트)</li>
+                <li><em>행위 패턴</em>: 객체 간 상호작용 정의 (옵저버, 전략, 상태, 템플릿 메서드, 커맨드, 이터레이터, 미디에이터, 메멘토, 책임 연쇄, 인터프리터, 비지터)</li>
+            </ul>
+        </li>
+        <li><strong>참고 도서(GoF)</strong>: <em>Design Patterns: Elements of Reusable Object-Oriented Software</em>(1994, Erich Gamma 외). 23개 패턴을 생성/구조/행위로 분류한 고전.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>2. CRUD</h2>
+    <ul>
+        <li><strong>정의</strong>: Create(생성), Read(조회), Update(수정), Delete(삭제) — 데이터 처리의 기본 작업.</li>
+        <li><strong>중요성</strong>: DAO 인터페이스의 기본 틀(예: insert, findById, update, delete) 설계 기준이 됨.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>3. DAO (Data Access Object)</h2>
+    <ul>
+        <li><strong>정의</strong>: 데이터베이스 접근(SQL 작성/실행, 결과 매핑)을 전담하는 객체.</li>
+        <li><strong>왜 필요한가</strong>:
+            <ul>
+                <li>관심사 분리: 비즈니스 로직과 DB 접근 로직 분리로 유지보수 용이.</li>
+                <li>중복 제거: 동일 SQL의 산재를 방지.</li>
+                <li>유연성: DB 교체 시 DAO 계층 중심 수정으로 영향 최소화.</li>
+                <li>테스트 용이: Mock DAO로 서비스 계층 단위 테스트 가능.</li>
+            </ul>
+        </li>
+        <li><strong>설계 포인트</strong>: 인터페이스(예: EmployeeDao) + 구현체(예: EmployeeDaoJdbc), PreparedStatement 기반 파라미터 바인딩으로 보안/성능 확보.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>4. DTO (Data Transfer Object)</h2>
+    <ul>
+        <li><strong>정의</strong>: 계층 간 데이터를 전달하기 위한 순수 데이터 객체(필드/게터/세터 중심, 비즈니스 로직 없음).</li>
+        <li><strong>필요성</strong>:
+            <ul>
+                <li>여러 컬럼을 한 객체로 묶어 전달하여 가독성/유지보수성 향상.</li>
+                <li>DB 스키마 변경 시 DTO만 조정해 파급효과 최소화.</li>
+            </ul>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2>5. 싱글톤 패턴 (Singleton)</h2>
+    <ul>
+        <li><strong>정의</strong>: 애플리케이션 전역에서 인스턴스를 하나만 유지하도록 강제하는 생성 패턴.</li>
+        <li><strong>DB 활용</strong>: 공용 DB 연결 팩토리/설정 관리 객체를 단일 인스턴스로 재사용(일관성·자원 절약).</li>
+        <li><strong>주의</strong>: 멀티스레드 안전성(동기화) 고려, 테스트 시 Mocking 난이도는 인터페이스 추상화로 완화.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>6. 전체 아키텍처 관계</h2>
+    <pre>
+Controller → Service → DAO ↔ DB
+                ↑
+               DTO
+    </pre>
+    <ul>
+        <li>Controller/Service: 비즈니스 로직, 트랜잭션 관리</li>
+        <li>DAO: SQL 실행 및 데이터 접근 캡슐화</li>
+        <li>DTO: 계층 간 데이터 전달</li>
+        <li>Singleton: 공용 DB 연결/설정 관리(예: ConnectionFactory)</li>
+    </ul>
+</section>
+
+</body>
+</html>

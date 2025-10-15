@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>L07. DTO/DAO 개념, 인터페이스 사용 이유, 구현 및 명명 규칙 (EMP 예시)</title>
+    <link rel="stylesheet" href="/src/css/study.css">
+</head>
+<body>
+
+<h1>L07. DTO &amp; DAO </h1>
+
+
+<section>
+    <h2>1) DTO(Data Transfer Object)란?</h2>
+    <ul>
+        <li><strong>정의</strong>: 레이어 간(Controller ↔ Service ↔ DAO) 데이터를 전달하기 위한 순수 데이터 보관용 객체</li>
+        <li><strong>특징</strong>
+            <ul>
+                <li>비즈니스 로직 없음(계산/검증 최소화)</li>
+                <li>필드, 기본 생성자, 게터/세터만 제공</li>
+                <li>직렬화/역직렬화, 매핑에 용이</li>
+            </ul>
+        </li>
+        <li><strong>사용 목적</strong>: SQL 결과를 코드에서 다루기 쉬운 형태로 전달, 입력 파라미터를 구조화</li>
+    </ul>
+</section>
+
+
+<section>
+    <h2>2) DAO(Data Access Object)란?</h2>
+    <ul>
+        <li><strong>정의</strong>: 데이터베이스 접근을 캡슐화해 CRUD(SQL 실행, ResultSet 처리)를 전담하는 객체</li>
+        <li><strong>역할</strong>
+            <ul>
+                <li>SQL 작성/실행, 바인딩, 결과 매핑(→ DTO)</li>
+                <li>DB 접근 코드의 재사용/표준화</li>
+                <li>상위 레이어에서 DB 종속성 제거</li>
+            </ul>
+        </li>
+    </ul>
+</section>
+
+
+<section>
+    <h2>3) 왜 <em>인터페이스 + 구현체(Impl)</em> 구조로 만들까?</h2>
+    <ul>
+        <li><strong>결합도 감소</strong>: 상위 레이어는 <code>EmpDao</code> 인터페이스에만 의존 → 구현체 교체 용이</li>
+        <li><strong>교체/확장 용이</strong>: JDBC → JPA, Oracle → MySQL, 캐시 DAO 등으로 갈아끼우기 쉬움</li>
+        <li><strong>설계 원칙</strong>: DIP(의존 역전), OCP(개방-폐쇄) 준수</li>
+    </ul>
+    <section>
+        <h2>DAO 인터페이스 설계 원칙 — DIP와 OCP</h2>
+        <ul>
+            <li><strong>DIP (Dependency Inversion Principle, 의존 역전 원칙)</strong>
+                <ul>
+                    <li>상위 모듈(예: Service)은 하위 모듈(예: EmpDaoImpl)의 구체 클래스에 직접 의존하지 말고, <strong>추상화(인터페이스)</strong>에 의존해야 한다는 원칙이다.</li>
+                    <li>즉, <code>EmpService</code>는 <code>new EmpDaoImpl()</code> 같은 구체 구현을 몰라도 <code>EmpDao</code> 인터페이스를 통해 기능을 사용할 수 있다.</li>
+                    <li>이렇게 하면 실제 구현체가 JDBC에서 JPA로 바뀌거나, Oracle에서 MySQL로 바뀌어도 상위 코드는 수정할 필요가 없다.</li>
+                    <li><strong>의존 방향이 뒤집힌다</strong>는 의미는, “상위(Service)가 하위(Impl)를 아는 게 아니라, 하위가 상위 인터페이스를 구현한다”는 구조를 말한다.</li>
+                </ul>
+            </li>
+            <li><strong>OCP (Open-Closed Principle, 개방-폐쇄 원칙)</strong>
+                <ul>
+                    <li>“확장에는 열려 있고, 변경에는 닫혀 있어야 한다”는 원칙이다.</li>
+                    <li>새로운 기능이나 구현 방식을 추가할 때 기존 코드를 수정하지 않고 확장만으로 대응할 수 있어야 한다.</li>
+                    <li>DAO 설계에 적용하면, <code>EmpDao</code> 인터페이스는 변경 없이 <code>EmpDaoImpl</code>, <code>EmpDaoMybatisImpl</code>, <code>EmpDaoJpaImpl</code> 같은 구현체를 새로 만들어 교체할 수 있다.</li>
+                    <li>결과적으로 프로그램의 유연성과 유지보수성이 높아진다.</li>
+                </ul>
+            </li>
+
+        </ul>
+        <pre><code>// 인터페이스 기반 설계 예시
+EmpDao dao = new EmpDaoImpl(conn);   // JDBC 구현 사용
+// 나중에 교체 시
+EmpDao dao = new EmpDaoJpaImpl();    // JPA 구현으로 교체 (Service 수정 없음)
+</code></pre>
+        <p>→ 요약하자면, DAO를 인터페이스로 설계하면 <strong>DIP로 결합도를 낮추고</strong>, <strong>OCP로 확장에 강한 구조</strong>를 만들 수 있다.</p>
+    </section>
+
+</section>
+
+
+<section>
+    <h2>4) 패키지 구조 예시</h2>
+    <pre><code>com.example.app
+ ├─ config/DB.java           // DB.getConnection(): 단일 연결 유지 + 닫히면 재연결(수업용)
+ ├─ dao/EmpDao.java          // DAO 인터페이스
+ ├─ dao/EmpDaoImpl.java      // DAO 구현체(JDBC)
+ └─ dto/EmpDto.java          // DTO(게터/세터만)
+</code></pre>
+</section>
+
+
+<section>
+    <h2>5) 명명 규칙(DAO/DTO)</h2>
+    <ul>
+        <li><strong>DTO 클래스명</strong>: <code>EmpDto</code>, <code>DeptDto</code> 처럼 엔티티+Dto</li>
+        <li><strong>DAO 인터페이스/구현체</strong>: <code>EmpDao</code> / <code>EmpDaoImpl</code></li>
+        <li><strong>CRUD 메서드 동사</strong>
+            <ul>
+                <li>생성: <code>insertEmp</code> 또는 엔티티 문맥이면 <code>insert</code></li>
+                <li>조회(단건): <code>findByEmpno</code>, <code>findById</code></li>
+                <li>조회(다건): <code>findAll</code>, 조건부는 <code>findByDeptno</code></li>
+                <li>수정: <code>updateSalary</code>, <code>updateEname</code>처럼 변경 대상 명시</li>
+                <li>삭제: <code>deleteByEmpno</code></li>
+            </ul>
+        </li>
+        <li><strong>반환 타입</strong>
+            <ul>
+                <li>단건 조회: <code>EmpDto</code>(없으면 <code>null</code> 반환) 또는 <code>Optional&lt;EmpDto&gt;</code></li>
+                <li>다건 조회: <code>List&lt;EmpDto&gt;</code>(빈 목록 허용)</li>
+                <li>조작 결과: <code>int</code>(영향받은 행 수)</li>
+            </ul>
+        </li>
+        <li><strong>파라미터 명</strong>: 조건 컬럼명 포함(예: <code>int empno</code>, <code>int deptno</code>)</li>
+        <li><strong>일관성</strong>: 같은 의미엔 같은 접두사/형태 유지(프로젝트 전반 합의)</li>
+    </ul>
+</section>
+
+<section>
+    <h2>6) 코드 — DTO(게터/세터만)</h2>
+    <p>대표 컬럼 가정: <code>EMPNO, ENAME, SAL, DEPTNO, HIREDATE</code></p>
+    <pre><code>package com.example.app.dto;
+
+
+import java.time.LocalDate;
+
+public class EmpDto {
+private int empno;
+private String ename;
+private int sal;
+private int deptno;
+private LocalDate hiredate;
+
+public EmpDto() { }
+
+public EmpDto(int empno, String ename, int sal, int deptno, LocalDate hiredate) {
+    this.empno = empno;
+    this.ename = ename;
+    this.sal = sal;
+    this.deptno = deptno;
+    this.hiredate = hiredate;
+}
+
+public int getEmpno() { return empno; }
+public void setEmpno(int empno) { this.empno = empno; }
+
+public String getEname() { return ename; }
+public void setEname(String ename) { this.ename = ename; }
+
+public int getSal() { return sal; }
+public void setSal(int sal) { this.sal = sal; }
+
+public int getDeptno() { return deptno; }
+public void setDeptno(int deptno) { this.deptno = deptno; }
+
+public LocalDate getHiredate() { return hiredate; }
+public void setHiredate(LocalDate hiredate) { this.hiredate = hiredate; }
+
+}
+</code></pre>
+    <h2>DTO를 get/set으로 캡슐화하는 이유</h2>
+    <ul>
+        <li><strong>DTO(Data Transfer Object)</strong>는 데이터 전송 전용 객체로, 단순히 데이터를 담고 전달하기 위한 구조이다.</li>
+        <li>비즈니스 로직이나 유효성 검사, 형변환은 포함하지 않으며, <strong>Controller ↔ Service ↔ DAO</strong> 사이의 데이터 이동에만 사용한다.</li>
+        <li>필드를 <code>private</code>으로 감추고 <code>get/set</code> 메서드를 제공하는 이유는 <strong>데이터 접근 일관성</strong> 때문이다.</li>
+        <li>다른 계층에서 같은 접근 방식(<code>getXxx()</code>, <code>setXxx()</code>)으로 데이터를 다룰 수 있어 재사용과 유지보수가 쉽다.</li>
+        <li>즉, DTO의 캡슐화는 보안을 위한 것이 아니라, <strong>표준화된 데이터 접근 방식</strong>을 제공하기 위함이다.</li>
+        <li>Bean은 내부 로직(검증, 형변환 등)을 포함할 수 있지만, DTO는 오직 <strong>데이터 전달</strong>에만 집중한다.</li>
+    </ul>
+
+
+</section>
+
+
+<section>
+    <h2>7) 코드 — DAO 인터페이스</h2>
+    <pre><code>package com.example.app.dao;
+
+
+import com.example.app.dto.EmpDto;
+import java.sql.SQLException;
+import java.util.List;
+
+public interface EmpDao {
+// C
+int insert(EmpDto emp) throws SQLException;
+
+// R
+EmpDto findByEmpno(int empno) throws SQLException;
+List&lt;EmpDto&gt; findAll() throws SQLException;
+List&lt;EmpDto&gt; findByDeptno(int deptno) throws SQLException;
+
+// U
+int updateSalary(int empno, int amountDelta) throws SQLException;
+
+// D
+int deleteByEmpno(int empno) throws SQLException;
+
+}
+</code></pre>
+
+</section>
+
+
+<section>
+    <h2>8) 코드 — DAO 구현체(JDBC)</h2>
+    <pre><code>package com.example.app.dao;
+
+
+import com.example.app.dto.EmpDto;
+
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+public class EmpDaoImpl implements EmpDao {
+private final Connection conn;
+
+public EmpDaoImpl(Connection conn) {
+    this.conn = conn;
+}
+
+@Override
+public int insert(EmpDto emp) throws SQLException {
+    String sql = "INSERT INTO EMP (EMPNO, ENAME, SAL, DEPTNO, HIREDATE) VALUES (?, ?, ?, ?, ?)";
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, emp.getEmpno());
+        ps.setString(2, emp.getEname());
+        ps.setInt(3, emp.getSal());
+        ps.setInt(4, emp.getDeptno());
+        ps.setDate(5, Date.valueOf(emp.getHiredate()));
+        return ps.executeUpdate();
+    }
+}
+
+@Override
+public EmpDto findByEmpno(int empno) throws SQLException {
+    String sql = "SELECT EMPNO, ENAME, SAL, DEPTNO, HIREDATE FROM EMP WHERE EMPNO = ?";
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, empno);
+        try (ResultSet rs = ps.executeQuery()) {
+            return rs.next() ? mapRow(rs) : null;
+        }
+    }
+}
+
+@Override
+public List&lt;EmpDto&gt; findAll() throws SQLException {
+    String sql = "SELECT EMPNO, ENAME, SAL, DEPTNO, HIREDATE FROM EMP ORDER BY EMPNO";
+    try (PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+        List&lt;EmpDto&gt; list = new ArrayList&lt;&gt;();
+        while (rs.next()) list.add(mapRow(rs));
+        return list;
+    }
+}
+
+@Override
+public List&lt;EmpDto&gt; findByDeptno(int deptno) throws SQLException {
+    String sql = "SELECT EMPNO, ENAME, SAL, DEPTNO, HIREDATE FROM EMP WHERE DEPTNO = ? ORDER BY EMPNO";
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, deptno);
+        try (ResultSet rs = ps.executeQuery()) {
+            List&lt;EmpDto&gt; list = new ArrayList&lt;&gt;();
+            while (rs.next()) list.add(mapRow(rs));
+            return list;
+        }
+    }
+}
+
+@Override
+public int updateSalary(int empno, int amountDelta) throws SQLException {
+    String sql = "UPDATE EMP SET SAL = SAL + ? WHERE EMPNO = ?";
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, amountDelta);
+        ps.setInt(2, empno);
+        return ps.executeUpdate();
+    }
+}
+
+@Override
+public int deleteByEmpno(int empno) throws SQLException {
+    String sql = "DELETE FROM EMP WHERE EMPNO = ?";
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, empno);
+        return ps.executeUpdate();
+    }
+}
+
+// ResultSet → EmpDto 매핑
+private EmpDto mapRow(ResultSet rs) throws SQLException {
+    EmpDto dto = new EmpDto();
+    dto.setEmpno(rs.getInt("EMPNO"));
+    dto.setEname(rs.getString("ENAME"));
+    dto.setSal(rs.getInt("SAL"));
+    dto.setDeptno(rs.getInt("DEPTNO"));
+    Date d = rs.getDate("HIREDATE");
+    dto.setHiredate(d != null ? d.toLocalDate() : null);
+    return dto;
+}
+
+}
+
+</code></pre>
+  <ul>
+    <li><strong>자원관리</strong>: <code>try-with-resources</code>로 <code>PreparedStatement</code>, <code>ResultSet</code> 자동 해제</li>
+    <li><strong>SQL 바인딩</strong>: <code>?</code> 파라미터 사용으로 SQL 인젝션 위험 감소</li>
+  </ul>
+</section>
+
+
+<section>
+    <h2>9) 요약</h2>
+    <ul>
+        <li>DTO는 <strong>게터/세터만</strong> 가진 순수 데이터 객체</li>
+        <li>DAO는 DB 접근을 캡슐화한 CRUD 전담 객체</li>
+        <li>인터페이스+구현체로 만들면 테스트/교체/확장이 쉬워지고 상위 레이어 결합도가 낮아진다</li>
+        <li>명명 규칙은 <strong>동사+조건</strong> 형태로 일관되게: <code>insert / findBy... / findAll / update... / deleteBy...</code></li>
+    </ul>
+</section>
+
+
+</body>
+</html>
